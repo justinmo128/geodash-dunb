@@ -18,7 +18,7 @@ function drawStart() {
 function gameLoop() {
     // LOGIC
     applyGravity();
-    ufoJump();
+    cubeJump();
     moveWalls();
     checkCollisions();
     distance++;
@@ -31,45 +31,44 @@ function gameLoop() {
 }
 
 // HELI MOVEMENT
-function moveHeli() {
+function shipMove() {
     // Accelerate upward if mouse pressed
     if (mouseIsPressed) {
-        heli.speed += -1;
+        heli.speed += -0.9;
     }
-
-    // Apply gravity (accel)
-    heli.speed += heli.accel;
-
-    // Constrain speed (max/min)
-    if (heli.speed > 5) {
-        heli.speed = 5;
-    } else if (heli.speed < -5) {
-        heli.speed = -5;
+    // Constrain speed
+    if (heli.speed > 6) {
+        heli.speed = 6;
+    } else if (heli.speed < -6) {
+        heli.speed = -6;
     }
+}
 
-    // Move helicopter by its speed
-    heli.y += heli.speed;
+function waveMove() {
+    if (mouseIsPressed) {
+        heli.speed = -3;
+    } else {
+        heli.speed = 3;
+    }
 }
 
 function applyGravity() {
     // Apply gravity (accel)
     heli.speed += heli.accel;
 
-    // Constrain speed (max/min)
-    if (heli.speed > 5) {
-        heli.speed = 5;
-    } else if (heli.speed < -5) {
-        heli.speed = -5;
-    }
-
     // Move helicopter by its speed
     heli.y += heli.speed;
 }
 
 function ufoJump() {
-    if (mouseIsPressed && mouseIsHeld == false) {
-        heli.speed = -10;
-        mouseIsHeld = true;
+    if (mouseIsPressed) {
+        heli.speed = -6;
+    }
+}
+
+function cubeJump () {
+    if (mouseIsPressed && heli.y >= 511) {
+        heli.speed = -8;
     }
 }
   
@@ -167,7 +166,7 @@ function reset() {
     w: 80,
     h: 40,
     speed: 0,
-    accel: 0.3,
+    accel: 0.5,
     };
     wall1 = {
     x: cnv.width,

@@ -49,7 +49,6 @@ document.addEventListener("mouseup", mouseupHandler);
 
 function mousedownHandler() {
   mouseIsPressed = true;
-  mouseIsHeld = false;
 
   // Play propeller sound
   if (state === "gameon" || state === "start") {
@@ -67,7 +66,6 @@ function mousedownHandler() {
 
 function mouseupHandler() {
   mouseIsPressed = false;
-  mouseIsHeld = false;
 
   // Stop propeller sound
   propeller.pause();
