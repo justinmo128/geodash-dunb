@@ -1,72 +1,40 @@
-// Helicopter Game Start
-let mouseIsHeld = true;
-
-// Set up canvas and graphics context
-let cnv = document.getElementById("my-canvas");
+// Canvas and graphics context
+let cnv = document.getElementById("canvas");
 let ctx = cnv.getContext("2d");
-cnv.width = 800;
-cnv.height = 600;
+cnv.width = 960;
+cnv.height = 540;
 
-// Global Variables (Once)
-let heliImg = document.createElement("img");
-heliImg.src = "img/heliBlueTransparent.png";
-
-let explosion = document.createElement("audio");
-explosion.src = "sound/explosion.wav";
-
-let propeller = document.createElement("audio");
-propeller.src = "sound/propeller.wav";
-
-let mouseIsPressed = false;
-
-// Global Variables (Reset)
-let state;
-let heli;
-let wall1, wall2, wall3;
-let distance;
-let bestScore = 0;
-reset();
+// Global Variables
+let gameState = "gameLoop";
+let currentTime = 0;
+let lastFrameOccurence = 0;
 
 // Draw Function
 window.addEventListener("load", draw);
-
 function draw() {
-  if (state === "start") {
-    drawStart();
-  } else if (state === "gameon") {
-    gameLoop();
-  } else if (state === "gameover") {
-    drawGameOver();
-  }
-
-  // Request Animation Frame
-  requestAnimationFrame(draw);
+    if (gameState === "gameLoop") {
+        drawGame();
+    }
+    // Request Animation Frame
+    // requestAnimationFrame(draw);
+    setTimeout(draw, 0);
+    currentTime = performance.now();
 }
 
-// EVENT STUFF
-document.addEventListener("mousedown", mousedownHandler);
-document.addEventListener("mouseup", mouseupHandler);
-
-function mousedownHandler() {
-  mouseIsPressed = true;
-
-  // Play propeller sound
-  if (state === "gameon" || state === "start") {
-    propeller.currentTime = 0;
-    propeller.play();
-  }
-
-  // Start game on mousedown
-  if (state === "start") {
-    state = "gameon";
-  } else if (state === "gameon") {
-    gameLoop();
-  }
+function drawMainComponents() {
+    // Background
+    ctx.fillStyle = "rgb(0,0,0)";
+    ctx.fillRect(0, 0, cnv.width, cnv.height);
+    // FPS
+    ctx.textAlign = "left"
+    let fps = 1000 / (currentTime - lastFrameOccurence);
+    fps = Math.round(fps);
+    lastFrameOccurence = currentTime;
+    ctx.font = "14px Roboto";
+    ctx.fillStyle = "white";
+    ctx.fillText(`FPS: ${fps}`, 10, 20)
 }
 
-function mouseupHandler() {
-  mouseIsPressed = false;
-
-  // Stop propeller sound
-  propeller.pause();
+function drawGame() {
+    drawMainComponents();
 }
