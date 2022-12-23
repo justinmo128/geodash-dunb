@@ -16,7 +16,7 @@ let floor = {
     y: 360
 };
 let player = {
-    colour: "#eef20f",
+    colour: "red",
     mode: "cube",
     y: 300,
     xSpeed: 10.376,
@@ -113,5 +113,7 @@ function applyGravity() {
 function jump() {
     // Jump height 3 blocks
     // Jump length 3.6 blocks
-    player.ySpeed = -10
+    if (player.y > 295) {
+        player.ySpeed = -10;
+    }
 }
