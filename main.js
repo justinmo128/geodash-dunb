@@ -18,7 +18,7 @@ let floor = {
     y: 0
 };
 let player = {
-    colour: "#eef20f",
+    colour: "red",
     mode: "cube",
     x: 160,
     y: 300,
