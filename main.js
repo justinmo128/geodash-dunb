@@ -5,6 +5,8 @@ cnv.width = 960;
 cnv.height = 540;
 
 // Global Variables
+// 60 pixels = 30 units
+// 30 units = 1 block
 let gameState = "gameLoop";
 let currentTime = 0;
 let lastTime = 0
@@ -22,7 +24,7 @@ let player = {
     mode: "cube",
     x: 160,
     y: 300,
-    xSpeed: 10.376,
+    xSpeed: 311.284,
     xSpeedMod: 1,
     ySpeed: 0
 }
@@ -76,13 +78,13 @@ function drawLevelComponents() {
     ctx.fillRect(0, 0, cnv.width, cnv.height);
     // Floor
     ctx.fillStyle = floor.colour;
-    ctx.fillRect(0, 600 - camera.y, cnv.width, 180);
+    ctx.fillRect(0, 360, cnv.width, 180);
 }
 
 function drawPlayer() {
     if (player.mode = "cube") {
         ctx.fillStyle = player.colour;
-        ctx.fillRect(camera.x - player.x, camera.y - player.y, 60, 60)
+        ctx.fillRect(160, player.y, 60, 60)
     }
 }
 
@@ -114,26 +116,30 @@ window.addEventListener("mouseup", () => {
 })
 
 function applyGravity() {
-    player.ySpeed += 0.4 / 1000 * timeDiff;
-    player.y += player.ySpeed / 1000 * timeDiff;
-    if (player.y >= floor.y - 60) {
-        player.y = floor.y - 60
+    player.ySpeed += 60 / 1000 * timeDiff;
+    player.y += player.ySpeed;
+    if (player.y >= 300) {
+        player.y = 300;
     }
 }
 
 function jump() {
     // Jump height 3 blocks
     // Jump length 3.6 blocks
-    if (player.y >= -60) {
+    if (player.y >= 300) {
         player.ySpeed = -10;
     }
 }
 
 function movePlayer() {
     player.x += player.xSpeed / 500 * timeDiff;
+    
+    if (player.y !== 300) {
+        console.log((player.x / 60).toFixed(2), (5 - player.y / 60).toFixed(2))
+    }
 }
 
 function moveCamera() {
     camera.x = player.x + 160;
-    camera.y = player.y + 300;
+    // camera.y = player.y + 300;
 }
