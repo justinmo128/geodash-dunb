@@ -9,16 +9,14 @@ cnv.height = 270;
 let gameState = "gameLoop";
 let keyHeld = false;
 let background = {
-    // colour: "#4287f5",
-    colour: "white",
+    colour: "#4287f5",
 }
 let floor = {
-    // colour: "#0548b3",
-    colour: "green",
+    colour: "#0548b3",
     y: 0
 };
 let player = {
-    colour: "red",
+    colour: "lime",
     mode: "cube",
     x: 0,
     y: 150,
