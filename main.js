@@ -29,25 +29,45 @@ let camera = {
     y: 180
 }
 
-class Spike {
-    constructor(x, y) {
+class gameOBJ {
+    constructor(x, y, type) {
         this.x = x;
         this.y = y;
-        this.HBx = this.x + 11;
-        this.HBy = this.y + 10;
-        this.HBw = 6;
-        this.HBh = 10;
+        this.type = type;
+        this.HBx = this.x;
+        this.HBy = this.y;
+        if (this.type == "spike") {
+            this.HBx = this.x + 11;
+            this.HBy = this.y + 10;
+            this.HBw = 6;
+            this.HBh = 10;
+            this.hbType = "red";
+        } else if (this.type == "block") {
+            this.HBw = 30;
+            this.HBh = 30;
+            this.hbType = "blue";
+        } else if (this.type == "slab") {
+            this.HBw = 30;
+            this.HBh = 15;
+            this.hbType = "blue";
+        }
     }
 }
-let spikes = [new Spike (1200, 0), new Spike(1230, 0), new Spike(1260, 0)]
+// let spikes = [new Spike (1200, 0), new Spike(1230, 0), new Spike(1260, 0)]
+let levelJSON;
+let gameObjects = [];
+fetch('stereomadness.json')
+    .then((res) => res.json())
+    .then((data) => levelJSON = data)
+    .then(createGameObjects)
+    .then(initialize)
+    .then(draw);
 
-class Block {
-    constructor(x, y) {
-        this.x = x;
-        this.y = y;
+function createGameObjects() {
+    for (let i = 0; i < levelJSON.length; i++) {
+        gameObjects[i] = new gameOBJ(levelJSON[i].x, levelJSON[i].y, levelJSON[i].type)
     }
 }
-let blocks = [];
 
 function initialize() {
     camera = {
@@ -74,7 +94,6 @@ function initialize() {
 }
 
 // Draw Function
-window.addEventListener("load", draw);
 function draw() {
     drawGame();
     setTimeout(draw, 50/3);
@@ -93,10 +112,16 @@ function drawLevelComponents() {
     // Floor
     ctx.fillStyle = floor.colour;
     ctx.fillRect(0, 180, cnv.width, 90);
-    // Spikes
+    // Game Objects
     ctx.fillStyle = "black";
-    for (let i = 0; i < spikes.length; i++) {
-        drawSpike(spikes[i].x, spikes[i].y);
+    for (let i = 0; i < gameObjects.length; i++) {
+        if (gameObjects[i].type == "spike") {
+            drawSpike(gameObjects[i].x, gameObjects[i].y);
+        } else if (gameObjects[i].type == "block") {
+            fillRectCam(gameObjects[i].x, gameObjects[i].y, 30, 30)
+        } else if (gameObjects[i].type == "slab") {
+            fillRectCam(gameObjects[i].x, gameObjects[i].y, 30, 15)
+        }
     }
 }
 
@@ -137,8 +162,6 @@ window.addEventListener("mouseup", () => {
     keyUp();
 })
 
-
-window.addEventListener("load", physics);
 function physics() {
     if (gameState == "gameLoop") {
         applyGravity();
@@ -174,13 +197,21 @@ function movePlayer() {
 }
 
 function checkCollision() {
-    for (let i = 0; i < spikes.length; i++) {
-        if (player.x <= spikes[i].HBx + spikes[i].HBw &&
-            player.x + 30 >= spikes[i].HBx &&
-            player.y <= spikes[i].HBy + spikes[i].HBh &&
-            player.y + 30 >= spikes[i].HBy) {
-                playerDeath();
-            }
+    for (let i = 0; i < gameObjects.length; i++) {
+        if (player.x <= gameObjects[i].HBx + gameObjects[i].HBw &&
+            player.x + 30 >= gameObjects[i].HBx &&
+            player.y <= gameObjects[i].HBy + gameObjects[i].HBh &&
+            player.y + 30 >= gameObjects[i].HBy) {
+                if (gameObjects[i].type == "spike") {
+                    playerDeath();
+                }
+        } else if (player.x <= gameObjects[i].HBx + gameObjects[i].HBw &&
+            player.x + 30 >= gameObjects[i].HBx &&
+            player.y <= gameObjects[i].HBy + gameObjects[i].HBh) {
+                if (gameObjects[i].type == "block" || gameObjects[i].type == "slab") {
+                    player.y = gameObjects[i].y + gameObjects[i].HBh;
+                }
+        }
     }
 }
 
