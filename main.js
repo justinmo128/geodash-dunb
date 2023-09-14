@@ -1,9 +1,3 @@
-// Canvas and graphics context
-let cnv = document.getElementById("canvas");
-let ctx = cnv.getContext("2d");
-cnv.width = 480;
-cnv.height = 270;
-
 // Global Variables
 // 30 units = 1 block
 let gameState = "gameLoop";
@@ -22,11 +16,8 @@ let player = {
     xSpeed: 311.284, // units per second
     xSpeedMod: 1,
     gravity: -0.9,
-    yVel: 0
-}
-let camera = {
-    x: 0,
-    y: 180
+    yVel: 0,
+    grounded: true
 }
 
 class gameOBJ {
@@ -60,8 +51,7 @@ fetch('stereomadness.json')
     .then((res) => res.json())
     .then((data) => levelJSON = data)
     .then(createGameObjects)
-    .then(initialize)
-    .then(draw);
+    .then(initialize);
 
 function createGameObjects() {
     for (let i = 0; i < levelJSON.length; i++) {
@@ -81,7 +71,8 @@ function initialize() {
         xSpeed: 311.284, // units per second
         xSpeedMod: 1,
         gravity: -0.9,
-        yVel: 0
+        yVel: 0,
+        grounded: true
     };
     background = {
         colour: "#4287f5",
@@ -91,50 +82,6 @@ function initialize() {
     }
     gameState = "gameLoop";
     physics();
-}
-
-// Draw Function
-function draw() {
-    drawGame();
-    setTimeout(draw, 50/3);
-}
-
-function drawGame() {
-    moveCamera();
-    drawLevelComponents();
-    drawPlayer();
-}
-
-function drawLevelComponents() {
-    // Background
-    ctx.fillStyle = background.colour;
-    ctx.fillRect(0, 0, cnv.width, cnv.height);
-    // Floor
-    ctx.fillStyle = floor.colour;
-    ctx.fillRect(0, 180, cnv.width, 90);
-    // Game Objects
-    ctx.fillStyle = "black";
-    for (let i = 0; i < gameObjects.length; i++) {
-        if (gameObjects[i].type == "spike") {
-            drawSpike(gameObjects[i].x, gameObjects[i].y);
-        } else if (gameObjects[i].type == "block") {
-            fillRectCam(gameObjects[i].x, gameObjects[i].y, 30, 30)
-        } else if (gameObjects[i].type == "slab") {
-            fillRectCam(gameObjects[i].x, gameObjects[i].y, 30, 15)
-        }
-    }
-}
-
-function drawPlayer() {
-    if (player.mode == "cube") {
-        ctx.fillStyle = player.colour;
-        if (player.x < 90) {
-            ctx.fillRect(player.x, camera.y - player.y - 30, 30, 30);
-        } else {
-            fillRectCam(player.x, player.y, 30, 30)
-        }
-        
-    }
 }
 
 function keyDown() {
@@ -165,6 +112,7 @@ window.addEventListener("mouseup", () => {
 function physics() {
     if (gameState == "gameLoop") {
         applyGravity();
+        if (keyHeld) {jump()}
         movePlayer();
         checkCollision();
         setTimeout(physics, 50/3);
@@ -174,20 +122,17 @@ function physics() {
 function applyGravity() {
     player.y += player.yVel;
     player.yVel += player.gravity;
-    
-    if (player.yVel < -10) {
-        player.yVel = -10;
-    }
-    if (player.y <= 0) {
-        player.y = 0;
-        setTimeout(() => {if (keyHeld) {jump()}}, 10);
+
+    if (player.grounded) {
+
+        player.yVel = 0;
     }
 }
 
 function jump() {
     // Jump height 3 blocks
     // Jump length 3.6 blocks
-    if (player.y <= 0) {
+    if (player.grounded) {
         player.yVel = 11;
     }
 }
@@ -197,40 +142,43 @@ function movePlayer() {
 }
 
 function checkCollision() {
+    console.log(player.y)
     for (let i = 0; i < gameObjects.length; i++) {
-        if (player.x <= gameObjects[i].HBx + gameObjects[i].HBw &&
-            player.x + 30 >= gameObjects[i].HBx &&
+        // Red Hitbox
+        if (player.x < gameObjects[i].HBx + gameObjects[i].HBw &&
+            player.x + 30 > gameObjects[i].HBx &&
+            player.y < gameObjects[i].HBy + gameObjects[i].HBh &&
+            player.y + 30 > gameObjects[i].HBy &&
+            gameObjects[i].hbType == "red") {
+                playerDeath();
+                return;
+        }
+        // Blue Hitbox (over)
+        else if (player.x < gameObjects[i].HBx + gameObjects[i].HBw &&
+            player.x + 30 > gameObjects[i].HBx &&
             player.y <= gameObjects[i].HBy + gameObjects[i].HBh &&
-            player.y + 30 >= gameObjects[i].HBy) {
-                if (gameObjects[i].type == "spike") {
-                    playerDeath();
-                }
-        } else if (player.x <= gameObjects[i].HBx + gameObjects[i].HBw &&
-            player.x + 30 >= gameObjects[i].HBx &&
-            player.y <= gameObjects[i].HBy + gameObjects[i].HBh) {
-                if (gameObjects[i].type == "block" || gameObjects[i].type == "slab") {
-                    player.y = gameObjects[i].y + gameObjects[i].HBh;
-                }
+            player.y + 30 >= gameObjects[i].HBy + gameObjects[i].HBh && 
+            gameObjects[i].hbType == "blue") {
+                player.y = gameObjects[i].y + gameObjects[i].HBh;
+                player.grounded = true;
+                return;
+        }
+        // Blue Hitbox (under)
+        else if (player.x + 10 < gameObjects[i].HBx + gameObjects[i].HBw &&
+            player.x + 20 > gameObjects[i].HBx &&
+            player.y + 10 < gameObjects[i].HBy + gameObjects[i].HBh &&
+            player.y + 20 > gameObjects[i].HBy && 
+            gameObjects[i].hbType == "blue") {
+                playerDeath();
+                return;
         }
     }
-}
-
-function moveCamera() {
-    if (gameState !== "death") {
-        camera.x = player.x - 90;
+    if (player.y <= 0) {
+        player.y = 0;
+        player.grounded = true;
+        return;
     }
-}
-
-function drawSpike(x, y) {
-    ctx.beginPath();
-    ctx.moveTo(x - camera.x + 15, camera.y - y - 30);
-    ctx.lineTo(x - camera.x + 30, camera.y - y);
-    ctx.lineTo(x - camera.x, camera.y - y);
-    ctx.fill();
-}
-
-function fillRectCam(x, y, w, h) {
-    ctx.fillRect(x - camera.x, camera.y - y - h, w, h);
+    player.grounded = false;
 }
 
 function playerDeath() {
@@ -239,15 +187,6 @@ function playerDeath() {
         shakeScreen(i);
     }
     setTimeout(initialize, 300)
-}
-
-function shakeScreen(loopAmt) {
-    let oldCamerax = camera.x;
-    let oldCameray = camera.y
-    setTimeout(() => {
-        camera.x = oldCamerax + (getRandomInt(-50, 50));
-        camera.y = oldCameray + (getRandomInt(-20, 20));
-    }, 30 * loopAmt)
 }
 
 function getRandomInt(min, max) {
