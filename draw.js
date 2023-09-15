@@ -24,36 +24,49 @@ function drawGame() {
 
 function drawLevelComponents() {
     // Background
+    ctx.globalAlpha = 1;
+    if (player.x < 90) {
+        drawImgCam("gamebg", camera.x - 90, camera.y, 240);
+    } else {
+        drawImgCam("gamebg", (camera.x - player.x % 512), camera.y, 240);
+    }
+    ctx.globalAlpha = 0.5;
     ctx.fillStyle = background.colour;
     ctx.fillRect(0, 0, cnv.width, cnv.height);
     // Floor
+    ctx.globalAlpha = 1;
+    if (player.x < 90) {
+        drawImgCam("floor", camera.x, 0, 0);
+    } else {
+        drawImgCam("floor", camera.x - player.x % 90, 0, 0);
+    }
+    ctx.globalAlpha = 0.6;
     ctx.fillStyle = floor.colour;
-    ctx.fillRect(0, 180, cnv.width, 90);
+    fillRectCam(camera.x, -90, cnv.width, 90);
+    ctx.globalAlpha = 1;
 }
 
 function drawGameObjects() {
-// Game Objects
-ctx.fillStyle = "black";
-for (let i = 0; i < gameObjects.length; i++) {
-    if (gameObjects[i].type == "spike") {
-        drawSpike(gameObjects[i].x, gameObjects[i].y);
-    } else if (gameObjects[i].type == "block") {
-        fillRectCam(gameObjects[i].x, gameObjects[i].y, 30, 30)
-    } else if (gameObjects[i].type == "slab") {
-        fillRectCam(gameObjects[i].x, gameObjects[i].y, 30, 15)
+    // Game Objects
+    ctx.fillStyle = "black";
+    for (let i = 0; i < gameObjects.length; i++) {
+        drawImgCam(gameObjects[i].type, gameObjects[i].x, gameObjects[i].y, gameObjects[i].h)
     }
-}
 }
 
 function drawPlayer() {
     if (player.mode == "cube") {
-        ctx.fillStyle = player.colour;
         if (player.x < 90) {
-            ctx.fillRect(player.x, camera.y - player.y - 30, 30, 30);
+            ctx.drawImage(document.getElementById("player"), player.x, camera.y - player.y - 30)
         } else {
-            fillRectCam(player.x, player.y, 30, 30)
+            drawImgCam("player", player.x, player.y, 30)
         }
-        
+        // ctx.fillStyle = player.colour;
+        // if (player.x < 90) {
+        //     ctx.fillRect(player.x, camera.y - player.y - 30, 30, 30);
+        // } else {
+        //     fillRectCam(player.x, player.y, 30, 30)
+        // }
     }
 }
 
@@ -75,6 +88,10 @@ function fillRectCam(x, y, w, h) {
     ctx.fillRect(x - camera.x, camera.y - y - h, w, h);
 }
 
+function drawImgCam(imgName, x, y, h) {
+    ctx.drawImage(document.getElementById(imgName), x - camera.x, camera.y - y - h)
+}
+
 function shakeScreen(loopAmt) {
     let oldCamerax = camera.x;
     let oldCameray = camera.y
@@ -82,4 +99,11 @@ function shakeScreen(loopAmt) {
         camera.x = oldCamerax + (getRandomInt(-50, 50));
         camera.y = oldCameray + (getRandomInt(-20, 20));
     }, 30 * loopAmt)
+}
+
+function drawRotated(x, y, angle) {
+    ctx.save();
+    ctx.translate(x, y)
+    ctx.rotate(angle);
+    
 }

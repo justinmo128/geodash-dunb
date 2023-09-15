@@ -24,6 +24,8 @@ class gameOBJ {
     constructor(x, y, type) {
         this.x = x;
         this.y = y;
+        this.h = 30;
+        this.w = 30;
         this.type = type;
         this.HBx = this.x;
         this.HBy = this.y;
@@ -39,6 +41,7 @@ class gameOBJ {
             this.hbType = "blue";
         } else if (this.type == "slab") {
             this.HBw = 30;
+            this.h = 15;
             this.HBh = 15;
             this.hbType = "blue";
         }
@@ -124,7 +127,6 @@ function applyGravity() {
     player.yVel += player.gravity;
 
     if (player.grounded) {
-
         player.yVel = 0;
     }
 }
@@ -142,7 +144,6 @@ function movePlayer() {
 }
 
 function checkCollision() {
-    console.log(player.y)
     for (let i = 0; i < gameObjects.length; i++) {
         // Red Hitbox
         if (player.x < gameObjects[i].HBx + gameObjects[i].HBw &&
