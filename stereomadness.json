@@ -1,5 +1,10 @@
 [
     {
+        "x": 500,
+        "y": 0,
+        "type": "portal_ship"
+    },
+    {
         "x": 1210,
         "y": 0,
         "type": "spike"

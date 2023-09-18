@@ -8,8 +8,13 @@ let background = {
 let floor = {
     colour: "#0548b3",
 };
+let newFloor = {
+    canCollide: false,
+}
+let roof = {
+    canCollide: false,
+};
 let player = {
-    colour: "lime",
     mode: "cube",
     x: 0,
     y: 0,
@@ -44,10 +49,17 @@ class gameOBJ {
             this.h = 15;
             this.HBh = 15;
             this.hbType = "blue";
+        } else if (this.type.slice(0, 6) == "portal") {
+            this.HBw = 30;
+            this.h = 90;
+            this.HBh = 90;
+            this.hbType = "green";
+            this.portalType = this.type.split("_").pop();
+            this.type = "portal";
         }
     }
 }
-// let spikes = [new Spike (1200, 0), new Spike(1230, 0), new Spike(1260, 0)]
+
 let levelJSON;
 let gameObjects = [];
 fetch('stereomadness.json')
@@ -89,7 +101,6 @@ function initialize() {
 
 function keyDown() {
     keyHeld = true;
-    jump();
 }
 function keyUp() {
     keyHeld = false;
@@ -123,7 +134,15 @@ function physics() {
 }
 
 function applyGravity() {
+    if (player.yVel >= 6 && player.mode == "ship") {
+        player.yVel = 6;
+    }
     player.y += player.yVel;
+    if (player.mode == "cube") {
+        player.gravity = -0.9;
+    } else if (player.mode == "ship") {
+        player.gravity = -0.6;
+    }
     player.yVel += player.gravity;
 
     if (player.grounded) {
@@ -134,8 +153,12 @@ function applyGravity() {
 function jump() {
     // Jump height 3 blocks
     // Jump length 3.6 blocks
-    if (player.grounded) {
-        player.yVel = 11;
+    if (player.mode == "cube") {
+        if (player.grounded) {
+            player.yVel = 11;
+        }
+    } else if (player.mode == "ship") {
+        player.yVel += 0.9;
     }
 }
 
@@ -173,11 +196,39 @@ function checkCollision() {
                 playerDeath();
                 return;
         }
+        // Green Hitbox
+        else if (player.x <= gameObjects[i].HBx + gameObjects[i].HBw &&
+            player.x + 30 >= gameObjects[i].HBx &&
+            player.y <= gameObjects[i].HBy + gameObjects[i].HBh &&
+            player.y + 30 >= gameObjects[i].HBy &&
+            gameObjects[i].hbType == "green") {
+                if (gameObjects[i].type == "portal") {
+                    player.mode = gameObjects[i].portalType;
+                    if (gameObjects[i].portalType == "ship") {
+                        newFloor.y = gameObjects[i].y - 120;
+                        if (newFloor.y < 0) {
+                            newFloor.y = 0;
+                            camera.y = 315;
+                        }
+                        roof.y = newFloor.y + 300;
+                        newFloor.canCollide = true;
+                        roof.canCollide = true;
+                        
+                    }
+                }
+        }
     }
     if (player.y <= 0) {
         player.y = 0;
         player.grounded = true;
         return;
+    } else if (player.y <= newFloor.y) {
+        player.y = floor.y;
+        player.grounded = true;
+        return;
+    } else if (player.y + 30 >= roof.y) {
+        player.y = roof.y - 30;
+        console.log(player.yVel);
     }
     player.grounded = false;
 }
