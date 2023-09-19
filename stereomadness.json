@@ -1,10 +1,5 @@
 [
     {
-        "x": 500,
-        "y": 0,
-        "type": "portal_ship"
-    },
-    {
         "x": 1210,
         "y": 0,
         "type": "spike"
@@ -48,5 +43,10 @@
         "x": 1520,
         "y": 30,
         "type": "slab"
+    },
+    {
+        "x": 1650,
+        "y": 0,
+        "type": "portal_ship"
     }
 ]

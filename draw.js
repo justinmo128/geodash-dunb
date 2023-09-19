@@ -9,18 +9,31 @@ let camera = {
 }
 
 // Draw Function
-window.addEventListener("load", draw)
+window.addEventListener("load", draw);
 function draw() {
-    drawGame();
+    if (gameState == "menu") {
+        drawMenu();
+    } else if (gameState == "gameLoop") {
+        moveCamera();
+        drawLevelComponents();
+        drawPortalUnder();
+        drawPlayer();
+        drawGameObjects();
+    } else if (gameState == "win") {
+        ctx.drawImage(document.getElementById("levelcomplete"), 40, 100)
+    }
     setTimeout(draw, 50/3);
 }
 
-function drawGame() {
-    moveCamera();
-    drawLevelComponents();
-    drawPortalUnder();
-    drawPlayer();
-    drawGameObjects();
+function drawMenu() {
+    if (menuState == "top") {
+        ctx.drawImage(document.getElementById("gamebg"), 0, -180);
+        ctx.drawImage(document.getElementById("logo"), 40, 50);
+        ctx.drawImage(document.getElementById("playbtn"), 100, 120);
+        ctx.drawImage(document.getElementById("editorbtn"), 300, 150);
+    } else if (false) {
+
+    }
 }
 
 function drawLevelComponents() {
@@ -30,37 +43,48 @@ function drawLevelComponents() {
     ctx.fillRect(0, 0, cnv.width, cnv.height);
     if (player.x < 90) {
         drawImgCam("gamebg", camera.x - 90, camera.y - 50, 240);
+    } else if (player.x - 140 > gameObjects[gameObjects.length - 1].x) {
+        drawImgCam("gamebg", (camera.x - (gameObjects[gameObjects.length - 1].x + 140) % 512), camera.y - 50, 240);
     } else {
         drawImgCam("gamebg", (camera.x - player.x % 512), camera.y - 50, 240);
     }
     ctx.globalAlpha = 0.5;
-    // ctx.fillStyle = background.colour;
-    // ctx.fillRect(0, 0, cnv.width, cnv.height);
-    // // Floor
-    // ctx.globalAlpha = 1;
-    // if (player.x < 90) {
-    //     drawImgCam("floor", camera.x, 0, 0);
-    // } else {
-    //     drawImgCam("floor", camera.x - player.x % 90, 0, 0);
-    // }
+    ctx.fillStyle = background.colour;
+    ctx.fillRect(0, 0, cnv.width, cnv.height);
+    // Floor
+    ctx.globalAlpha = 1;
+    if (player.x < 90) {
+        drawImgCam("floor", camera.x, 0, 0);
+    } else if (player.x - 140 > gameObjects[gameObjects.length - 1].x) {
+        drawImgCam("floor", (camera.x - (gameObjects[gameObjects.length - 1].x + 140) % 512), camera.y - 50, 240);
+    } else {
+        drawImgCam("floor", camera.x - player.x % 90, 0, 0);
+    }
+    ctx.globalAlpha = 0.6;
+    ctx.fillStyle = floor.colour;
+    fillRectCam(camera.x, -90, cnv.width, 90);
     // NewFloor
     if (newFloor.canCollide) {
         if (player.x < 90) {
             drawImgCam("floor", camera.x, newFloor.y, 0);
+        } else if (player.x - 140 > gameObjects[gameObjects.length - 1].x) {
+            drawImgCam("floor", (camera.x - (gameObjects[gameObjects.length - 1].x + 140) % 512), newFloor.y, 0);
         } else {
             drawImgCam("floor", camera.x - player.x % 90, newFloor.y, 0);
         }
+        fillRectCam(camera.x, newFloor.y, cnv.width, -90);
     }
     // Roof
-    // if (player.x < 90) {
-    //     drawImgCam("floor", camera.x, 0, 0);
-    // } else {
-    //     drawImgCam("floor", camera.x - player.x % 90, 0, 0);
-    // }
-    ctx.globalAlpha = 0.6;
-    // ctx.fillStyle = floor.colour;
-    // fillRectCam(camera.x, -90, cnv.width, 90);
-
+    if (roof.canCollide) {
+        if (player.x < 90) {
+            drawImgCam("floor", camera.x, 0, 0);
+        } else if (player.x - 140 > gameObjects[gameObjects.length - 1].x) {
+            drawImgCam("floor", (camera.x - (gameObjects[gameObjects.length - 1].x + 140) % 512), roof.y, 90);
+        } else {
+            drawImgCam("floor", camera.x - player.x % 90, roof.y, 90);
+        }
+        fillRectCam(camera.x, roof.y, cnv.width, 90);
+    }
     ctx.globalAlpha = 1;
 }
 
@@ -100,6 +124,10 @@ function drawPlayer() {
 }
 
 function moveCamera() {
+    if (player.x - 140 > gameObjects[gameObjects.length - 1].x) {
+        camera.x = gameObjects[gameObjects.length - 1].x + 50;
+        return;
+    }
     if (gameState !== "death") {
         camera.x = player.x - 90;
     }

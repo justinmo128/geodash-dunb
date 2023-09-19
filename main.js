@@ -1,12 +1,14 @@
 // Global Variables
 // 30 units = 1 block
-let gameState = "gameLoop";
+let gameState = "menu";
+let menuState = "top";
 let keyHeld = false;
 let background = {
     colour: "#4287f5",
 }
 let floor = {
     colour: "#0548b3",
+    y: 0,
 };
 let newFloor = {
     canCollide: false,
@@ -62,11 +64,13 @@ class gameOBJ {
 
 let levelJSON;
 let gameObjects = [];
-fetch('stereomadness.json')
-    .then((res) => res.json())
-    .then((data) => levelJSON = data)
-    .then(createGameObjects)
-    .then(initialize);
+function startLevel(levelName) {
+    fetch(`${levelName}.json`)
+        .then((res) => res.json())
+        .then((data) => levelJSON = data)
+        .then(createGameObjects)
+        .then(initialize);
+}
 
 function createGameObjects() {
     for (let i = 0; i < levelJSON.length; i++) {
@@ -105,23 +109,6 @@ function keyDown() {
 function keyUp() {
     keyHeld = false;
 }
-// Event Listeners
-window.addEventListener("keydown", (e) => {
-    if (e.key !== "Escape") {
-        keyDown();
-    }
-})
-window.addEventListener("keyup", (e) => {
-    if (e.key !== "Escape") {
-        keyUp();
-    }
-})
-window.addEventListener("mousedown", () => {
-    keyDown();
-})
-window.addEventListener("mouseup", () => {
-    keyUp();
-})
 
 function physics() {
     if (gameState == "gameLoop") {
@@ -129,6 +116,7 @@ function physics() {
         if (keyHeld) {jump()}
         movePlayer();
         checkCollision();
+        checkEnding();
         setTimeout(physics, 50/3);
     }
 }
@@ -228,9 +216,14 @@ function checkCollision() {
         return;
     } else if (player.y + 30 >= roof.y) {
         player.y = roof.y - 30;
-        console.log(player.yVel);
     }
     player.grounded = false;
+}
+
+function checkEnding() {
+    if (player.x > gameObjects[gameObjects.length - 1].x + 480) {
+        gameState = "win";
+    }
 }
 
 function playerDeath() {
