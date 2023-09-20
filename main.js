@@ -1,8 +1,6 @@
 // Global Variables
 // 30 units = 1 block
 let gameState = "menu";
-let menuState = "top";
-let keyHeld = false;
 let background = {
     colour: "#4287f5",
 }
@@ -65,7 +63,7 @@ class gameOBJ {
 let levelJSON;
 let gameObjects = [];
 function startLevel(levelName) {
-    fetch(`${levelName}.json`)
+    fetch(`levels/${levelName}.json`)
         .then((res) => res.json())
         .then((data) => levelJSON = data)
         .then(createGameObjects)
@@ -101,13 +99,6 @@ function initialize() {
     }
     gameState = "gameLoop";
     physics();
-}
-
-function keyDown() {
-    keyHeld = true;
-}
-function keyUp() {
-    keyHeld = false;
 }
 
 function physics() {
@@ -157,13 +148,9 @@ function movePlayer() {
 function checkCollision() {
     for (let i = 0; i < gameObjects.length; i++) {
         // Red Hitbox
-        if (player.x < gameObjects[i].HBx + gameObjects[i].HBw &&
-            player.x + 30 > gameObjects[i].HBx &&
-            player.y < gameObjects[i].HBy + gameObjects[i].HBh &&
-            player.y + 30 > gameObjects[i].HBy &&
-            gameObjects[i].hbType == "red") {
-                playerDeath();
-                return;
+        if (collides(gameObjects[i].HBx, gameObjects[i].HBy, gameObjects[i].HBw, gameObjects[i].HBh) && gameObjects[i].hbType == "red") {
+            playerDeath();
+            return;
         }
         // Blue Hitbox (over)
         else if (player.x < gameObjects[i].HBx + gameObjects[i].HBw &&
@@ -220,6 +207,16 @@ function checkCollision() {
     player.grounded = false;
 }
 
+function collides(x, y, w, h) {
+    if (player.x < x + w &&
+        player.x + 30 > x &&
+        player.y < y + h &&
+        player.y + 30 > y) {
+            return true;
+    }
+    return false;
+}
+
 function checkEnding() {
     if (player.x > gameObjects[gameObjects.length - 1].x + 480) {
         gameState = "win";
@@ -238,4 +235,4 @@ function getRandomInt(min, max) {
     min = Math.ceil(min);
     max = Math.floor(max);
     return Math.floor(Math.random() * (max - min) + min); // The maximum is exclusive and the minimum is inclusive
-  }
+}

@@ -3,6 +3,8 @@ let cnv = document.getElementById("canvas");
 let ctx = cnv.getContext("2d");
 cnv.width = 480;
 cnv.height = 330;
+ctx.font = "30px Pusab";
+ctx.textAlign = "center";
 let camera = {
     x: 0,
     y: 270
@@ -31,8 +33,16 @@ function drawMenu() {
         ctx.drawImage(document.getElementById("logo"), 40, 50);
         ctx.drawImage(document.getElementById("playbtn"), 100, 120);
         ctx.drawImage(document.getElementById("editorbtn"), 300, 150);
-    } else if (false) {
-
+    } else if (menuState == "mainLevels") {
+        ctx.drawImage(document.getElementById("gamebg"), 0, -180);
+        ctx.drawImage(document.getElementById("greenarrow"), 10, 10);
+        ctx.drawImage(document.getElementById("arrowleft"), 10, 130);
+        ctx.drawImage(document.getElementById("arrowright"), 440, 130);
+        ctx.drawImage(document.getElementById("levelbox"), 65, 60);
+    } else if (menuState == "editorMenu") {
+        ctx.drawImage(document.getElementById("gamebg"), 0, -180);
+        ctx.drawImage(document.getElementById("greenarrow"), 10, 10);
+        ctx.fillText("Coming Soon! (maybe)", 240, 165)
     }
 }
 
@@ -160,10 +170,3 @@ function shakeScreen(loopAmt) {
         camera.y = oldCameray + (getRandomInt(-20, 20));
     }, 30 * loopAmt)
 }
-
-// function drawRotated(x, y, angle) {
-//     ctx.save();
-//     ctx.translate(x, y)
-//     ctx.rotate(angle);
-    
-// }

@@ -1,5 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Nabla&family=Roboto&family=Roboto+Flex:opsz@8..144&display=swap');
 
+@font-face {
+    font-family: Pusab;
+    src: url(pusab.otf);
+}
+
 body {
     text-align: center;
     background: #1F1F1F url("img/bg.png") fixed;

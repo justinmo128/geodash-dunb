@@ -1,3 +1,7 @@
+let keyHeld = false;
+let mouseX = 0;
+let mouseY = 0;
+
 document.addEventListener("keydown", (e) => {
     if (e.key !== "Escape") {
         keyDown();
@@ -23,4 +27,11 @@ function mousemoveHandler(e) {
   // Calc mouse coordinates using mouse event and canvas location info
   mouseX = Math.round(e.clientX - cnvRect.left);
   mouseY = Math.round(e.clientY - cnvRect.top);
+}
+
+function keyDown() {
+    keyHeld = true;
+}
+function keyUp() {
+    keyHeld = false;
 }
