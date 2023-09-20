@@ -97,10 +97,16 @@ function initialize() {
     floor = {
         colour: "#0548b3",
     }
+    newFloor = {
+        canCollide: false,
+    }
+    roof = {
+        canCollide: false,
+    };
     gameState = "gameLoop";
-    physics();
 }
 
+window.addEventListener("load", physics)
 function physics() {
     if (gameState == "gameLoop") {
         applyGravity();
@@ -108,8 +114,8 @@ function physics() {
         movePlayer();
         checkCollision();
         checkEnding();
-        setTimeout(physics, 50/3);
     }
+    setTimeout(physics, 50/3);
 }
 
 function applyGravity() {
@@ -183,12 +189,11 @@ function checkCollision() {
                         newFloor.y = gameObjects[i].y - 120;
                         if (newFloor.y < 0) {
                             newFloor.y = 0;
-                            camera.y = 315;
                         }
+                        camera.y = newFloor.y + 315;
                         roof.y = newFloor.y + 300;
                         newFloor.canCollide = true;
                         roof.canCollide = true;
-                        
                     }
                 }
         }
@@ -197,11 +202,11 @@ function checkCollision() {
         player.y = 0;
         player.grounded = true;
         return;
-    } else if (player.y <= newFloor.y) {
-        player.y = floor.y;
+    } else if (player.y <= newFloor.y && newFloor.canCollide) {
+        player.y = newFloor.y;
         player.grounded = true;
         return;
-    } else if (player.y + 30 >= roof.y) {
+    } else if (player.y + 30 >= roof.y && roof.canCollide) {
         player.y = roof.y - 30;
     }
     player.grounded = false;
@@ -220,6 +225,7 @@ function collides(x, y, w, h) {
 function checkEnding() {
     if (player.x > gameObjects[gameObjects.length - 1].x + 480) {
         gameState = "win";
+        setTimeout(() => (gameState = "menu"), 2000)
     }
 }
 

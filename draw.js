@@ -39,6 +39,8 @@ function drawMenu() {
         ctx.drawImage(document.getElementById("arrowleft"), 10, 130);
         ctx.drawImage(document.getElementById("arrowright"), 440, 130);
         ctx.drawImage(document.getElementById("levelbox"), 65, 60);
+        ctx.fillStyle = "white";
+        ctx.fillText(levels[menuSelect], 240, 130);
     } else if (menuState == "editorMenu") {
         ctx.drawImage(document.getElementById("gamebg"), 0, -180);
         ctx.drawImage(document.getElementById("greenarrow"), 10, 10);
@@ -66,7 +68,7 @@ function drawLevelComponents() {
     if (player.x < 90) {
         drawImgCam("floor", camera.x, 0, 0);
     } else if (player.x - 140 > gameObjects[gameObjects.length - 1].x) {
-        drawImgCam("floor", (camera.x - (gameObjects[gameObjects.length - 1].x + 140) % 512), camera.y - 50, 240);
+        drawImgCam("floor", (camera.x - (gameObjects[gameObjects.length - 1].x + 140) % 90), camera.y - 50, 240);
     } else {
         drawImgCam("floor", camera.x - player.x % 90, 0, 0);
     }
@@ -78,9 +80,10 @@ function drawLevelComponents() {
         if (player.x < 90) {
             drawImgCam("floor", camera.x, newFloor.y, 0);
         } else if (player.x - 140 > gameObjects[gameObjects.length - 1].x) {
-            drawImgCam("floor", (camera.x - (gameObjects[gameObjects.length - 1].x + 140) % 512), newFloor.y, 0);
+            drawImgCam("floor", (camera.x - (gameObjects[gameObjects.length - 1].x + 140) % 90), newFloor.y, 0);
         } else {
             drawImgCam("floor", camera.x - player.x % 90, newFloor.y, 0);
+            console.log((camera.x - player.x % 90))
         }
         fillRectCam(camera.x, newFloor.y, cnv.width, -90);
     }
@@ -89,7 +92,7 @@ function drawLevelComponents() {
         if (player.x < 90) {
             drawImgCam("floor", camera.x, 0, 0);
         } else if (player.x - 140 > gameObjects[gameObjects.length - 1].x) {
-            drawImgCam("floor", (camera.x - (gameObjects[gameObjects.length - 1].x + 140) % 512), roof.y, 90);
+            drawImgCam("floor", (camera.x - (gameObjects[gameObjects.length - 1].x + 140) % 90), roof.y, 90);
         } else {
             drawImgCam("floor", camera.x - player.x % 90, roof.y, 90);
         }

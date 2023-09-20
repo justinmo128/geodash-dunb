@@ -48,5 +48,15 @@
         "x": 1650,
         "y": 0,
         "type": "portal_ship"
+    },
+    {
+        "x": 2000,
+        "y": 270,
+        "type": "portal_ship"
+    },
+    {
+        "x": 2300,
+        "y": 0,
+        "type": "spike"
     }
 ]
