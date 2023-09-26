@@ -33,6 +33,9 @@ function clicked() {
     } else if (menuState == "editorMenu") {
         if (checkClick(10, 60, 10, 65)) {
             menuState = "top";
+        } else if (checkClick(75, 215, 100, 240)) {
+            gameState = "editor";
+            document.getElementById("editor-div").style.display = "block";
         }
     }
 }

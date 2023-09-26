@@ -5,6 +5,12 @@
     src: url(pusab.otf);
 }
 
+html {
+    font-family: Pusab;
+    color: white;
+    font-size: 20px;
+}
+
 body {
     text-align: center;
     background: #1F1F1F url("img/bg.png") fixed;
@@ -25,6 +31,10 @@ canvas {
     border-radius: 5px;
 }
 
-img {
+#imgs {
+    display: none;
+}
+
+#editor-div {
     display: none;
 }

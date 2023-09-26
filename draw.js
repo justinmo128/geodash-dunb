@@ -23,18 +23,23 @@ function draw() {
         drawGameObjects();
     } else if (gameState == "win") {
         ctx.drawImage(document.getElementById("levelcomplete"), 40, 100)
+    } else if (gameState == "editor") {
+        console.log("Hi")
     }
-    setTimeout(draw, 50/3);
+    requestAnimationFrame(draw);
 }
 
 function drawMenu() {
-    if (menuState == "top") {
-        ctx.drawImage(document.getElementById("gamebg"), 0, -180);
+    ctx.drawImage(document.getElementById("gamebg"), 0, -180);
+    ctx.globalAlpha = 0.5;
+    ctx.fillStyle = background.colour;
+    ctx.fillRect(0, 0, cnv.width, cnv.height);
+    ctx.globalAlpha = 1;
+    if (menuState == "top") { 
         ctx.drawImage(document.getElementById("logo"), 40, 50);
         ctx.drawImage(document.getElementById("playbtn"), 100, 120);
         ctx.drawImage(document.getElementById("editorbtn"), 300, 150);
     } else if (menuState == "mainLevels") {
-        ctx.drawImage(document.getElementById("gamebg"), 0, -180);
         ctx.drawImage(document.getElementById("greenarrow"), 10, 10);
         ctx.drawImage(document.getElementById("arrowleft"), 10, 130);
         ctx.drawImage(document.getElementById("arrowright"), 440, 130);
@@ -42,9 +47,9 @@ function drawMenu() {
         ctx.fillStyle = "white";
         ctx.fillText(levels[menuSelect], 240, 130);
     } else if (menuState == "editorMenu") {
-        ctx.drawImage(document.getElementById("gamebg"), 0, -180);
         ctx.drawImage(document.getElementById("greenarrow"), 10, 10);
-        ctx.fillText("Coming Soon! (maybe)", 240, 165)
+        ctx.drawImage(document.getElementById("createbtn"), 75, 100);
+        ctx.drawImage(document.getElementById("importbtn"), 275, 100);
     }
 }
 
@@ -83,7 +88,6 @@ function drawLevelComponents() {
             drawImgCam("floor", (camera.x - (gameObjects[gameObjects.length - 1].x + 140) % 90), newFloor.y, 0);
         } else {
             drawImgCam("floor", camera.x - player.x % 90, newFloor.y, 0);
-            console.log((camera.x - player.x % 90))
         }
         fillRectCam(camera.x, newFloor.y, cnv.width, -90);
     }
@@ -123,15 +127,15 @@ function drawGameObjects() {
 function drawPlayer() {
     if (player.mode == "cube") {
         if (player.x < 90) {
-            ctx.drawImage(document.getElementById("player"), player.x, camera.y - player.y - 30)
+            ctx.drawImage(document.getElementById("player"), player.x, camera.y - player.y - 30);
         } else {
-            drawImgCam("player", player.x, player.y, 30)
+            drawImgCam("player", player.x, player.y, 30);
         }
     } else {
         if (player.x < 90) {
-            ctx.drawImage(player.mode, player.x, camera.y - player.y - 30)
+            ctx.drawImage(player.mode, player.x, camera.y - player.y - 30);
         } else {
-            drawImgCam(player.mode, player.x, player.y, 30)
+            drawImgCam(player.mode, player.x, player.y, 30);
         }
     }
 }
