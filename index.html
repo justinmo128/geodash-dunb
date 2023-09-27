@@ -7,18 +7,33 @@
         <script defer src="draw.js"></script>
         <script defer src="main.js"></script>
         <script defer src="eventlisteners.js"></script>
+        <script defer src="camlib.js"></script>
     </head>
 
     <body>
-        <div>
-            <canvas id="canvas"></canvas>
+        <div class="flex-container">
+            <div class="card editor-side">
+
+            </div>
+            <div class="card" id="canvas-div">
+                <canvas id="canvas"></canvas>
+            </div>
+            <div class="card editor-side">
+                
+            </div>
         </div>
-        <div id="editor-div">
-            hjasdjlasdkl;
+        <div class="card editor-div">
+            <div class="editor-cats">
+                <button class="editor-category">Build</button>
+                <button class="editor-category">Edit</button>
+                <button class="editor-category">Delete</button>
+            </div>
         </div>
-        <div>
+        <div class="card last-card" style="width: 480px;">
             <p>Get the original game:</p>
-            <p>todo: insert links</p>
+            <a href="https://store.steampowered.com/app/322170/Geometry_Dash/"><img src="img/steamlogo.png" width="50" height="50"></a>
+            <a href="https://play.google.com/store/apps/details?id=com.robtopx.geometryjump&hl=en_CA&gl=US&pli=1"><img src="img/googleplaylogo.png" width="50" height="50"></a>
+            <a href="https://apps.apple.com/us/app/geometry-dash/id625334537"><img src="img/appstorelogo.png" width="50" height="50"></a>
         </div>
         <!-- <script>
             document.getElementById("imgs").innerHTML

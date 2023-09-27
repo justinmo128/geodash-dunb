@@ -1,6 +1,7 @@
 let menuState = "top";
 let menuSelect = 0;
 let levels = [];
+let editorDivs = document.getElementsByClassName("editor-div");
 
 fetch(`levels/levels.json`)
     .then((res) => res.json())
@@ -35,7 +36,9 @@ function clicked() {
             menuState = "top";
         } else if (checkClick(75, 215, 100, 240)) {
             gameState = "editor";
-            document.getElementById("editor-div").style.display = "block";
+            for (let i = 0; i < editorDivs.length; i++) {
+                editorDivs[i].style.display = "block";
+            }
         }
     }
 }

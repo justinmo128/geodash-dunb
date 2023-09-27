@@ -19,6 +19,13 @@ document.addEventListener("mouseup", () => {
     keyUp();
 })
 
+document.addEventListener("touchstart", () => {
+    keyDown();
+})
+document.addEventListener("touchend", () => {
+    keyUp();
+})
+
 document.addEventListener("mousemove", mousemoveHandler);
 function mousemoveHandler(e) {
   // Get rectangle info about canvas location

@@ -7,8 +7,9 @@
 
 html {
     font-family: Pusab;
+    text-shadow: -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 2px 2px 0 #000;
     color: white;
-    font-size: 20px;
+    font-size: 30px;
 }
 
 body {
@@ -17,9 +18,7 @@ body {
     margin-top: 50px;
 }
 
-div {
-    width: 480px;
-    margin: 20px auto;
+.card {
     background: #25232A;
     border-radius: 10px;
     box-shadow: 0 2px 2px 2px rgba(0, 0, 0, 0.5);
@@ -35,6 +34,51 @@ canvas {
     display: none;
 }
 
-#editor-div {
-    display: none;
+.editor-div {
+    /* display: none; */
+    width: 930px;
+    margin: auto;
+}
+
+.flex-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#canvas-div {
+    width: 480px;
+    margin: 5px 5px;
+}
+
+.editor-side {
+    height: 330px;
+    width: 200px;
+}
+
+.last-card {
+    margin: 20px auto;
+}
+
+.editor-category {
+    background-image: url("img/editorselectbtn.png");
+    padding: 0;
+    border-width: 0;
+    border-radius: 15px;
+    width: 183px;
+    height: 60px;
+    font-family: Pusab;
+    text-shadow: -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 2px 2px 0 #000;
+    color: white;
+    font-size: 42px;
+    margin-bottom: 4px;
+}
+
+.editor-cats {
+    flex-direction: column;
+    width: 60px;
+}
+
+button:hover {
+    cursor: pointer;
 }

@@ -21,10 +21,11 @@ function draw() {
         drawPortalUnder();
         drawPlayer();
         drawGameObjects();
-    } else if (gameState == "win") {
-        ctx.drawImage(document.getElementById("levelcomplete"), 40, 100)
+        if (player.win) {
+            ctx.drawImage(document.getElementById("levelcomplete"), 40, 100);
+        }
     } else if (gameState == "editor") {
-        console.log("Hi")
+        drawEditor();
     }
     requestAnimationFrame(draw);
 }
@@ -138,42 +139,4 @@ function drawPlayer() {
             drawImgCam(player.mode, player.x, player.y, 30);
         }
     }
-}
-
-function moveCamera() {
-    if (player.x - 140 > gameObjects[gameObjects.length - 1].x) {
-        camera.x = gameObjects[gameObjects.length - 1].x + 50;
-        return;
-    }
-    if (gameState !== "death") {
-        camera.x = player.x - 90;
-    }
-    if (player.y == 0 && player.mode == "cube") {
-        camera.y = 270;
-    }
-}
-
-function drawSpike(x, y) {
-    ctx.beginPath();
-    ctx.moveTo(x - camera.x + 15, camera.y - y - 30);
-    ctx.lineTo(x - camera.x + 30, camera.y - y);
-    ctx.lineTo(x - camera.x, camera.y - y);
-    ctx.fill();
-}
-
-function fillRectCam(x, y, w, h) {
-    ctx.fillRect(x - camera.x, camera.y - y - h, w, h);
-}
-
-function drawImgCam(imgName, x, y, h) {
-    ctx.drawImage(document.getElementById(imgName), x - camera.x, camera.y - y - h)
-}
-
-function shakeScreen(loopAmt) {
-    let oldCamerax = camera.x;
-    let oldCameray = camera.y
-    setTimeout(() => {
-        camera.x = oldCamerax + (getRandomInt(-50, 50));
-        camera.y = oldCameray + (getRandomInt(-20, 20));
-    }, 30 * loopAmt)
 }

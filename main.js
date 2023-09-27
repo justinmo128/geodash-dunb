@@ -22,7 +22,9 @@ let player = {
     xSpeedMod: 1,
     gravity: -0.9,
     yVel: 0,
-    grounded: true
+    grounded: true,
+    dead: false,
+    win: false
 }
 
 class gameOBJ {
@@ -108,7 +110,7 @@ function initialize() {
 
 window.addEventListener("load", physics)
 function physics() {
-    if (gameState == "gameLoop") {
+    if (gameState == "gameLoop" && !player.dead) {
         applyGravity();
         if (keyHeld) {jump()}
         movePlayer();
@@ -152,6 +154,9 @@ function movePlayer() {
 }
 
 function checkCollision() {
+
+    // CLEAN THIS UP LATER!!!
+    
     for (let i = 0; i < gameObjects.length; i++) {
         // Red Hitbox
         if (collides(gameObjects[i].HBx, gameObjects[i].HBy, gameObjects[i].HBw, gameObjects[i].HBh) && gameObjects[i].hbType == "red") {
@@ -159,10 +164,7 @@ function checkCollision() {
             return;
         }
         // Blue Hitbox (over)
-        else if (player.x < gameObjects[i].HBx + gameObjects[i].HBw &&
-            player.x + 30 > gameObjects[i].HBx &&
-            player.y <= gameObjects[i].HBy + gameObjects[i].HBh &&
-            player.y + 30 >= gameObjects[i].HBy + gameObjects[i].HBh && 
+        else if (collides(gameObjects[i].HBx, gameObjects[i].HBy, gameObjects[i].HBw, gameObjects[i].HBh) && gameObjects[i].hbType && 
             gameObjects[i].hbType == "blue") {
                 player.y = gameObjects[i].y + gameObjects[i].HBh;
                 player.grounded = true;
@@ -224,13 +226,13 @@ function collides(x, y, w, h) {
 
 function checkEnding() {
     if (player.x > gameObjects[gameObjects.length - 1].x + 480) {
-        gameState = "win";
+        player.win = true;
         setTimeout(() => (gameState = "menu"), 2000)
     }
 }
 
 function playerDeath() {
-    gameState = "death"
+    player.dead = true;
     for (let i = 0; i < 10; i++) {
         shakeScreen(i);
     }
