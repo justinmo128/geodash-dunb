@@ -54,6 +54,10 @@ function drawMenu() {
     }
 }
 
+function drawEditor() {
+    
+}
+
 function drawLevelComponents() {
     // Background
     ctx.globalAlpha = 1;

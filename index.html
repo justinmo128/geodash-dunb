@@ -7,26 +7,39 @@
         <script defer src="draw.js"></script>
         <script defer src="main.js"></script>
         <script defer src="eventlisteners.js"></script>
+        <script defer src="editor.js"></script>
         <script defer src="camlib.js"></script>
     </head>
 
     <body>
         <div class="flex-container">
-            <div class="card editor-side">
-
+            <div class="card editor-div editor-side">
+                <img id="editor-leave" src="img/greenarrow.png" width="50px" height="62px">
             </div>
             <div class="card" id="canvas-div">
                 <canvas id="canvas"></canvas>
             </div>
-            <div class="card editor-side">
+            <div class="card editor-div editor-side">
                 
             </div>
         </div>
-        <div class="card editor-div">
+        <div class="card editor-div" id="editor-main">
             <div class="editor-cats">
-                <button class="editor-category">Build</button>
-                <button class="editor-category">Edit</button>
-                <button class="editor-category">Delete</button>
+                <button class="editor-tab-btn" id="build-btn">Build</button>
+                <button class="editor-tab-btn" id="edit-btn">Edit</button>
+                <button class="editor-tab-btn" id="delete-btn">Delete</button>
+            </div>
+            <div class="editor-tab" id="build-box">
+                <button class="build-object"><img src="img/block.png"></button>
+                <button class="build-object"><img src="img/slab.png"></button>
+                <button class="build-object"><img src="img/spike.png"></button>
+                <button class="build-object"><img src="img/portalshipover.png" height="40px"></button>
+            </div>
+            <div class="editor-tab" id="edit-box">
+                <p>This is the edit tab.</p>
+            </div>
+            <div class="editor-tab" id="delete-box">
+                <p>This is the delete tab.</p>
             </div>
         </div>
         <div class="card last-card" style="width: 480px;">
@@ -35,6 +48,7 @@
             <a href="https://play.google.com/store/apps/details?id=com.robtopx.geometryjump&hl=en_CA&gl=US&pli=1"><img src="img/googleplaylogo.png" width="50" height="50"></a>
             <a href="https://apps.apple.com/us/app/geometry-dash/id625334537"><img src="img/appstorelogo.png" width="50" height="50"></a>
         </div>
+        <p style="font-size: 12px;">Alpha 21</p>
         <!-- <script>
             document.getElementById("imgs").innerHTML
         </script> do later-->
