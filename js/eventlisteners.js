@@ -26,6 +26,8 @@ document.addEventListener("touchend", () => {
     keyUp();
 })
 
+document.addEventListener("click", clicked)
+
 document.addEventListener("mousemove", mousemoveHandler);
 function mousemoveHandler(e) {
   // Get rectangle info about canvas location
@@ -41,4 +43,20 @@ function keyDown() {
 }
 function keyUp() {
     keyHeld = false;
+}
+
+function clicked() {
+    if (gameState == "menu") {
+        clickInMenu();
+    } else if (gameState == "editor") {
+        clickInEditor();
+    }
+}
+
+
+function checkClick(x1, x2, y1, y2) {
+    if (mouseX >= x1 && mouseX <= x2 && mouseY >= y1 && mouseY <= y2) {
+        return true;
+    }
+    return false;
 }

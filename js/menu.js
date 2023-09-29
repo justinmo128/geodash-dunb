@@ -6,8 +6,7 @@ fetch(`levels/levels.json`)
     .then((res) => res.json())
     .then((data) => levels = data);
 
-document.addEventListener("click", () => {if (gameState == "menu") {clicked()}})
-function clicked() {
+function clickInMenu() {
     if (menuState == "top") {
         if (checkClick(100, 250, 120, 270)) {
             menuState = "mainLevels";
@@ -38,13 +37,8 @@ function clicked() {
             for (let i = 0; i < editorDivs.length; i++) {
                 editorDivs[i].style.display = "flex";
             }
+            camera.x = 0;
+            camera.y = 270;
         }
     }
-}
-
-function checkClick(x1, x2, y1, y2) {
-    if (mouseX >= x1 && mouseX <= x2 && mouseY >= y1 && mouseY <= y2) {
-        return true;
-    }
-    return false;
 }

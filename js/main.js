@@ -80,7 +80,7 @@ function createGameObjects() {
 
 function initialize() {
     camera = {
-        x: 0, y: 180
+        x: 0, y: 270
     };
     player = {
         colour: "lime",
@@ -158,17 +158,17 @@ function checkCollision() {
     // CLEAN THIS UP LATER!!!
     
     for (let i = 0; i < gameObjects.length; i++) {
-        // Red Hitbox
-        if (collides(gameObjects[i].HBx, gameObjects[i].HBy, gameObjects[i].HBw, gameObjects[i].HBh) && gameObjects[i].hbType == "red") {
-            playerDeath();
-            return;
-        }
         // Blue Hitbox (over)
-        else if (collides(gameObjects[i].HBx, gameObjects[i].HBy, gameObjects[i].HBw, gameObjects[i].HBh) && gameObjects[i].hbType && 
+        if (collides(gameObjects[i].HBx, gameObjects[i].HBy, gameObjects[i].HBw, gameObjects[i].HBh) && gameObjects[i].hbType && 
             gameObjects[i].hbType == "blue") {
                 player.y = gameObjects[i].y + gameObjects[i].HBh;
                 player.grounded = true;
                 return;
+        }
+        // Red Hitbox
+        else if (collides(gameObjects[i].HBx, gameObjects[i].HBy, gameObjects[i].HBw, gameObjects[i].HBh) && gameObjects[i].hbType == "red") {
+            playerDeath();
+            return;
         }
         // Blue Hitbox (under)
         else if (player.x + 10 < gameObjects[i].HBx + gameObjects[i].HBw &&

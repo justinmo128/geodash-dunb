@@ -1,4 +1,4 @@
 # geodash-remake
 
-Project for Computer Science 10<br>
+Project for Computer Science 20<br>
 Not yet complete<br>
