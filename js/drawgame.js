@@ -5,7 +5,7 @@ function drawLevelComponents() {
     ctx.fillRect(0, 0, cnv.width, cnv.height);
     if (player.x < 90) {
         drawImgCam("gamebg", camera.x - 90, camera.y - 50, 240);
-    } else if (player.x - 140 > gameObjects[gameObjects.length - 1].x) {
+    } else if (player.x - 140 > maxX) {
         drawImgCam("gamebg", (camera.x - (gameObjects[gameObjects.length - 1].x + 140) % 512), camera.y - 50, 240);
     } else {
         drawImgCam("gamebg", (camera.x - player.x % 512), camera.y - 50, 240);
@@ -17,7 +17,7 @@ function drawLevelComponents() {
     ctx.globalAlpha = 1;
     if (player.x < 90) {
         drawImgCam("floor", camera.x, 0, 0);
-    } else if (player.x - 140 > gameObjects[gameObjects.length - 1].x) {
+    } else if (player.x - 140 > maxX) {
         drawImgCam("floor", (camera.x - (gameObjects[gameObjects.length - 1].x + 140) % 90), camera.y - 50, 240);
     } else {
         drawImgCam("floor", camera.x - player.x % 90, 0, 0);
@@ -29,7 +29,7 @@ function drawLevelComponents() {
     if (newFloor.canCollide) {
         if (player.x < 90) {
             drawImgCam("floor", camera.x, newFloor.y, 0);
-        } else if (player.x - 140 > gameObjects[gameObjects.length - 1].x) {
+        } else if (player.x - 140 > maxX) {
             drawImgCam("floor", (camera.x - (gameObjects[gameObjects.length - 1].x + 140) % 90), newFloor.y, 0);
         } else {
             drawImgCam("floor", camera.x - player.x % 90, newFloor.y, 0);
@@ -40,7 +40,7 @@ function drawLevelComponents() {
     if (roof.canCollide) {
         if (player.x < 90) {
             drawImgCam("floor", camera.x, 0, 0);
-        } else if (player.x - 140 > gameObjects[gameObjects.length - 1].x) {
+        } else if (player.x - 140 > maxX) {
             drawImgCam("floor", (camera.x - (gameObjects[gameObjects.length - 1].x + 140) % 90), roof.y, 90);
         } else {
             drawImgCam("floor", camera.x - player.x % 90, roof.y, 90);

@@ -26,6 +26,7 @@ let player = {
     dead: false,
     win: false
 }
+let maxX = 0;
 
 class gameOBJ {
     constructor(x, y, type) {
@@ -74,7 +75,10 @@ function startLevel(levelName) {
 
 function createGameObjects() {
     for (let i = 0; i < levelJSON.length; i++) {
-        gameObjects[i] = new gameOBJ(levelJSON[i].x, levelJSON[i].y, levelJSON[i].type)
+        gameObjects[i] = new gameOBJ(levelJSON[i].x, levelJSON[i].y, levelJSON[i].type);
+        if (gameObjects[i].x > maxX) {
+            maxX = gameObjects[i].x;
+        }
     }
 }
 
@@ -225,7 +229,7 @@ function collides(x, y, w, h) {
 }
 
 function checkEnding() {
-    if (player.x > gameObjects[gameObjects.length - 1].x + 480) {
+    if (player.x > maxX + 480) {
         player.win = true;
         setTimeout(() => (gameState = "menu"), 2000)
     }

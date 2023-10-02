@@ -56,6 +56,12 @@ canvas {
 .editor-side {
     height: 330px;
     width: 200px;
+    font-size: 20px;
+}
+
+input {
+    height: 30px;
+    width:
 }
 
 .last-card {
@@ -111,4 +117,13 @@ button:hover {
 
 #editor-leave:hover {
     cursor: pointer;
+}
+
+#block-btn {
+    background-image: url("img/buttoncyan.png")
+}
+
+#delete-box {
+    justify-content: center;
+    align-items: center;
 }
