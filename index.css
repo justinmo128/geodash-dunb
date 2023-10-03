@@ -10,6 +10,10 @@ html {
     font-size: 30px;
 }
 
+p {
+    margin: 0;
+}
+
 body {
     text-align: center;
     background: #1F1F1F url("img/bg.png") fixed;
@@ -57,11 +61,12 @@ canvas {
     height: 330px;
     width: 200px;
     font-size: 20px;
+    text-align: left;
 }
 
 input {
-    height: 30px;
-    width:
+    height: 20px;
+    width: 180px;
 }
 
 .last-card {
