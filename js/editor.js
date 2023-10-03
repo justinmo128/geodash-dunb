@@ -1,6 +1,6 @@
 let buildCategory = "build"; // The current category selected
 let currentObj = "block"; // The Object selected in the build menu
-let selectedObj; // The object selected in canvas
+let selectedIndex = -1; // The object selected in canvas
 let editorTabs = document.getElementsByClassName("editor-tab");
 let editorTabBtns = document.getElementsByClassName("editor-tab-btn");
 let editorDivs = document.getElementsByClassName("editor-div");
@@ -45,31 +45,50 @@ function editorLeave() {
 }
 
 function clickInEditor() {
-    let coordX = Math.floor((mouseX + camera.x) /30) * 30;
-    let coordY = Math.floor((camera.y - mouseY) /30) * 30;
+    let coordX = mouseX + camera.x;
+    let coordY = camera.y - mouseY;
+    let snappedX = Math.floor((coordX) /30) * 30;
+    let snappedY = Math.floor((coordY) /30) * 30;
     if (mouseX <= 480 && mouseX >= 0 && mouseY >= 0 && mouseY <= 330) {
         if (buildCategory == "build") {
             if (currentObj.split(" ")[1] == "portal") {
                 editorObjects.push({
-                    x: coordX,
-                    y: coordY,
+                    x: snappedX,
+                    y: snappedY,
                     type: "portal",
                     portalType: currentObj.split(" ")[0],
                     h: 90
                 })
             } else {
                 editorObjects.push({
-                    x: coordX,
-                    y: coordY,
+                    x: snappedX,
+                    y: snappedY,
                     type: currentObj,
                     h: 30
                 })
             }
         } else if (buildCategory == "edit") {
-
+            let indices = [];
+            let selectedInIndices = false;
+            for (let i = 0; i < editorObjects.length; i++) {
+                if (coordX >= editorObjects[i].x && coordX <= editorObjects[i].x + 30 && coordY >= editorObjects[i].y && coordY <= editorObjects[i].y + editorObjects[i].h) {
+                    indices.push(i);
+                }
+            }
+            for (let i = 0; i < indices.length; i++) {
+                if (selectedIndex == indices[i]) {
+                    selectedInIndices = true;
+                    selectedIndex = indices[i + 1];
+                    break;
+                }
+            }
+            if (!selectedInIndices || selectedIndex === undefined) {
+                selectedIndex = indices[0];
+            }
+            console.log(selectedIndex)
         } else {
             let index = editorObjects.findIndex(
-                element => element.x == coordX && element.y == coordY
+                element => element.x == snappedX && element.y == snappedY
             )
             if (index > -1) {
                 editorObjects.splice(index, 1)
