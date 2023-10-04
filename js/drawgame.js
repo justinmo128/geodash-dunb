@@ -53,7 +53,7 @@ function drawLevelComponents() {
 function drawPortalUnder() {
     for (let i = 0; i < gameObjects.length; i++) {
         if (gameObjects[i].type == "portal") {
-            drawImgCam(`portal${gameObjects[i].portalType}under`, gameObjects[i].x, gameObjects[i].y, gameObjects[i].h);
+            drawImgCam(`portal${gameObjects[i].portalType}under`, gameObjects[i].x - 15, gameObjects[i].y, gameObjects[i].h);
         }
     }
 }
@@ -62,7 +62,7 @@ function drawGameObjects() {
     // Game Objects
     for (let i = 0; i < gameObjects.length; i++) {
         if (gameObjects[i].type == "portal") {
-            drawImgCam(`portal${gameObjects[i].portalType}over`, gameObjects[i].x, gameObjects[i].y, gameObjects[i].h);
+            drawImgCam(`portal${gameObjects[i].portalType}over`, gameObjects[i].x - 15, gameObjects[i].y, gameObjects[i].h);
         } else {
             drawImgCam(gameObjects[i].type, gameObjects[i].x, gameObjects[i].y, gameObjects[i].h);
         }

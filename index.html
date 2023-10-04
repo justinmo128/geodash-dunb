@@ -15,14 +15,16 @@
     <body>
         <div class="flex-container">
             <div class="card editor-div editor-side">
-                <img id="editor-leave" src="img/greenarrow.png" width="50px" height="62px">
+                <button id="editor-leave"></button>
+                <button id="delete-obj-btn"></button>
             </div>
             <div class="card" id="canvas-div">
                 <canvas id="canvas"></canvas>
             </div>
             <div class="card editor-div editor-side">
-                <p>Level Name:<br>
-                <input id="level-name"></p>
+                <p>Level Name:</p>
+                <input id="level-name">
+                <button id="export-btn" style="margin-top: 230px;">Export</button>
             </div>
         </div>
         <div class="card editor-div" id="editor-main">
@@ -38,7 +40,8 @@
                 <button class="build-object" title="Ship Portal"><img src="img/portalshipover.png" height="40px"></button>
             </div>
             <div class="editor-tab" id="edit-box">
-                <p>This is the edit tab.</p>
+                <p>WASD - 1 block<br>
+                Arrow Keys - 1 unit</p>
             </div>
             <div class="editor-tab" id="delete-box">
                 <p>Click an object to delete it.</p>

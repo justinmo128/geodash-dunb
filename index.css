@@ -59,6 +59,7 @@ canvas {
 
 .editor-side {
     height: 330px;
+    flex-direction: column;
     width: 200px;
     font-size: 20px;
     text-align: left;
@@ -131,4 +132,21 @@ button:hover {
 #delete-box {
     justify-content: center;
     align-items: center;
+}
+
+#delete-obj-btn {
+    background-image: url("img/deleteobjbtn.png");
+    background-color: transparent;
+    border-width: 0;
+    width: 50px;
+    height: 53px;
+}
+
+#editor-leave {
+    background-image: url("img/greenarrow.png");
+    background-color: transparent;
+    border-width: 0;
+    width: 50px;
+    height: 62px;
+    padding: 0;
 }

@@ -1,30 +1,18 @@
 let keyHeld = false;
+let mouseHeld = false;
 let mouseX = 0;
 let mouseY = 0;
 
 document.addEventListener("keydown", (e) => {
-    if (e.key !== "Escape") {
-        keyDown();
-    }
+    keyDown(e);
 })
-document.addEventListener("keyup", (e) => {
-    if (e.key !== "Escape") {
-        keyUp();
-    }
+document.addEventListener("keyup", keyUp)
+document.addEventListener("mousedown", (e) => {
+    mouseDown(e);
 })
-document.addEventListener("mousedown", () => {
-    keyDown();
-})
-document.addEventListener("mouseup", () => {
-    keyUp();
-})
-
-document.addEventListener("touchstart", () => {
-    keyDown();
-})
-document.addEventListener("touchend", () => {
-    keyUp();
-})
+document.addEventListener("mouseup", mouseUp)
+document.addEventListener("touchstart", keyDown)
+document.addEventListener("touchend", keyUp)
 
 document.addEventListener("click", clicked)
 
@@ -38,8 +26,20 @@ function mousemoveHandler(e) {
   mouseY = Math.round(e.clientY - cnvRect.top);
 }
 
-function keyDown() {
+function mouseDown(e) {
+    mouseHeld = true;
+    if (gameState == "gameLoop") {
+        keyDown(e);
+    }
+}
+function mouseUp() {
+    mouseHeld = false;
+    keyUp();
+}
+
+function keyDown(e) {
     keyHeld = true;
+    editorKeys(e);
 }
 function keyUp() {
     keyHeld = false;
