@@ -145,7 +145,7 @@ function clickInEditor() {
 }
 
 function editorKeys(e) {
-    if (selectedIndex > -1) {
+    if (selectedIndex > -1 && gameState == "editor") {
         if (e.key == "w") {
             editorObjects[selectedIndex].y += 30;
         } else if (e.key == "a") {
