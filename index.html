@@ -17,6 +17,7 @@
             <div class="card editor-div editor-side">
                 <button id="editor-leave"></button>
                 <button id="delete-obj-btn"></button>
+                <button id="deselect-btn">Deselect</button>
             </div>
             <div class="card" id="canvas-div">
                 <canvas id="canvas"></canvas>
@@ -24,7 +25,17 @@
             <div class="card editor-div editor-side">
                 <p>Level Name:</p>
                 <input id="level-name">
-                <button id="export-btn" style="margin-top: 230px;">Export</button>
+                <p>Difficulty:</p>
+                <input type="number" min="1" max="10" id="difficulty">
+                <p>
+                    camX: <span id="cam-x"></span><br>
+                    camY: <span id="cam-y"></span>
+                </p>
+                <p>
+                    objX: <span id="obj-x"></span><br>
+                    objY: <span id="obj-y"></span>
+                </p>
+                <button id="export-btn">Export</button>
             </div>
         </div>
         <div class="card editor-div" id="editor-main">
@@ -48,6 +59,7 @@
             </div>
         </div>
         <div class="card last-card" style="width: 480px;">
+            <input type="file" accept=".json">
             <p>Get the original game:</p>
             <a href="https://store.steampowered.com/app/322170/Geometry_Dash/"><img src="img/steamlogo.png" width="50" height="50"></a>
             <a href="https://play.google.com/store/apps/details?id=com.robtopx.geometryjump&hl=en_CA&gl=US&pli=1"><img src="img/googleplaylogo.png" width="50" height="50"></a>

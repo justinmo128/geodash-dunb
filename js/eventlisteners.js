@@ -27,14 +27,19 @@ function mousemoveHandler(e) {
 }
 
 function mouseDown(e) {
-    mouseHeld = true;
     if (gameState == "gameLoop") {
         keyDown(e);
+    } else if (gameState == "editor") {
+        mouseHeld = true;
+        initMouseX = mouseX;
+        initMouseY = mouseY;
+        initCamX = camera.x;
+        initCamY = camera.y;
     }
 }
 function mouseUp() {
-    mouseHeld = false;
     keyUp();
+    mouseHeld = false;
 }
 
 function keyDown(e) {

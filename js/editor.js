@@ -6,6 +6,15 @@ let editorTabBtns = document.getElementsByClassName("editor-tab-btn");
 let editorDivs = document.getElementsByClassName("editor-div");
 let buildObjs = document.getElementsByClassName("build-object");
 let editorObjects = [];
+let initMouseX = 0;
+let initMouseY = 0;
+let initCamX = 0;
+let initCamY = 0;
+let camXEl = document.getElementById("cam-x");
+let camYEl = document.getElementById("cam-y");
+let objXEl = document.getElementById("obj-x");
+let objYEl = document.getElementById("obj-y");
+let movedCam = false;
 
 for (let i = 0; i < editorTabBtns.length; i++) {
     editorTabBtns[i].addEventListener("click", () => {
@@ -52,12 +61,39 @@ function deleteObject(index) {
     editorObjects.splice(index, 1)
 }
 
+document.getElementById("deselect-btn").addEventListener("click", deselect)
+function deselect() {
+    selectedIndex = -1;
+}
+
+window.addEventListener("load", moveEditorCam);
+function moveEditorCam() {
+    if (mouseInBounds() && mouseHeld) {
+        if ((initMouseX - mouseX) > 5 || (initMouseX - mouseX) < -5 || (initMouseY - mouseY) > 5 || (initMouseY - mouseY) < -5) {
+            camera.x = initCamX + initMouseX - mouseX;
+            camera.y = initCamY - (initMouseY - mouseY);
+            movedCam = true;
+        } else {
+            movedCam = false;
+        }
+    }
+    if (camera.y < 240) {
+        camera.y = 240;
+    }
+    if (camera.x < 0) {
+        camera.x = 0;
+    }
+    camXEl.innerHTML = camera.x;
+    camYEl.innerHTML = camera.y;
+    setTimeout(moveEditorCam, 1000/240)
+}
+
 function clickInEditor() {
     let coordX = mouseX + camera.x;
     let coordY = camera.y - mouseY;
     let snappedX = Math.floor((coordX) /30) * 30;
     let snappedY = Math.floor((coordY) /30) * 30;
-    if (mouseX <= 480 && mouseX >= 0 && mouseY >= 0 && mouseY <= 330) {
+    if (mouseInBounds() && !movedCam) {
         if (buildCategory == "build") {
             if (currentObj.split(" ")[1] == "portal") {
                 editorObjects.push({
@@ -131,17 +167,30 @@ function editorKeys(e) {
 }
 
 function drawEditor() {
+    if (selectedIndex > -1) {
+        objXEl.innerHTML = editorObjects[selectedIndex].x;
+        objYEl.innerHTML = editorObjects[selectedIndex].y;
+    } else {
+        objXEl.innerHTML = 0;
+        objYEl.innerHTML = 0;
+    }
+    
+    // Background
     ctx.drawImage(document.getElementById("gamebg"), 0, -180);
     ctx.globalAlpha = 0.5;
     ctx.fillStyle = background.colour;
     ctx.fillRect(0, 0, cnv.width, cnv.height);
     ctx.globalAlpha = 1;
+
     drawGrid();
-    drawImgCam("floor", camera.x - player.x % 90, 0, 0);
+
+    // Floor
+    ctx.drawImage(document.getElementById("floor"), -1 * (camera.x) % 90 - 100, camera.y)
     ctx.globalAlpha = 0.6;
     ctx.fillStyle = floor.colour;
     fillRectCam(camera.x, -90, cnv.width, 90);
     ctx.globalAlpha = 1;
+
     drawEditorObjects();
 }
 
@@ -169,4 +218,39 @@ function drawGrid() {
         ctx.fillRect(0, i*30 + camera.y % 30, 480, 1);
     }
     ctx.globalAlpha = 1;
+}
+
+function mouseInBounds() {
+    if (mouseX <= 480 && mouseX >= 0 && mouseY >= 0 && mouseY <= 330) {
+        return true;
+    }
+    return false;
+}
+
+document.getElementById("export-btn").addEventListener("click", exportLevel)
+function exportLevel() {
+    let exportArray = [];
+    for (let i = 0; i < editorObjects.length; i++) {
+        exportArray.push({
+            x: editorObjects[i].x,
+            y: editorObjects[i].y,
+            type: editorObjects[i].type,
+        })
+
+        if (exportArray[i].type == "portal") {
+            exportArray[i].type = `portal_${editorObjects[i].portalType}`;
+        }
+    }
+    let exportObject = {
+        name: document.getElementById("level-name").value,
+        difficulty: +document.getElementById("difficulty").value,
+        objects: exportArray
+    }
+    let jsonExport = JSON.stringify(exportObject)
+    let a = document.createElement("a");
+    a.href = URL.createObjectURL(
+        new Blob([jsonExport], {type:"application/json"})
+    )
+    a.download = `${exportObject.name}.json`
+    a.click()
 }

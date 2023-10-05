@@ -7,6 +7,7 @@ fetch(`levels/levels.json`)
     .then((data) => levels = data);
 
 function clickInMenu() {
+    console.log(mouseX, mouseY)
     if (menuState == "top") {
         if (checkClick(100, 250, 120, 270)) {
             menuState = "mainLevels";
@@ -39,6 +40,8 @@ function clickInMenu() {
             }
             camera.x = 0;
             camera.y = 270;
+        } else if (checkClick(275, 415, 100, 240)) {
+
         }
     }
 }

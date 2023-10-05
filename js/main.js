@@ -74,8 +74,8 @@ function startLevel(levelName) {
 }
 
 function createGameObjects() {
-    for (let i = 0; i < levelJSON.length; i++) {
-        gameObjects[i] = new gameOBJ(levelJSON[i].x, levelJSON[i].y, levelJSON[i].type);
+    for (let i = 0; i < levelJSON.objects.length; i++) {
+        gameObjects[i] = new gameOBJ(levelJSON.objects[i].x, levelJSON.objects[i].y, levelJSON.objects[i].type);
         if (gameObjects[i].x > maxX) {
             maxX = gameObjects[i].x;
         }
