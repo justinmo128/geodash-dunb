@@ -1,6 +1,10 @@
 let menuState = "top";
 let menuSelect = 0;
 let levels = [];
+let importInput = document.createElement('input');
+importInput.type = 'file';
+importInput.accept = 'json';
+importInput.addEventListener("change", importLevel)
 
 fetch(`levels/levels.json`)
     .then((res) => res.json())
@@ -41,7 +45,14 @@ function clickInMenu() {
             camera.x = 0;
             camera.y = 270;
         } else if (checkClick(275, 415, 100, 240)) {
-
+            importInput.click();
         }
     }
+}
+
+function importLevel() {
+    new Response(importInput.files[0]).json()
+        .then(json => {levelJSON = json})
+        .then(createGameObjects)
+        .then(initialize);
 }

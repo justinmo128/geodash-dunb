@@ -21,6 +21,7 @@ function draw() {
         drawPortalUnder();
         drawPlayer();
         drawGameObjects();
+        drawHitboxes();
     } else if (gameState == "editor") {
         drawEditor();
     }
