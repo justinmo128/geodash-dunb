@@ -18,15 +18,15 @@ let player = {
     mode: "cube",
     x: 0,
     y: 0,
-    xSpeed: 311.284, // units per second
-    xSpeedMod: 1,
-    gravity: -0.9,
+    xSpeed: 311.58, // units per second
+    gravity: -2851.5625, // units per second squared
     yVel: 0,
     grounded: true,
     dead: false,
     win: false
 }
 let maxX = 0;
+const physicsTPS = 60;
 
 class gameOBJ {
     constructor(x, y, type) {
@@ -91,9 +91,9 @@ function initialize() {
         mode: "cube",
         x: 0,
         y: 0,
-        xSpeed: 311.284, // units per second
+        xSpeed: 311.58, // units per second
         xSpeedMod: 1,
-        gravity: -0.9,
+        gravity: -2851.5625,
         yVel: 0,
         grounded: true
     };
@@ -121,24 +121,35 @@ function physics() {
         checkCollision();
         checkEnding();
     }
-    setTimeout(physics, 50/3);
+    setTimeout(physics, 1000/physicsTPS);
 }
 
 function applyGravity() {
-    if (player.yVel >= 6 && player.mode == "ship") {
-        player.yVel = 6;
+    player.y += player.yVel / physicsTPS;
+    player.yVel += player.gravity / physicsTPS;
+
+    if (player.yVel >= 14400 && player.mode == "ship") {
+        player.yVel = 14400;
     }
-    player.y += player.yVel;
+
     if (player.mode == "cube") {
-        player.gravity = -0.9;
+        if (player.yVel > -812.5) {
+            player.gravity = -2851.5625;
+        } else {
+            player.gravity = 0;
+        }
     } else if (player.mode == "ship") {
-        player.gravity = -0.6;
+        if (keyHeld) {
+            player.gravity = 0;
+        } else {
+            player.gravity = -496.8;
+        }
     }
-    player.yVel += player.gravity;
 
     if (player.grounded) {
         player.yVel = 0;
     }
+    
 }
 
 function jump() {
@@ -146,15 +157,15 @@ function jump() {
     // Jump length 3.6 blocks
     if (player.mode == "cube") {
         if (player.grounded) {
-            player.yVel = 11;
+            player.yVel = 660;
         }
     } else if (player.mode == "ship") {
-        player.yVel += 0.9;
+        player.yVel += 10.56;
     }
 }
 
 function movePlayer() {
-    player.x += player.xSpeed / 60;
+    player.x += player.xSpeed / physicsTPS;
 }
 
 function checkCollision() {
@@ -163,7 +174,7 @@ function checkCollision() {
     
     for (let i = 0; i < gameObjects.length; i++) {
         // Blue Hitbox (over)
-        if (collides(gameObjects[i].HBx, gameObjects[i].HBy, gameObjects[i].HBw, gameObjects[i].HBh) && gameObjects[i].hbType && 
+        if (collides(gameObjects[i].HBx, gameObjects[i].HBy, gameObjects[i].HBw, gameObjects[i].HBh) && 
             gameObjects[i].hbType == "blue") {
                 player.y = gameObjects[i].y + gameObjects[i].HBh;
                 player.grounded = true;
@@ -214,15 +225,18 @@ function checkCollision() {
         return;
     } else if (player.y + 30 >= roof.y && roof.canCollide) {
         player.y = roof.y - 30;
+        if (keyHeld) {
+            player.yVel = 0;
+        }
     }
     player.grounded = false;
 }
 
 function collides(x, y, w, h) {
-    if (player.x < x + w &&
-        player.x + 30 > x &&
-        player.y < y + h &&
-        player.y + 30 > y) {
+    if (player.x <= x + w &&
+        player.x + 30 >= x &&
+        player.y <= y + h &&
+        player.y + 30 >= y) {
             return true;
     }
     return false;
