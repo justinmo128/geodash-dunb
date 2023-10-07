@@ -1,6 +1,6 @@
 function moveCamera() {
-    if (player.x - 140 > gameObjects[gameObjects.length - 1].x && !player.dead) {
-        camera.x = gameObjects[gameObjects.length - 1].x + 50;
+    if (player.x - 140 > gameObjs[gameObjs.length - 1].x && !player.dead) {
+        camera.x = gameObjs[gameObjs.length - 1].x + 50;
         return;
     }
     if (!player.dead) {

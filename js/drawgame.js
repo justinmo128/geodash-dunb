@@ -6,7 +6,7 @@ function drawLevelComponents() {
     if (player.x < 90) {
         drawImgCam("gamebg", camera.x - 90, camera.y - 50, 240);
     } else if (player.x - 140 > maxX) {
-        drawImgCam("gamebg", (camera.x - (gameObjects[gameObjects.length - 1].x + 140) % 512), camera.y - 50, 240);
+        drawImgCam("gamebg", (camera.x - (gameObjs[gameObjs.length - 1].x + 140) % 512), camera.y - 50, 240);
     } else {
         drawImgCam("gamebg", (camera.x - player.x % 512), camera.y - 50, 240);
     }
@@ -18,7 +18,7 @@ function drawLevelComponents() {
     if (player.x < 90) {
         drawImgCam("floor", camera.x, 0, 0);
     } else if (player.x - 140 > maxX) {
-        drawImgCam("floor", (camera.x - (gameObjects[gameObjects.length - 1].x + 140) % 90), camera.y - 50, 240);
+        drawImgCam("floor", (camera.x - (gameObjs[gameObjs.length - 1].x + 140) % 90), camera.y - 50, 240);
     } else {
         drawImgCam("floor", camera.x - player.x % 90, 0, 0);
     }
@@ -30,7 +30,7 @@ function drawLevelComponents() {
         if (player.x < 90) {
             drawImgCam("floor", camera.x, newFloor.y, 0);
         } else if (player.x - 140 > maxX) {
-            drawImgCam("floor", (camera.x - (gameObjects[gameObjects.length - 1].x + 140) % 90), newFloor.y, 0);
+            drawImgCam("floor", (camera.x - (gameObjs[gameObjs.length - 1].x + 140) % 90), newFloor.y, 0);
         } else {
             drawImgCam("floor", camera.x - player.x % 90, newFloor.y, 0);
         }
@@ -41,7 +41,7 @@ function drawLevelComponents() {
         if (player.x < 90) {
             drawImgCam("floor", camera.x, 0, 0);
         } else if (player.x - 140 > maxX) {
-            drawImgCam("floor", (camera.x - (gameObjects[gameObjects.length - 1].x + 140) % 90), roof.y, 90);
+            drawImgCam("floor", (camera.x - (gameObjs[gameObjs.length - 1].x + 140) % 90), roof.y, 90);
         } else {
             drawImgCam("floor", camera.x - player.x % 90, roof.y, 90);
         }
@@ -51,20 +51,30 @@ function drawLevelComponents() {
 }
 
 function drawPortalUnder() {
-    for (let i = 0; i < gameObjects.length; i++) {
-        if (gameObjects[i].type == "portal") {
-            drawImgCam(`portal${gameObjects[i].portalType}under`, gameObjects[i].x - 15, gameObjects[i].y, gameObjects[i].h);
+    for (let i = 0; i < gameObjs.length; i++) {
+        if (player.x < 90 && gameObjs[i].type == "portal") {
+            ctx.drawImage(document.getElementById(`portal${gameObjs[i].portalType}under`), gameObjs[i].x - 15, camera.y - gameObjs[i].y - gameObjs[i].h)
+        } else if (gameObjs[i].type == "portal") {
+            drawImgCam(`portal${gameObjs[i].portalType}under`, gameObjs[i].x - 15, gameObjs[i].y, gameObjs[i].h);
         }
     }
 }
 
 function drawGameObjects() {
     // Game Objects
-    for (let i = 0; i < gameObjects.length; i++) {
-        if (gameObjects[i].type == "portal") {
-            drawImgCam(`portal${gameObjects[i].portalType}over`, gameObjects[i].x - 15, gameObjects[i].y, gameObjects[i].h);
+    for (let i = 0; i < gameObjs.length; i++) {
+        if (gameObjs[i].type == "portal") {
+            if (player.x < 90) {
+                ctx.drawImage(document.getElementById(`portal${gameObjs[i].portalType}over`), gameObjs[i].x - 15, camera.y - gameObjs[i].y - gameObjs[i].h)
+            } else {
+                drawImgCam(`portal${gameObjs[i].portalType}over`, gameObjs[i].x - 15, gameObjs[i].y, gameObjs[i].h);
+            }
         } else {
-            drawImgCam(gameObjects[i].type, gameObjects[i].x, gameObjects[i].y, gameObjects[i].h);
+            if (player.x < 90) {
+                ctx.drawImage(document.getElementById(gameObjs[i].type), gameObjs[i].x, camera.y - gameObjs[i].y - gameObjs[i].h)
+            } else {
+                drawImgCam(gameObjs[i].type, gameObjs[i].x, gameObjs[i].y, gameObjs[i].h);
+            }
         }
     }
     if (player.win) {
@@ -86,4 +96,17 @@ function drawPlayer() {
             drawImgCam(player.mode, player.x, player.y, 30);
         }
     }
+}
+
+function drawHitboxes() {
+    ctx.globalAlpha = 0.5;
+    ctx.fillStyle = "red";
+    fillRectCam(player.x, player.y, player.w, player.h)
+    ctx.fillStyle = "blue";
+    fillRectCam(player.blueHBx, player.blueHBy, player.blueHBw, player.blueHBh)
+    for (let i = 0; i < gameObjs.length; i++) {
+        ctx.fillStyle = gameObjs[i].hbType;
+        fillRectCam(gameObjs[i].HBx, gameObjs[i].HBy, gameObjs[i].HBw, gameObjs[i].HBh)
+    }
+    ctx.globalAlpha = 1;
 }
