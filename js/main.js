@@ -146,7 +146,7 @@ function applyGravity() {
         }
     }
 
-    if (player.grounded) {
+    if (player.grounded || player.y + 30 >= roof.y && roof.canCollide && keyHeld) {
         player.yVel = 0;
     }
     
@@ -225,9 +225,6 @@ function checkCollision() {
         return;
     } else if (player.y + 30 >= roof.y && roof.canCollide) {
         player.y = roof.y - 30;
-        if (keyHeld) {
-            player.yVel = 0;
-        }
     }
     player.grounded = false;
 }
