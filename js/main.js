@@ -47,7 +47,7 @@ class gameOBJ {
             this.HBx = this.x + 12;
             this.HBy = this.y + 10;
             this.HBw = 6;
-            this.HBh = 10;
+            this.HBh = 9;
             this.hbType = "red";
         } else if (this.type == "block") {
             this.HBw = 30;
@@ -141,8 +141,10 @@ function applyGravity() {
     player.y += player.yVel / physicsTPS;
     player.yVel += player.gravity / physicsTPS;
 
-    if (player.yVel >= 14400 && player.mode == "ship") {
-        player.yVel = 14400;
+    if (player.yVel >= 480 && player.mode == "ship") {
+        player.yVel = 480;
+    } else if (player.yVel <= -384 && player.mode == "ship") {
+        player.yVel = -384
     }
 
     if (player.mode == "cube") {
@@ -154,6 +156,8 @@ function applyGravity() {
     } else if (player.mode == "ship") {
         if (keyHeld) {
             player.gravity = 0;
+        } else if (player.yVel > 60) {
+            player.gravity = -745.2;
         } else {
             player.gravity = -496.8;
         }
@@ -163,6 +167,8 @@ function applyGravity() {
         player.yVel = 0;
     }
     player.blueHBy = player.y + 11;
+    console.log(player.grounded)
+    
 }
 
 function jump() {
@@ -172,7 +178,7 @@ function jump() {
         if (player.grounded) {
             player.yVel = 660;
         }
-    } else if (player.mode == "ship") {
+    } else if (player.mode == "ship" && player.y + player.h < roof.y && roof.canCollide) {
         player.yVel += 10.56;
     }
 }
@@ -193,6 +199,7 @@ function checkCollision() {
             player.y = gameObjs[i].y + gameObjs[i].HBh;
             player.blueHBy = player.y + 11;
             player.grounded = true;
+            return;
         }
         // Red Hitbox
         else if (collides(player.x, player.y, player.w, player.h, gameObjs[i].HBx, gameObjs[i].HBy, gameObjs[i].HBw, gameObjs[i].HBh) && gameObjs[i].hbType == "red") {
