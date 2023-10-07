@@ -91,7 +91,6 @@ function createGameObjects() {
 function initialize() {
     gameState = "gameLoop";
     player = {
-        colour: "lime",
         mode: "cube",
         x: 0,
         y: 0,
@@ -102,10 +101,10 @@ function initialize() {
         blueHBw: 8,
         blueHBh: 8,
         xSpeed: 311.58, // units per second
-        xSpeedMod: 1,
-        gravity: -2851.5625,
+        gravity: -2851.5625, // units per second squared
         yVel: 0,
         grounded: true,
+        dead: false,
         win: false
     };
     camera = {
@@ -167,8 +166,6 @@ function applyGravity() {
         player.yVel = 0;
     }
     player.blueHBy = player.y + 11;
-    console.log(player.grounded)
-    
 }
 
 function jump() {
@@ -210,10 +207,7 @@ function checkCollision() {
             playerDeath();
         }
         // Green Hitbox
-        else if (player.x <= gameObjs[i].HBx + gameObjs[i].HBw &&
-            player.x + 30 >= gameObjs[i].HBx &&
-            player.y <= gameObjs[i].HBy + gameObjs[i].HBh &&
-            player.y + 30 >= gameObjs[i].HBy &&
+        else if (collides(player.x, player.y, player.w, player.h, gameObjs[i].HBx, gameObjs[i].HBy, gameObjs[i].HBw, gameObjs[i].HBh) &&
             gameObjs[i].hbType == "green") {
                 if (gameObjs[i].type == "portal") {
                     player.mode = gameObjs[i].portalType;
