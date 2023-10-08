@@ -155,16 +155,17 @@ function applyGravity() {
     } else if (player.mode == "ship") {
         if (keyHeld) {
             player.gravity = 0;
-        } else if (player.yVel > 60) {
+        } else if (player.yVel > 66) {
             player.gravity = -745.2;
         } else {
             player.gravity = -496.8;
         }
     }
 
-    if (player.grounded || player.y + 30 >= roof.y && roof.canCollide && keyHeld) {
+    if (player.grounded || player.y + player.h >= roof.y && roof.canCollide) {
         player.yVel = 0;
     }
+
     player.blueHBy = player.y + 11;
 }
 
@@ -176,7 +177,11 @@ function jump() {
             player.yVel = 660;
         }
     } else if (player.mode == "ship" && player.y + player.h < roof.y && roof.canCollide) {
-        player.yVel += 10.56;
+        if (player.yVel > 66) {
+            player.yVel += 10.35;
+        } else {
+            player.yVel += 12.69;
+        }
     }
 }
 
@@ -191,7 +196,7 @@ function checkCollision() {
     
     for (let i = 0; i < gameObjs.length; i++) {
         // Blue Hitbox (over)
-        if (collides(player.x, player.y, player.w, 1, gameObjs[i].HBx, gameObjs[i].HBy, gameObjs[i].HBw, gameObjs[i].HBh) && 
+        if (collides(player.x, player.y, player.w, player.h, gameObjs[i].HBx, gameObjs[i].HBy, gameObjs[i].HBw, gameObjs[i].HBh) && 
         gameObjs[i].hbType == "blue") {
             player.y = gameObjs[i].y + gameObjs[i].HBh;
             player.blueHBy = player.y + 11;
@@ -235,7 +240,7 @@ function checkCollision() {
         player.blueHBy = player.y + 11;
         return;
     } else if (player.y + player.h >= roof.y && roof.canCollide) {
-        player.y = roof.y - 30;
+        player.y = roof.y - player.h - 1;
     }
     player.grounded = false;
 }
