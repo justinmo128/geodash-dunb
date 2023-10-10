@@ -1,9 +1,11 @@
+// Camera
 function moveCamera() {
     if (player.x - 140 > gameObjs[gameObjs.length - 1].x && !player.dead) {
         camera.x = gameObjs[gameObjs.length - 1].x + 50;
         return;
-    }
-    if (!player.dead) {
+    } else if (player.x < 90) {
+        camera.x = 0;
+    } else {
         camera.x = player.x - 90;
     }
     if (player.y == 0 && player.mode == "cube" && !player.dead) {
@@ -26,4 +28,11 @@ function shakeScreen(loopAmt) {
         camera.x = oldCamerax + (getRandomInt(-50, 50));
         camera.y = oldCameray + (getRandomInt(-20, 20));
     }, 30 * loopAmt)
+}
+
+// Random
+function getRandomInt(min, max) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min) + min); // max exclusive, min inclusive
 }

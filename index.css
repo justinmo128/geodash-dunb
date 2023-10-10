@@ -8,6 +8,7 @@ html {
     text-shadow: -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 2px 2px 0 #000;
     color: white;
     font-size: 30px;
+    user-select: none
 }
 
 p {
@@ -149,4 +150,8 @@ button:hover {
     width: 50px;
     height: 62px;
     padding: 0;
+}
+
+#difficulty {
+    width: 30px;
 }

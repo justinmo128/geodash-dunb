@@ -3,13 +3,15 @@
     <head>
         <title>Geometry Dash Dunb Version</title>
         <link rel="stylesheet" href="index.css">
-        <script src="js/camlib.js"></script>
-        <script src="js/eventlisteners.js"></script>
-        <script defer src="js/menu.js"></script>
-        <script defer src="js/draw.js"></script>
-        <script defer src="js/drawgame.js"></script>
+        <script defer src="js/drawmain.js"></script>
         <script defer src="js/main.js"></script>
         <script defer src="js/editor.js"></script>
+        <script defer src="js/libs.js"></script>
+        <script defer src="js/keyhandlers.js"></script>
+        <script defer src="js/menu.js"></script>
+        <script defer src="js/drawmenu.js"></script>
+        <script defer src="js/drawgame.js"></script>
+        <script defer src="js/draweditor.js"></script>
     </head>
 
     <body>
@@ -60,11 +62,11 @@
         </div>
         <div class="card last-card" style="width: 480px;">
             <p>Get the original game:</p>
-            <a href="https://store.steampowered.com/app/322170/Geometry_Dash/"><img src="img/steamlogo.png" width="50" height="50"></a>
-            <a href="https://play.google.com/store/apps/details?id=com.robtopx.geometryjump&hl=en_CA&gl=US&pli=1"><img src="img/googleplaylogo.png" width="50" height="50"></a>
-            <a href="https://apps.apple.com/us/app/geometry-dash/id625334537"><img src="img/appstorelogo.png" width="50" height="50"></a>
+            <a href="https://store.steampowered.com/app/322170/Geometry_Dash/" target="_blank"><img src="img/steamlogo.png" width="50" height="50"></a>
+            <a href="https://play.google.com/store/apps/details?id=com.robtopx.geometryjump&hl=en_CA&gl=US&pli=1" target="_blank"><img src="img/googleplaylogo.png" width="50" height="50"></a>
+            <a href="https://apps.apple.com/us/app/geometry-dash/id625334537" target="_blank"><img src="img/appstorelogo.png" width="50" height="50"></a>
         </div>
-        <p style="font-size: 12px;">Version 33</p>
+        <p style="font-size: 12px;">Version 0.9</p>
         <!-- <script>
             document.getElementById("imgs").innerHTML
         </script> do later-->
@@ -74,7 +76,7 @@
             <img src="img/slab.png" id="slab">
             <img src="img/floor.png" id="floor">
             <img src="img/gamebg.png" id="gamebg">
-            <img src="img/player.png" id="player">
+            <img src="img/player.png" id="cube">
             <img src="img/portalshipover.png" id="portalshipover">
             <img src="img/portalshipunder.png" id="portalshipunder">
             <img src="img/ship.png" id="ship">

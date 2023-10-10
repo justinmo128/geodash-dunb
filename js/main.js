@@ -1,5 +1,3 @@
-// Global Variables
-// 30 units = 1 block
 let gameState = "menu";
 let background = {
     colour: "#4287f5",
@@ -20,11 +18,11 @@ let player = {
     y: 0,
     w: 30,
     h: 30,
-    blueHBx: 11,
-    blueHBy: 11,
-    blueHBw: 8,
-    blueHBh: 8,
-    xSpeed: 311.58, // units per second
+    bluehbx: 11,
+    bluehby: 11,
+    bluehbw: 8,
+    bluehbh: 8,
+    xVel: 311.58, // units per second, 30 units is a block
     gravity: -2851.5625, // units per second squared
     yVel: 0,
     grounded: true,
@@ -32,7 +30,7 @@ let player = {
     win: false
 }
 let maxX = 0;
-const physicsTPS = 60;
+const physicsTPS = 120;
 
 class gameOBJ {
     constructor(x, y, type) {
@@ -41,27 +39,27 @@ class gameOBJ {
         this.h = 30;
         this.w = 30;
         this.type = type;
-        this.HBx = this.x;
-        this.HBy = this.y;
+        this.hbx = this.x;
+        this.hby = this.y;
         if (this.type == "spike") {
-            this.HBx = this.x + 12;
-            this.HBy = this.y + 10;
-            this.HBw = 6;
-            this.HBh = 9;
+            this.hbx = this.x + 12;
+            this.hby = this.y + 10;
+            this.hbw = 6;
+            this.hbh = 9;
             this.hbType = "red";
         } else if (this.type == "block") {
-            this.HBw = 30;
-            this.HBh = 30;
+            this.hbw = 30;
+            this.hbh = 30;
             this.hbType = "blue";
         } else if (this.type == "slab") {
-            this.HBw = 30;
+            this.hbw = 30;
             this.h = 15;
-            this.HBh = 15;
+            this.hbh = 15;
             this.hbType = "blue";
         } else if (this.type.slice(0, 6) == "portal") {
-            this.HBw = 30;
+            this.hbw = 30;
             this.h = 90;
-            this.HBh = 90;
+            this.hbh = 90;
             this.hbType = "green";
             this.portalType = this.type.split("_").pop();
             this.type = "portal";
@@ -96,11 +94,11 @@ function initialize() {
         y: 0,
         w: 30,
         h: 30,
-        blueHBx: 11,
-        blueHBy: 11,
-        blueHBw: 8,
-        blueHBh: 8,
-        xSpeed: 311.58, // units per second
+        bluehbx: 11,
+        bluehby: 11,
+        bluehbw: 8,
+        bluehbh: 8,
+        xVel: 311.58, // units per second
         gravity: -2851.5625, // units per second squared
         yVel: 0,
         grounded: true,
@@ -166,78 +164,76 @@ function applyGravity() {
         player.yVel = 0;
     }
 
-    player.blueHBy = player.y + 11;
+    player.bluehby = player.y + 11;
 }
 
 function jump() {
-    // Jump height 3 blocks
-    // Jump length 3.6 blocks
     if (player.mode == "cube") {
         if (player.grounded) {
             player.yVel = 660;
         }
     } else if (player.mode == "ship" && player.y + player.h < roof.y && roof.canCollide) {
         if (player.yVel > 66) {
-            player.yVel += 10.35;
+            player.yVel += 621 / physicsTPS;
         } else {
-            player.yVel += 12.69;
+            player.yVel += 761.4 / physicsTPS;
         }
     }
 }
 
 function movePlayer() {
-    player.x += player.xSpeed / physicsTPS;
-    player.blueHBx = player.x + 11;
+    player.x += player.xVel / physicsTPS;
+    player.bluehbx = player.x + 11;
 }
 
 function checkCollision() {
-
-    // CLEAN THIS UP LATER!!!
-    
+    // Object collision
     for (let i = 0; i < gameObjs.length; i++) {
         // Blue Hitbox (over)
-        if (collides(player.x, player.y, player.w, player.h, gameObjs[i].HBx, gameObjs[i].HBy, gameObjs[i].HBw, gameObjs[i].HBh) && 
+        if (collides(player.x, player.y, player.w, 15, gameObjs[i].hbx, gameObjs[i].hby, gameObjs[i].hbw, gameObjs[i].hbh) && 
         gameObjs[i].hbType == "blue") {
-            player.y = gameObjs[i].y + gameObjs[i].HBh;
-            player.blueHBy = player.y + 11;
+            player.y = gameObjs[i].y + gameObjs[i].hbh;
+            player.bluehby = player.y + 11;
             player.grounded = true;
             return;
         }
         // Red Hitbox
-        else if (collides(player.x, player.y, player.w, player.h, gameObjs[i].HBx, gameObjs[i].HBy, gameObjs[i].HBw, gameObjs[i].HBh) && gameObjs[i].hbType == "red") {
+        else if (collides(player.x, player.y, player.w, player.h, gameObjs[i].hbx, gameObjs[i].hby, gameObjs[i].hbw, gameObjs[i].hbh) && gameObjs[i].hbType == "red") {
             playerDeath();
         }
         // Blue Hitbox (under)
-        else if (collides(player.blueHBx, player.blueHBy, player.blueHBw, player.blueHBh, gameObjs[i].HBx, gameObjs[i].HBy, gameObjs[i].HBw, gameObjs[i].HBh) && gameObjs[i].hbType == "blue") {
+        else if (collides(player.bluehbx, player.bluehby, player.bluehbw, player.bluehbh, gameObjs[i].hbx, gameObjs[i].hby, gameObjs[i].hbw, gameObjs[i].hbh) && gameObjs[i].hbType == "blue") {
             playerDeath();
         }
         // Green Hitbox
-        else if (collides(player.x, player.y, player.w, player.h, gameObjs[i].HBx, gameObjs[i].HBy, gameObjs[i].HBw, gameObjs[i].HBh) &&
-            gameObjs[i].hbType == "green") {
-                if (gameObjs[i].type == "portal") {
-                    player.mode = gameObjs[i].portalType;
-                    if (gameObjs[i].portalType == "ship") {
-                        newFloor.y = gameObjs[i].y - 120;
-                        if (newFloor.y < 0) {
-                            newFloor.y = 0;
-                        }
-                        camera.y = newFloor.y + 315;
-                        roof.y = newFloor.y + 300;
-                        newFloor.canCollide = true;
-                        roof.canCollide = true;
-                        player.yVel = 0;
-                    }
+        else if (collides(player.x, player.y, player.w, player.h, gameObjs[i].hbx, gameObjs[i].hby, gameObjs[i].hbw, gameObjs[i].hbh) &&
+        gameObjs[i].type == "portal") {
+            player.mode = gameObjs[i].portalType;
+            if (gameObjs[i].portalType == "ship") {
+                newFloor.y = gameObjs[i].y - 120;
+                if (newFloor.y < 0) {
+                    newFloor.y = 0;
                 }
+                camera.y = newFloor.y + 315;
+                roof.y = newFloor.y + 300;
+                newFloor.canCollide = true;
+                roof.canCollide = true;
+                if (player.mode !== "ship") {
+                    player.yVel = 0;
+                }
+            }
         }
     }
+    // Ground, roof collision
     if (player.y <= 0) {
         player.y = 0;
-        player.blueHBy = player.y + 11;
+        player.bluehby = player.y + 11;
         player.grounded = true;
         return;
     } else if (player.y <= newFloor.y && newFloor.canCollide) {
         player.y = newFloor.y;
-        player.blueHBy = player.y + 11;
+        player.bluehby = player.y + 11;
+        player.grounded = true;
         return;
     } else if (player.y + player.h >= roof.y && roof.canCollide) {
         player.y = roof.y - player.h - 1;
@@ -266,14 +262,10 @@ function checkEnding() {
 
 function playerDeath() {
     player.dead = true;
-    for (let i = 0; i < 10; i++) {
-        // shakeScreen(i);
-    }
+    player.xVel = 0;
+    player.yVel = 0;
+    // for (let i = 0; i < 10; i++) {
+    //     shakeScreen(i);
+    // }
     setTimeout(initialize, 300)
-}
-
-function getRandomInt(min, max) {
-    min = Math.ceil(min);
-    max = Math.floor(max);
-    return Math.floor(Math.random() * (max - min) + min); // The maximum is exclusive and the minimum is inclusive
 }

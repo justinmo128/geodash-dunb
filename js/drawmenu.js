@@ -1,33 +1,3 @@
-// Canvas and graphics context
-let cnv = document.getElementById("canvas");
-let ctx = cnv.getContext("2d");
-cnv.width = 480;
-cnv.height = 330;
-ctx.font = "30px Pusab";
-ctx.textAlign = "center";
-let camera = {
-    x: 0,
-    y: 270
-}
-
-// Draw Function
-window.addEventListener("load", draw);
-function draw() {
-    if (gameState == "menu") {
-        drawMenu();
-    } else if (gameState == "gameLoop") {
-        moveCamera();
-        drawLevelComponents();
-        drawPortalUnder();
-        drawPlayer();
-        drawGameObjects();
-        drawHitboxes();
-    } else if (gameState == "editor") {
-        drawEditor();
-    }
-    requestAnimationFrame(draw);
-}
-
 function drawMenu() {
     ctx.drawImage(document.getElementById("gamebg"), 0, -180);
     ctx.globalAlpha = 0.5;
