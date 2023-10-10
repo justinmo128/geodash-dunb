@@ -15,6 +15,9 @@ let camYEl = document.getElementById("cam-y");
 let objXEl = document.getElementById("obj-x");
 let objYEl = document.getElementById("obj-y");
 let movedCam = false;
+let setDifficulty = document.getElementById("difficulty");
+let levelDiff = document.getElementById("level-diff");
+let levelDiffIcon = document.getElementById("level-difficon");
 
 for (let i = 0; i < editorTabBtns.length; i++) {
     editorTabBtns[i].addEventListener("click", () => {
@@ -25,6 +28,12 @@ for (let i = 0; i < buildObjs.length; i++) {
     buildObjs[i].addEventListener("click", () => {
         buildObjSelect(i);
     })
+}
+
+setDifficulty.addEventListener("change", changeDifficulty)
+function changeDifficulty() {
+    levelDiff.innerHTML = getDifficulty(setDifficulty.value);
+    levelDiffIcon.style.backgroundImage = `url(img/diff${getDifficulty(setDifficulty.value)}.png)`;
 }
 
 function switchCategory(newCat) {
@@ -189,7 +198,7 @@ function exportLevel() {
     }
     let exportObject = {
         name: document.getElementById("level-name").value,
-        difficulty: +document.getElementById("difficulty").value,
+        difficulty: setDifficulty.value,
         objects: exportArray
     }
     let jsonExport = JSON.stringify(exportObject)

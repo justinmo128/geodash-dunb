@@ -25,10 +25,15 @@
                 <canvas id="canvas"></canvas>
             </div>
             <div class="card editor-div editor-side">
-                <p>Level Name:</p>
-                <input id="level-name">
+                <p>Level Name:<br>
+                    <input id="level-name">
+                </p>
                 <p>Difficulty:</p>
-                <input type="number" min="1" max="10" id="difficulty">
+                <div class="info-holder">
+                    <input type="number" min="1" max="10" id="difficulty">
+                    <div id="level-difficon"></div>
+                    <span id="level-diff"></span>
+                </div>
                 <p>
                     camX: <span id="cam-x"></span><br>
                     camY: <span id="cam-y"></span>
@@ -60,7 +65,12 @@
                 <p>Click an object to delete it.</p>
             </div>
         </div>
-        <div class="card last-card" style="width: 480px;">
+        <div class="card info-holder" id="level-info">
+            <span id="level-info-name"></span>
+            <div id="level-info-difficon"></div>
+            <span id="level-info-diff"></span>
+        </div>
+        <div class="card last-card">
             <p>Get the original game:</p>
             <a href="https://store.steampowered.com/app/322170/Geometry_Dash/" target="_blank"><img src="img/steamlogo.png" width="50" height="50"></a>
             <a href="https://play.google.com/store/apps/details?id=com.robtopx.geometryjump&hl=en_CA&gl=US&pli=1" target="_blank"><img src="img/googleplaylogo.png" width="50" height="50"></a>

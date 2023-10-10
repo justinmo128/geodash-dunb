@@ -66,6 +66,10 @@ canvas {
     text-align: left;
 }
 
+.editor-side > * {
+    margin-bottom: 5px;
+}
+
 input {
     height: 20px;
     width: 180px;
@@ -73,6 +77,7 @@ input {
 
 .last-card {
     margin: 20px auto;
+    width: 480px;
 }
 
 .editor-tab-btn {
@@ -154,4 +159,34 @@ button:hover {
 
 #difficulty {
     width: 30px;
+}
+
+#level-difficon {
+    background-size: 30px;
+    width: 30px;
+    height: 30px;
+}
+
+#level-info-difficon {
+    background-size: 30px;
+    width: 30px;
+    height: 30px;
+}
+
+.info-holder {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.info-holder > * {
+    margin-right: 10px;
+}
+
+#level-info {
+    width: 480px;
+    margin: auto;
+    margin-top: 10px;
+    display: none;
+    justify-content: center;
 }

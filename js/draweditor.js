@@ -6,7 +6,7 @@ function drawEditor() {
         objXEl.innerHTML = 0;
         objYEl.innerHTML = 0;
     }
-    
+
     // Background
     ctx.drawImage(document.getElementById("gamebg"), 0, -180);
     ctx.globalAlpha = 0.5;
