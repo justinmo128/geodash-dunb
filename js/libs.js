@@ -30,6 +30,14 @@ function shakeScreen(loopAmt) {
     }, 30 * loopAmt)
 }
 
+function drawImgCamRotate(imgName, x, y, w, h, angle) {
+    ctx.save();
+    ctx.translate(x - camera.x + w/2, camera.y - y - h + h/2);
+    ctx.rotate(angle * Math.PI / 180);
+    ctx.drawImage(document.getElementById(imgName), w/-2, h/-2);
+    ctx.restore();
+}
+
 // Random
 function getRandomInt(min, max) {
     min = Math.ceil(min);

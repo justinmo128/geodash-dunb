@@ -3,7 +3,7 @@ function drawGame() {
     drawLevelComponents();
     drawPlayer();
     drawGameObjects();
-    drawHitboxes();
+    // drawHitboxes();
 }
 
 function drawLevelComponents() {
@@ -58,7 +58,7 @@ function drawGameObjects() {
 }
 
 function drawPlayer() {
-    drawImgCam(player.mode, player.x, player.y, 30);
+    drawImgCamRotate(player.mode, player.x, player.y, player.w, player.h, player.angle);
 }
 
 function drawHitboxes() {

@@ -26,8 +26,10 @@ let player = {
     gravity: -2851.5625, // units per second squared
     yVel: 0,
     grounded: true,
+    roofed: false,
     dead: false,
-    win: false
+    win: false,
+    angle: 0
 }
 let maxX = 0;
 const physicsTPS = 120;
@@ -107,7 +109,8 @@ function initialize() {
         yVel: 0,
         grounded: true,
         dead: false,
-        win: false
+        win: false,
+        angle: 0
     };
     camera = {
         x: 0, y: 270
@@ -134,6 +137,7 @@ window.addEventListener("load", physics)
 function physics() {
     if (gameState == "gameLoop" && !player.dead) {
         applyGravity();
+        rotatePlayer();
         if (keyHeld) {jump()}
         movePlayer();
         checkCollision();
@@ -167,12 +171,48 @@ function applyGravity() {
             player.gravity = -496.8;
         }
     }
-
-    if (player.grounded) {
+    if (player.roofed && !keyHeld) {
+        player.y--;
+        player.roofed = false;
+    }
+    if (player.grounded || player.roofed) {
         player.yVel = 0;
     }
-
     player.bluehby = player.y + 11;
+}
+
+function rotatePlayer() {
+    if (player.grounded || player.roofed) {
+        if (player.mode == "cube") {
+            let roundedAngle = Math.round(player.angle/90)*90;
+            player.angle += 450/physicsTPS;
+            if (player.angle > roundedAngle) {
+                player.angle = roundedAngle;
+            }
+        } else if (player.mode == "ship") {
+            if (player.roofed && player.angle !== 0) {
+                player.angle += 500/physicsTPS;
+                if (player.angle > 360) {
+                    player.angle = 0;
+                }
+            } else {
+                player.angle -= 500/physicsTPS;
+                if (player.angle < 0) {
+                    player.angle = 0;
+                }
+            }
+        }
+    } else {
+        if (player.mode == "cube") {
+            player.angle += 360/physicsTPS;
+        } else if (player.mode == "ship") {
+            player.angle = player.yVel / -8;
+        }
+    }
+    player.angle = player.angle % 360;
+    if (player.angle < 0) {
+        player.angle = 360 + player.angle;
+    }
 }
 
 function jump() {
@@ -180,7 +220,7 @@ function jump() {
         if (player.grounded) {
             player.yVel = 660;
         }
-    } else if (player.mode == "ship" && player.y + player.h < roof.y && roof.canCollide) {
+    } else if (player.mode == "ship" && player.y + player.h < roof.y && roof.canCollide && !player.roofed) {
         if (player.yVel > 66) {
             player.yVel += 621 / physicsTPS;
         } else {
@@ -207,8 +247,8 @@ function checkCollision() {
         gameObjs[i].hbType == "blue") {
             if (player.y + player.h < gameObjs[i].y + gameObjs[i].h) {
                 if (player.mode == "ship") {
+                    player.roofed = true;
                     player.y = gameObjs[i].y - player.h;
-                    player.grounded = true;
                     return;
                 }
             } else if (player.y > gameObjs[i].y) {
@@ -239,6 +279,7 @@ function checkCollision() {
                 roof.y = newFloor.y + 300;
                 newFloor.canCollide = true;
                 roof.canCollide = true;
+                player.angle = 0;
             }
         }
     }
@@ -254,18 +295,19 @@ function checkCollision() {
         player.grounded = true;
         return;
     } else if (player.y + player.h >= roof.y && roof.canCollide) {
-        player.y = roof.y - player.h - 1;
-        player.grounded = true;
+        player.roofed = true;
+        player.y = roof.y - player.h;
         return;
     }
     player.grounded = false;
+    player.roofed = false;
 }
 
 function collides(Ax, Ay, Aw, Ah, Bx, By, Bw, Bh) {
-    if (Ax < Bx + Bw &&
-        Ax + Aw > Bx &&
-        Ay < By + Bh &&
-        Ay + Ah > By) {
+    if (Ax <= Bx + Bw &&
+        Ax + Aw >= Bx &&
+        Ay <= By + Bh &&
+        Ay + Ah >= By) {
             return true;
     }
     return false;
