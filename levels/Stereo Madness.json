@@ -59,6 +59,11 @@
             "type": "portal_ship"
         },
         {
+            "x": 1700,
+            "y": 0,
+            "type": "block"
+        },
+        {
             "x": 1670,
             "y": 270,
             "type": "portal_ship"

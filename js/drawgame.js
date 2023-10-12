@@ -1,22 +1,18 @@
 function drawGame() {
     moveCamera();
     drawLevelComponents();
+    drawBackgroundObjects();
     drawPlayer();
     drawGameObjects();
-    // drawHitboxes();
+    drawHitboxes();
 }
 
 function drawLevelComponents() {
     // Background
     ctx.fillStyle = "black";
     ctx.fillRect(0, 0, cnv.width, cnv.height);
-    if (player.x < 90) {
-        drawImgCam("gamebg", camera.x - 90, camera.y - 50, 240);
-    } else if (player.x - 140 > maxX) {
-        drawImgCam("gamebg", (camera.x - (gameObjs[gameObjs.length - 1].x + 140) % 512), camera.y - 50, 240);
-    } else {
-        drawImgCam("gamebg", (camera.x - player.x % 512), camera.y - 50, 240);
-    }
+    background.x = camera.x * -0.2;
+    ctx.drawImage(document.getElementById("gamebg"), background.x % 512, -50)
     ctx.globalAlpha = 0.5;
     ctx.fillStyle = background.colour;
     ctx.fillRect(0, 0, cnv.width, cnv.height);
@@ -43,10 +39,25 @@ function drawLevelComponents() {
     ctx.globalAlpha = 1;
 }
 
-function drawGameObjects() {
+function drawBackgroundObjects() {
     for (let i = 0; i < gameObjs.length; i++) {
         if (gameObjs[i].type == "portal") {
             drawImgCam(`portal${gameObjs[i].portalType}under`, gameObjs[i].x - 15, gameObjs[i].y, gameObjs[i].h);
+        }
+    }
+}
+
+function drawPlayer() {
+    let offset = 0;
+    if (player.mode == "ship") {
+        offset = 5;
+    }
+    drawImgCamRotate(player.mode, player.x - offset, player.y, player.w, player.h, player.angle);
+}
+
+function drawGameObjects() {
+    for (let i = 0; i < gameObjs.length; i++) {
+        if (gameObjs[i].type == "portal") {
             drawImgCam(`portal${gameObjs[i].portalType}over`, gameObjs[i].x - 15, gameObjs[i].y, gameObjs[i].h);
         } else {
             drawImgCam(gameObjs[i].type, gameObjs[i].x, gameObjs[i].y, gameObjs[i].h);
@@ -55,10 +66,6 @@ function drawGameObjects() {
     if (player.win) {
         ctx.drawImage(document.getElementById("levelcomplete"), 40, 100);
     }
-}
-
-function drawPlayer() {
-    drawImgCamRotate(player.mode, player.x, player.y, player.w, player.h, player.angle);
 }
 
 function drawHitboxes() {

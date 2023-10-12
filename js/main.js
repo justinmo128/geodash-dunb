@@ -1,6 +1,8 @@
 let gameState = "menu";
 let background = {
     colour: "#4287f5",
+    x: 0,
+    y: 0
 }
 let floor = {
     colour: "#0548b3",
@@ -117,6 +119,8 @@ function initialize() {
     };
     background = {
         colour: "#4287f5",
+        x: 0,
+        y: 0
     }
     floor = {
         colour: "#0548b3",
@@ -137,10 +141,10 @@ window.addEventListener("load", physics)
 function physics() {
     if (gameState == "gameLoop" && !player.dead) {
         applyGravity();
-        rotatePlayer();
         if (keyHeld) {jump()}
-        movePlayer();
+        rotatePlayer();
         checkCollision();
+        movePlayer();
         checkEnding();
     }
     setTimeout(physics, 1000/physicsTPS);
@@ -185,7 +189,7 @@ function rotatePlayer() {
     if (player.grounded || player.roofed) {
         if (player.mode == "cube") {
             let roundedAngle = Math.round(player.angle/90)*90;
-            player.angle += 450/physicsTPS;
+            player.angle += 720/physicsTPS;
             if (player.angle > roundedAngle) {
                 player.angle = roundedAngle;
             }
@@ -245,18 +249,24 @@ function checkCollision() {
         // Red Player + Blue Obj (Landing on blocks)
         else if (collides(player.x, player.y, player.w, player.h, gameObjs[i].hbx, gameObjs[i].hby, gameObjs[i].hbw, gameObjs[i].hbh) && 
         gameObjs[i].hbType == "blue") {
-            if (player.y + player.h < gameObjs[i].y + gameObjs[i].h) {
-                if (player.mode == "ship") {
-                    player.roofed = true;
-                    player.y = gameObjs[i].y - player.h;
-                    return;
-                }
-            } else if (player.y > gameObjs[i].y) {
+            if (player.yVel <= 0) {
                 player.y = gameObjs[i].y + gameObjs[i].hbh;
                 player.bluehby = player.y + 11;
                 player.grounded = true;
                 return;
-            }   
+            }
+            // if (player.y + player.h < gameObjs[i].y + gameObjs[i].h) {
+            //     if (player.mode == "ship") {
+            //         player.roofed = true;
+            //         player.y = gameObjs[i].y - player.h;
+            //         return;
+            //     }
+            // } else if (player.y < gameObjs[i].y + gameObjs[i].h) {
+            //     player.y = gameObjs[i].y + gameObjs[i].hbh;
+            //     player.bluehby = player.y + 11;
+            //     player.grounded = true;
+            //     return;
+            // }   
         }
         // Red Player + Red Obj (Spikes)
         else if (collides(player.x, player.y, player.w, player.h, gameObjs[i].hbx, gameObjs[i].hby, gameObjs[i].hbw, gameObjs[i].hbh) && gameObjs[i].hbType == "red") {
