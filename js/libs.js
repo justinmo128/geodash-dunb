@@ -1,7 +1,7 @@
 // Camera
 function moveCamera() {
-    if (player.x - 140 > gameObjs[gameObjs.length - 1].x && !player.dead) {
-        camera.x = gameObjs[gameObjs.length - 1].x + 50;
+    if (player.x - 140 > maxX && !player.dead) {
+        camera.x = maxX + 50;
         return;
     } else if (player.x < 90) {
         camera.x = 0;
@@ -21,21 +21,32 @@ function drawImgCam(imgName, x, y, h) {
     ctx.drawImage(document.getElementById(imgName), x - camera.x, camera.y - y - h)
 }
 
-function shakeScreen(loopAmt) {
-    let oldCamerax = camera.x;
-    let oldCameray = camera.y;
-    setTimeout(() => {
-        camera.x = oldCamerax + (getRandomInt(-50, 50));
-        camera.y = oldCameray + (getRandomInt(-20, 20));
-    }, 30 * loopAmt)
-}
-
 function drawImgCamRotate(imgName, x, y, w, h, angle) {
     ctx.save();
     ctx.translate(x - camera.x + w/2, camera.y - y - h + h/2);
     ctx.rotate(angle * Math.PI / 180);
     ctx.drawImage(document.getElementById(imgName), w/-2, h/-2);
     ctx.restore();
+}
+
+// Drawing Common Elements
+function drawBG() {
+    background.x = camera.x * -0.2;
+    background.y = camera.y * 0.2;
+    ctx.drawImage(document.getElementById("gamebg"), background.x % 512, background.y % 512 - 245)
+    ctx.globalAlpha = 0.5;
+    ctx.fillStyle = background.colour;
+    ctx.fillRect(0, 0, cnv.width, cnv.height);
+    ctx.globalAlpha = 1;
+}
+
+function drawFloorRoof(type) {
+    ctx.globalAlpha = 1;
+    ctx.drawImage(document.getElementById("floor"), player.x / 90 - camera.x % 90 - 90, camera.y - type.y)
+    ctx.globalAlpha = 0.6;
+    ctx.fillStyle = type.colour;
+    fillRectCam(camera.x, type.y, cnv.width, -90);
+    ctx.globalAlpha = 1;
 }
 
 // Random

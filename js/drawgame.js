@@ -4,39 +4,18 @@ function drawGame() {
     drawBackgroundObjects();
     drawPlayer();
     drawGameObjects();
-    drawHitboxes();
+    // drawHitboxes();
 }
 
 function drawLevelComponents() {
-    // Background
-    ctx.fillStyle = "black";
-    ctx.fillRect(0, 0, cnv.width, cnv.height);
-    background.x = camera.x * -0.2;
-    ctx.drawImage(document.getElementById("gamebg"), background.x % 512, -50)
-    ctx.globalAlpha = 0.5;
-    ctx.fillStyle = background.colour;
-    ctx.fillRect(0, 0, cnv.width, cnv.height);
-    // Floor
-    ctx.globalAlpha = 1;
-    ctx.drawImage(document.getElementById("floor"), player.x / 90 - camera.x % 90 - 90, camera.y)
-    ctx.globalAlpha = 0.6;
-    ctx.fillStyle = floor.colour;
-    fillRectCam(camera.x, -90, cnv.width, 90);
-    // NewFloor
+    drawBG();
+    drawFloorRoof(floor);
     if (newFloor.canCollide) {
-        ctx.globalAlpha = 1;
-        ctx.drawImage(document.getElementById("floor"), player.x / 90 - camera.x % 90 - 90, camera.y - newFloor.y)
-        ctx.globalAlpha = 0.6;
-        fillRectCam(camera.x, newFloor.y, cnv.width, -90);
+        drawFloorRoof(newFloor);
     }
-    // Roof
     if (roof.canCollide) {
-        ctx.globalAlpha = 1;
-        ctx.drawImage(document.getElementById("floor"), player.x / 90 - camera.x % 90 - 90, camera.y - roof.y - 90)
-        ctx.globalAlpha = 0.6;
-        fillRectCam(camera.x, roof.y, cnv.width, 90);
+        drawFloorRoof(roof);
     }
-    ctx.globalAlpha = 1;
 }
 
 function drawBackgroundObjects() {

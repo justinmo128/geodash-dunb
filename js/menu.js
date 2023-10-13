@@ -1,3 +1,4 @@
+initializeMenu();
 let menuState = "top";
 let menuSelect = 0;
 let levels = [];
@@ -9,6 +10,13 @@ importInput.addEventListener("change", importLevel)
 fetch(`levels/levels.json`)
     .then((res) => res.json())
     .then((data) => levels = data);
+
+function checkClick(x1, x2, y1, y2) {
+    if (mouseX >= x1 && mouseX <= x2 && mouseY >= y1 && mouseY <= y2) {
+        return true;
+    }
+    return false;
+}
 
 function clickInMenu() {
     console.log(mouseX, mouseY)
@@ -38,12 +46,7 @@ function clickInMenu() {
         if (checkClick(10, 60, 10, 65)) {
             menuState = "top";
         } else if (checkClick(75, 215, 100, 240)) {
-            gameState = "editor";
-            for (let i = 0; i < editorDivs.length; i++) {
-                editorDivs[i].style.display = "flex";
-            }
-            camera.x = 0;
-            camera.y = 270;
+            initializeEditor();
         } else if (checkClick(275, 415, 100, 240)) {
             importInput.click();
         }
@@ -55,4 +58,42 @@ function importLevel() {
         .then(json => {levelJSON = json})
         .then(createGameObjects)
         .then(initialize);
+}
+
+function initializeEditor() {
+    gameState = "editor";
+    for (let i = 0; i < editorDivs.length; i++) {
+        editorDivs[i].style.display = "flex";
+    }
+    camera.x = 0;
+    camera.y = 270;
+    background = {
+        colour: "#4287f5",
+        x: 0,
+        y: 0
+    }
+    floor = {
+        colour: "#0548b3",
+        y: 0
+    }
+    newFloor = {
+        canCollide: false,
+    }
+    roof = {
+        canCollide: false,
+    };
+    player = {
+        x: 0
+    };
+}
+
+function initializeMenu() {
+    gameState = "menu";
+    camera.x = 0;
+    camera.y = 500;
+    background = {
+        colour: "#4287f5",
+        x: 0,
+        y: 0
+    };
 }

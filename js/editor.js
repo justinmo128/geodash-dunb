@@ -102,52 +102,49 @@ function clickInEditor() {
     let coordY = camera.y - mouseY;
     let snappedX = Math.floor((coordX) /30) * 30;
     let snappedY = Math.floor((coordY) /30) * 30;
-    if (mouseInBounds() && !movedCam) {
-        if (buildCategory == "build") {
-            if (currentObj.split(" ")[1] == "portal") {
-                editorObjects.push({
-                    x: snappedX,
-                    y: snappedY - 30,
-                    type: "portal",
-                    portalType: currentObj.split(" ")[0],
-                    h: 90,
-                    w: 30
-                })
-            } else {
-                editorObjects.push({
-                    x: snappedX,
-                    y: snappedY,
-                    type: currentObj,
-                    h: 30,
-                    w: 30
-                })
-            }
-            selectedIndex = editorObjects.length - 1;
-        } else if (buildCategory == "edit") {
-            let indices = [];
-            let selectedInIndices = false;
-            for (let i = 0; i < editorObjects.length; i++) {
-                if (coordX >= editorObjects[i].x && coordX <= editorObjects[i].x + editorObjects[i].w && coordY >= editorObjects[i].y && coordY <= editorObjects[i].y + editorObjects[i].h) {
-                    indices.push(i);
-                }
-            }
-            for (let i = 0; i < indices.length; i++) {
-                if (selectedIndex == indices[i]) {
-                    selectedInIndices = true;
-                    selectedIndex = indices[i + 1];
-                    break;
-                }
-            }
-            if (!selectedInIndices || selectedIndex === undefined) {
-                selectedIndex = indices[0];
-            }
-            console.log(selectedIndex)
+    if (buildCategory == "build" && mouseInBounds() && !movedCam) {
+        if (currentObj.split(" ")[1] == "portal") {
+            editorObjects.push({
+            x: snappedX,
+            y: snappedY - 30,
+            type: "portal",
+            portalType: currentObj.split(" ")[0],
+            h: 90,
+            w: 30
+            })
         } else {
-            for (let i = 0; i < editorObjects.length; i++) {
-                if (coordX >= editorObjects[i].x && coordX <= editorObjects[i].x + editorObjects[i].w && coordY >= editorObjects[i].y && coordY <= editorObjects[i].y + editorObjects[i].h) {
-                    deleteObject(i)
-                    break;
-                }
+            editorObjects.push({
+            x: snappedX,
+            y: snappedY,
+            type: currentObj,
+            h: 30,
+            w: 30
+            })
+        }
+        selectedIndex = editorObjects.length - 1;
+    } else if (buildCategory == "edit" && mouseInBounds() && !movedCam) {
+        let indices = [];
+        let selectedInIndices = false;
+        for (let i = 0; i < editorObjects.length; i++) {
+            if (coordX >= editorObjects[i].x && coordX <= editorObjects[i].x + editorObjects[i].w && coordY >= editorObjects[i].y && coordY <= editorObjects[i].y + editorObjects[i].h) {
+                indices.push(i);
+            }
+        }
+        for (let i = 0; i < indices.length; i++) {
+            if (selectedIndex == indices[i]) {
+                selectedInIndices = true;
+                selectedIndex = indices[i + 1];
+                break;
+            }
+        }
+        if (!selectedInIndices || selectedIndex === undefined) {
+            selectedIndex = indices[0];
+        }
+    } else if (mouseInBounds() && !movedCam) {
+        for (let i = 0; i < editorObjects.length; i++) {
+            if (coordX >= editorObjects[i].x && coordX <= editorObjects[i].x + editorObjects[i].w && coordY >= editorObjects[i].y && coordY <= editorObjects[i].y + editorObjects[i].h) {
+                deleteObject(i)
+                break;
             }
         }
     }

@@ -6,23 +6,9 @@ function drawEditor() {
         objXEl.innerHTML = 0;
         objYEl.innerHTML = 0;
     }
-
-    // Background
-    ctx.drawImage(document.getElementById("gamebg"), 0, -180);
-    ctx.globalAlpha = 0.5;
-    ctx.fillStyle = background.colour;
-    ctx.fillRect(0, 0, cnv.width, cnv.height);
-    ctx.globalAlpha = 1;
-
+    drawBG();
     drawGrid();
-
-    // Floor
-    ctx.drawImage(document.getElementById("floor"), -1 * (camera.x) % 90 - 100, camera.y)
-    ctx.globalAlpha = 0.6;
-    ctx.fillStyle = floor.colour;
-    fillRectCam(camera.x, -90, cnv.width, 90);
-    ctx.globalAlpha = 1;
-
+    drawFloorRoof(floor);
     drawEditorObjects();
 }
 

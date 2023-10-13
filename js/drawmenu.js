@@ -1,9 +1,5 @@
 function drawMenu() {
-    ctx.drawImage(document.getElementById("gamebg"), 0, -180);
-    ctx.globalAlpha = 0.5;
-    ctx.fillStyle = background.colour;
-    ctx.fillRect(0, 0, cnv.width, cnv.height);
-    ctx.globalAlpha = 1;
+    drawBG()
     if (menuState == "top") { 
         ctx.drawImage(document.getElementById("logo"), 40, 50);
         ctx.drawImage(document.getElementById("playbtn"), 100, 120);

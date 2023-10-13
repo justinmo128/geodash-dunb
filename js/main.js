@@ -1,38 +1,4 @@
-let gameState = "menu";
-let background = {
-    colour: "#4287f5",
-    x: 0,
-    y: 0
-}
-let floor = {
-    colour: "#0548b3",
-    y: 0,
-};
-let newFloor = {
-    canCollide: false,
-}
-let roof = {
-    canCollide: false,
-};
-let player = {
-    mode: "cube",
-    x: 0,
-    y: 0,
-    w: 30,
-    h: 30,
-    bluehbx: 11,
-    bluehby: 11,
-    bluehbw: 8,
-    bluehbh: 8,
-    xVel: 311.58, // units per second, 30 units is a block
-    gravity: -2851.5625, // units per second squared
-    yVel: 0,
-    grounded: true,
-    roofed: false,
-    dead: false,
-    win: false,
-    angle: 0
-}
+let gameState, background, floor, newFloor, roof, player;
 let maxX = 0;
 const physicsTPS = 120;
 let levelInfo = document.getElementById("level-info");
@@ -40,38 +6,64 @@ let levelInfoName = document.getElementById("level-info-name");
 let levelInfoDiff = document.getElementById("level-info-diff");
 let levelInfoDiffIcon = document.getElementById("level-info-difficon");
 
-class gameOBJ {
-    constructor(x, y, type) {
+class Block {
+    constructor(x, y) {
         this.x = x;
         this.y = y;
         this.h = 30;
         this.w = 30;
-        this.type = type;
+        this.type = "block";
         this.hbx = this.x;
         this.hby = this.y;
-        if (this.type == "spike") {
-            this.hbx = this.x + 12;
-            this.hby = this.y + 10;
-            this.hbw = 6;
-            this.hbh = 9;
-            this.hbType = "red";
-        } else if (this.type == "block") {
-            this.hbw = 30;
-            this.hbh = 30;
-            this.hbType = "blue";
-        } else if (this.type == "slab") {
-            this.hbw = 30;
-            this.h = 15;
-            this.hbh = 15;
-            this.hbType = "blue";
-        } else if (this.type.slice(0, 6) == "portal") {
-            this.hbw = 30;
-            this.h = 90;
-            this.hbh = 90;
-            this.hbType = "green";
-            this.portalType = this.type.split("_").pop();
-            this.type = "portal";
-        }
+        this.hbw = 30;
+        this.hbh = 30;
+        this.hbType = "blue";
+    }
+}
+
+class Spike {
+    constructor(x, y) {
+        this.x = x;
+        this.y = y;
+        this.h = 30;
+        this.w = 30;
+        this.type = "spike";
+        this.hbx = this.x + 12;
+        this.hby = this.y + 10;
+        this.hbw = 6;
+        this.hbh = 9;
+        this.hbType = "red";
+    }
+}
+
+class Slab {
+    constructor(x, y) {
+        this.x = x;
+        this.y = y;
+        this.h = 15;
+        this.w = 30;
+        this.type = "slab";
+        this.hbx = this.x;
+        this.hby = this.y;
+        this.hbw = 30;
+        this.hbh = 15;
+        this.hbType = "blue";
+    }
+}
+
+class Portal {
+    constructor(x, y, type) {
+        this.x = x;
+        this.y = y;
+        this.h = 90;
+        this.w = 30;
+        this.type = "portal";
+        this.hbx = this.x;
+        this.hby = this.y;
+        this.hbw = 30;
+        this.hbh = 90;
+        this.hbType = "green";
+        this.portalType = type.split("_").pop();
     }
 }
 
@@ -87,7 +79,15 @@ function startLevel(levelName) {
 
 function createGameObjects() {
     for (let i = 0; i < levelJSON.objects.length; i++) {
-        gameObjs[i] = new gameOBJ(levelJSON.objects[i].x, levelJSON.objects[i].y, levelJSON.objects[i].type);
+        if (levelJSON.objects[i].type == "block") {
+            gameObjs[i] = new Block(levelJSON.objects[i].x, levelJSON.objects[i].y)
+        } else if (levelJSON.objects[i].type == "spike") {
+            gameObjs[i] = new Spike(levelJSON.objects[i].x, levelJSON.objects[i].y)
+        } else if (levelJSON.objects[i].type == "slab") {
+            gameObjs[i] = new Slab(levelJSON.objects[i].x, levelJSON.objects[i].y)
+        } else if (levelJSON.objects[i].type.split("_")[0] == "portal") {
+            gameObjs[i] = new Portal(levelJSON.objects[i].x, levelJSON.objects[i].y, levelJSON.objects[i].type)
+        }
         if (gameObjs[i].x > maxX) {
             maxX = gameObjs[i].x;
         }
@@ -106,7 +106,7 @@ function initialize() {
         bluehby: 11,
         bluehbw: 8,
         bluehbh: 8,
-        xVel: 311.58, // units per second
+        xVel: 311.58, // units per second, 30 units is a block
         gravity: -2851.5625, // units per second squared
         yVel: 0,
         grounded: true,
@@ -124,12 +124,14 @@ function initialize() {
     }
     floor = {
         colour: "#0548b3",
+        y: 0
     }
     newFloor = {
         canCollide: false,
     }
     roof = {
         canCollide: false,
+        h: 90
     };
     levelInfo.style.display = "flex";
     levelInfoName.innerHTML = levelJSON.name;
@@ -153,13 +155,15 @@ function physics() {
 function applyGravity() {
     player.y += player.yVel / physicsTPS;
     player.yVel += player.gravity / physicsTPS;
-
+    
+    // Max Velocity
     if (player.yVel >= 480 && player.mode == "ship") {
         player.yVel = 480;
     } else if (player.yVel <= -384 && player.mode == "ship") {
         player.yVel = -384
-    }
+    }  
 
+    // Set Gravity
     if (player.mode == "cube") {
         if (player.yVel > -812.5) {
             player.gravity = -2851.5625;
@@ -175,12 +179,13 @@ function applyGravity() {
             player.gravity = -496.8;
         }
     }
-    if (player.roofed && !keyHeld) {
-        player.y--;
-        player.roofed = false;
-    }
+
     if (player.grounded || player.roofed) {
         player.yVel = 0;
+    }
+    if (player.roofed && !keyHeld) {
+        player.roofed = false;
+        player.y--;
     }
     player.bluehby = player.y + 11;
 }
@@ -249,24 +254,18 @@ function checkCollision() {
         // Red Player + Blue Obj (Landing on blocks)
         else if (collides(player.x, player.y, player.w, player.h, gameObjs[i].hbx, gameObjs[i].hby, gameObjs[i].hbw, gameObjs[i].hbh) && 
         gameObjs[i].hbType == "blue") {
-            if (player.yVel <= 0) {
+            if (player.yVel <= 0 && player.y + player.bluehbh > gameObjs[i].y + gameObjs[i].h) {
                 player.y = gameObjs[i].y + gameObjs[i].hbh;
                 player.bluehby = player.y + 11;
                 player.grounded = true;
                 return;
+            } else if (player.y + player.h - player.bluehbh < gameObjs[i].y && player.mode == "ship") {
+                player.roofed = true;
+                console.log(player.yVel)
+                player.y = gameObjs[i].y - player.h;
+                player.bluehby = player.y + 11;
+                return;
             }
-            // if (player.y + player.h < gameObjs[i].y + gameObjs[i].h) {
-            //     if (player.mode == "ship") {
-            //         player.roofed = true;
-            //         player.y = gameObjs[i].y - player.h;
-            //         return;
-            //     }
-            // } else if (player.y < gameObjs[i].y + gameObjs[i].h) {
-            //     player.y = gameObjs[i].y + gameObjs[i].hbh;
-            //     player.bluehby = player.y + 11;
-            //     player.grounded = true;
-            //     return;
-            // }   
         }
         // Red Player + Red Obj (Spikes)
         else if (collides(player.x, player.y, player.w, player.h, gameObjs[i].hbx, gameObjs[i].hby, gameObjs[i].hbw, gameObjs[i].hbh) && gameObjs[i].hbType == "red") {
@@ -286,7 +285,7 @@ function checkCollision() {
                     newFloor.y = 0;
                 }
                 camera.y = newFloor.y + 315;
-                roof.y = newFloor.y + 300;
+                roof.y = newFloor.y + 390;
                 newFloor.canCollide = true;
                 roof.canCollide = true;
                 player.angle = 0;
@@ -304,9 +303,9 @@ function checkCollision() {
         player.bluehby = player.y + 11;
         player.grounded = true;
         return;
-    } else if (player.y + player.h >= roof.y && roof.canCollide) {
+    } else if (player.y + player.h >= roof.y - roof.h && roof.canCollide) {
         player.roofed = true;
-        player.y = roof.y - player.h;
+        player.y = roof.y - roof.h - player.h;
         return;
     }
     player.grounded = false;
@@ -326,32 +325,25 @@ function collides(Ax, Ay, Aw, Ah, Bx, By, Bw, Bh) {
 function checkEnding() {
     if (player.x > maxX + 480 && !player.win) {
         player.win = true;
-        setTimeout(() => {
-            gameState = "menu"
-        }  , 2000)
+        setTimeout(initializeMenu, 2000)
     }
 }
 
 function playerDeath() {
     player.dead = true;
-    player.xVel = 0;
-    player.yVel = 0;
-    // for (let i = 0; i < 10; i++) {
-    //     shakeScreen(i);
-    // }
     setTimeout(initialize, 300)
 }
 
-function getDifficulty(diffNum) {
-    if (diffNum == 10) {
+function getDifficulty(n) {
+    if (n == 10) {
         return "Demon";
-    } else if (diffNum >= 8) {
+    } else if (n >= 8) {
         return "Insane";
-    } else if (diffNum >= 6) {
+    } else if (n >= 6) {
         return "Harder";
-    } else if (diffNum >= 4) {
+    } else if (n >= 4) {
         return "Hard";
-    } else if (diffNum == 3) {
+    } else if (n == 3) {
         return "Normal";
     } else {
         return "Easy";
