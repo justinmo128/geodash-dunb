@@ -5,6 +5,8 @@ let levelInfo = document.getElementById("level-info");
 let levelInfoName = document.getElementById("level-info-name");
 let levelInfoDiff = document.getElementById("level-info-diff");
 let levelInfoDiffIcon = document.getElementById("level-info-difficon");
+let currentTime = Date.now();
+let deltaTime = 0;
 
 class Block {
     constructor(x, y) {
@@ -141,6 +143,7 @@ function initialize() {
 
 window.addEventListener("load", physics)
 function physics() {
+    deltaTime = Date.now() - currentTime;
     if (gameState == "gameLoop" && !player.dead) {
         applyGravity();
         if (keyHeld) {jump()}
@@ -149,12 +152,14 @@ function physics() {
         movePlayer();
         checkEnding();
     }
+    currentTime = Date.now();
     setTimeout(physics, 1000/physicsTPS);
 }
 
 function applyGravity() {
-    player.y += player.yVel / physicsTPS;
+    player.y += player.yVel / physicsTPS * 0.5;
     player.yVel += player.gravity / physicsTPS;
+    player.y += player.yVel / physicsTPS * 0.5;
     
     // Max Velocity
     if (player.yVel >= 480 && player.mode == "ship") {
