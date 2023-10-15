@@ -157,9 +157,13 @@ function physics() {
 }
 
 function applyGravity() {
-    player.y += player.yVel / physicsTPS * 0.5;
+    // player.y += player.yVel * deltaTime / 1000 * 0.5;
+    // player.yVel += player.gravity * deltaTime / 1000;
+    // player.y += player.yVel * deltaTime / 1000 * 0.5;
+
+    player.y += player.yVel /physicsTPS * 0.5;
     player.yVel += player.gravity / physicsTPS;
-    player.y += player.yVel / physicsTPS * 0.5;
+    player.y += player.yVel /physicsTPS * 0.5;
     
     // Max Velocity
     if (player.yVel >= 480 && player.mode == "ship") {
