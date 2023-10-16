@@ -4,7 +4,7 @@ let menuSelect = 0;
 let levels = [];
 let importInput = document.createElement('input');
 importInput.type = 'file';
-importInput.accept = 'json';
+importInput.accept = '.json';
 importInput.addEventListener("change", importLevel)
 
 fetch(`levels/levels.json`)
