@@ -89,6 +89,7 @@ function initializeEditor() {
 
 function initializeMenu() {
     gameState = "menu";
+    levelInfo.style.display = "none";
     camera.x = 0;
     camera.y = 500;
     background = {
