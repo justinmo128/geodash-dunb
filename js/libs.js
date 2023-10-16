@@ -57,20 +57,18 @@ function getRandomInt(min, max) {
 }
 
 // Easing
-let easingIsRunning = false;
 function ease(instance, vector, duration, style) {
     let intervalID = 0;
     let instanceSave = Object.assign({}, instance);
-    if (style == "linear" && !easingIsRunning) {
+    if (style == "linear" && !instance.activated) {
         intervalID = setInterval(() => {
             instance.x += vector[0]/duration*(1000/physicsTPS);
             instance.y += vector[1]/duration*(1000/physicsTPS);
-            easingIsRunning = true;
+            instance.angle += vector[2]/duration*(1000/physicsTPS);
         }, (1000/physicsTPS))
     }
     setTimeout(() => {
         clearInterval(intervalID);
-        easingIsRunning = false;
         instance.x = instanceSave.x + vector[0];
         instance.y = instanceSave.y + vector[1];
     }, duration)
