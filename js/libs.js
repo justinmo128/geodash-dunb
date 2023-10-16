@@ -55,3 +55,21 @@ function getRandomInt(min, max) {
     max = Math.floor(max);
     return Math.floor(Math.random() * (max - min) + min); // max exclusive, min inclusive
 }
+
+// Easing
+function ease(instance, vector, duration, style) {
+    let intervalID = 0;
+    let instanceSave = Object.assign({}, instance);
+    if (style == "linear" && !instance.activated) {
+        intervalID = setInterval(() => {
+            instance.x += vector[0]/duration*(1000/physicsTPS);
+            instance.y += vector[1]/duration*(1000/physicsTPS);
+            instance.angle += vector[2]/duration*(1000/physicsTPS);
+        }, (1000/physicsTPS))
+    }
+    setTimeout(() => {
+        clearInterval(intervalID);
+        instance.x = instanceSave.x + vector[0];
+        instance.y = instanceSave.y + vector[1];
+    }, duration)
+}

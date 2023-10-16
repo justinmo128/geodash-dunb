@@ -66,6 +66,7 @@ class Portal {
         this.hbh = 90;
         this.hbType = "green";
         this.portalType = type.split("_").pop();
+        this.activated = false;
     }
 }
 
@@ -283,7 +284,7 @@ function checkCollision() {
         }
         // Red Player + Green Obj (Portals, Orbs, Pads)
         else if (collides(player.x, player.y, player.w, player.h, gameObjs[i].hbx, gameObjs[i].hby, gameObjs[i].hbw, gameObjs[i].hbh) &&
-        gameObjs[i].type == "portal") {
+        gameObjs[i].type == "portal" && !gameObjs[i].activated) {
             if (player.mode !== gameObjs[i].portalType) {
                 player.yVel = 0;
             }
@@ -293,11 +294,12 @@ function checkCollision() {
                 if (newFloor.y < 0) {
                     newFloor.y = 0;
                 }
-                camera.y = newFloor.y + 315;
+                ease(camera, [0, (newFloor.y + 315) - camera.y], 200, "linear")
                 roof.y = newFloor.y + 390;
                 newFloor.canCollide = true;
                 roof.canCollide = true;
                 player.angle = 0;
+                gameObjs[i].activated = true;
             }
         }
     }
