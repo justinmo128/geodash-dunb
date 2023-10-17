@@ -199,32 +199,16 @@ function applyGravity() {
     if (player.roofed && !keyHeld) {
         player.roofed = false;
         player.y--;
-        player.easing = true;
-        ease(player, [0, 0, player.angle - player.yVel / -8], 200, "linear", () => {player.easing = false}, true, true)
     }
     player.bluehby = player.y + 11;
 }
 
 function rotatePlayer() {
-    if (player.grounded || player.roofed) {
-        if (player.mode == "cube") {
-            let roundedAngle = Math.round(player.angle/90)*90;
-            player.angle += 720/physicsTPS;
-            if (player.angle > roundedAngle) {
-                player.angle = roundedAngle;
-            }
-        } else if (player.mode == "ship") {
-            if (player.roofed && player.angle !== 0) {
-                player.angle += 500/physicsTPS;
-                if (player.angle > 360) {
-                    player.angle = 0;
-                }
-            } else {
-                player.angle -= 500/physicsTPS;
-                if (player.angle < 0) {
-                    player.angle = 0;
-                }
-            }
+    if (player.grounded && player.mode == "cube") {
+        let roundedAngle = Math.round(player.angle/90)*90;
+        player.angle += 720/physicsTPS;
+        if (player.angle > roundedAngle) {
+            player.angle = roundedAngle;
         }
     } else {
         if (player.mode == "cube") {
@@ -234,9 +218,6 @@ function rotatePlayer() {
         }
     }
     player.angle = player.angle % 360;
-    if (player.angle < 0) {
-        player.angle = 360 + player.angle;
-    }
 }
 
 function jump() {

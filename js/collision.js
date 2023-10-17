@@ -64,19 +64,29 @@ function checkCollision() {
         }
     }
     // Ground, roof collision
-    if (player.y <= 0) {
-        player.y = 0;
+    if (player.y <= newFloor.hby && newFloor.canCollide) {
+        player.y = newFloor.y;
         player.bluehby = player.y + 11;
         player.grounded = true;
+        if (!player.easing) {
+            player.easing = true;
+            ease(player, [0, 0, 0-player.angle], 150, "linear", () => {player.easing = false}, true, true);
+        }
         return;
-    } else if (player.y <= newFloor.hby && newFloor.canCollide) {
-        player.y = newFloor.y;
+    } else if (player.y <= 0) {
+        player.y = 0;
         player.bluehby = player.y + 11;
         player.grounded = true;
         return;
     } else if (player.y + player.h >= roof.hby - roof.h && roof.canCollide) {
         player.roofed = true;
         player.y = roof.y - roof.h - player.h;
+        
+        if (!player.easing) {
+            player.easing = true;
+            ease(player, [0, 0, 0-player.angle], 150, "linear", () => {player.easing = false}, true, true);
+        }
+        
         return;
     }
     player.grounded = false;
