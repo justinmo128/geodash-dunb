@@ -87,6 +87,7 @@ function initializeEditor() {
     };
 }
 
+document.getElementById("editor-leave").addEventListener("click", initializeMenu)
 function initializeMenu() {
     gameState = "menu";
     levelInfo.style.display = "none";
@@ -97,4 +98,7 @@ function initializeMenu() {
         x: 0,
         y: 0
     };
+    for (let i = 0; i < editorDivs.length; i++) {
+        editorDivs[i].style.display = "none";
+    }
 }

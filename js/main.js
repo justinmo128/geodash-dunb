@@ -5,8 +5,7 @@ let levelInfo = document.getElementById("level-info");
 let levelInfoName = document.getElementById("level-info-name");
 let levelInfoDiff = document.getElementById("level-info-diff");
 let levelInfoDiffIcon = document.getElementById("level-info-difficon");
-let currentTime = Date.now();
-let deltaTime = 0;
+let cubeTransition = false;
 
 class Block {
     constructor(x, y) {
@@ -81,6 +80,8 @@ function startLevel(levelName) {
 }
 
 function createGameObjects() {
+    maxX = 0;
+    gameObjs = [];
     for (let i = 0; i < levelJSON.objects.length; i++) {
         if (levelJSON.objects[i].type == "block") {
             gameObjs[i] = new Block(levelJSON.objects[i].x, levelJSON.objects[i].y)
@@ -98,6 +99,9 @@ function createGameObjects() {
 }
 
 function initialize() {
+    for (let i = 0; i < gameObjs.length; i++) {
+        gameObjs[i].activated = false;
+    }
     gameState = "gameLoop";
     player = {
         mode: "cube",
@@ -115,6 +119,7 @@ function initialize() {
         grounded: true,
         dead: false,
         win: false,
+        easing: false,
         angle: 0
     };
     camera = {
@@ -131,10 +136,14 @@ function initialize() {
     }
     newFloor = {
         canCollide: false,
+        y: 0,
+        hby: 0
     }
     roof = {
         canCollide: false,
-        h: 90
+        h: 90,
+        y: 390,
+        hby: 390
     };
     levelInfo.style.display = "flex";
     levelInfoName.innerHTML = levelJSON.name;
@@ -144,7 +153,6 @@ function initialize() {
 
 window.addEventListener("load", physics)
 function physics() {
-    deltaTime = Date.now() - currentTime;
     if (gameState == "gameLoop" && !player.dead) {
         applyGravity();
         if (keyHeld) {jump()}
@@ -153,15 +161,10 @@ function physics() {
         movePlayer();
         checkEnding();
     }
-    currentTime = Date.now();
     setTimeout(physics, 1000/physicsTPS);
 }
 
 function applyGravity() {
-    // player.y += player.yVel * deltaTime / 1000 * 0.5;
-    // player.yVel += player.gravity * deltaTime / 1000;
-    // player.y += player.yVel * deltaTime / 1000 * 0.5;
-
     player.y += player.yVel /physicsTPS * 0.5;
     player.yVel += player.gravity / physicsTPS;
     player.y += player.yVel /physicsTPS * 0.5;
@@ -196,6 +199,8 @@ function applyGravity() {
     if (player.roofed && !keyHeld) {
         player.roofed = false;
         player.y--;
+        player.easing = true;
+        ease(player, [0, 0, player.angle - player.yVel / -8], 200, "linear", () => {player.easing = false}, true, true)
     }
     player.bluehby = player.y + 11;
 }
@@ -224,7 +229,7 @@ function rotatePlayer() {
     } else {
         if (player.mode == "cube") {
             player.angle += 360/physicsTPS;
-        } else if (player.mode == "ship") {
+        } else if (player.mode == "ship" && !player.easing) {
             player.angle = player.yVel / -8;
         }
     }
@@ -253,96 +258,11 @@ function movePlayer() {
     player.bluehbx = player.x + 11;
 }
 
-function checkCollision() {
-    // Object collision
-    for (let i = 0; i < gameObjs.length; i++) {
-        // Blue Player + Blue Obj (Running into blocks)
-        if (collides(player.bluehbx, player.bluehby, player.bluehbw, player.bluehbh, gameObjs[i].hbx, gameObjs[i].hby, gameObjs[i].hbw, gameObjs[i].hbh) && gameObjs[i].hbType == "blue") {
-            playerDeath();
-            return;
-        }
-        // Red Player + Blue Obj (Landing on blocks)
-        else if (collides(player.x, player.y, player.w, player.h, gameObjs[i].hbx, gameObjs[i].hby, gameObjs[i].hbw, gameObjs[i].hbh) && 
-        gameObjs[i].hbType == "blue") {
-            if (player.yVel <= 0 && player.y + player.bluehbh > gameObjs[i].y + gameObjs[i].h) {
-                player.y = gameObjs[i].y + gameObjs[i].hbh;
-                player.bluehby = player.y + 11;
-                player.grounded = true;
-                return;
-            } else if (player.y + player.h - player.bluehbh < gameObjs[i].y && player.mode == "ship") {
-                player.roofed = true;
-                console.log(player.yVel)
-                player.y = gameObjs[i].y - player.h;
-                player.bluehby = player.y + 11;
-                return;
-            }
-        }
-        // Red Player + Red Obj (Spikes)
-        else if (collides(player.x, player.y, player.w, player.h, gameObjs[i].hbx, gameObjs[i].hby, gameObjs[i].hbw, gameObjs[i].hbh) && gameObjs[i].hbType == "red") {
-            playerDeath();
-            return;
-        }
-        // Red Player + Green Obj (Portals, Orbs, Pads)
-        else if (collides(player.x, player.y, player.w, player.h, gameObjs[i].hbx, gameObjs[i].hby, gameObjs[i].hbw, gameObjs[i].hbh) &&
-        gameObjs[i].type == "portal" && !gameObjs[i].activated) {
-            if (player.mode !== gameObjs[i].portalType) {
-                player.yVel = 0;
-            }
-            player.mode = gameObjs[i].portalType;
-            if (gameObjs[i].portalType == "ship") {
-                newFloor.y = gameObjs[i].y - 120;
-                if (newFloor.y < 0) {
-                    newFloor.y = 0;
-                }
-                ease(camera, [0, (newFloor.y + 315) - camera.y], 200, "linear")
-                roof.y = newFloor.y + 390;
-                newFloor.canCollide = true;
-                roof.canCollide = true;
-                player.angle = 0;
-                gameObjs[i].activated = true;
-            }
-        }
-    }
-    // Ground, roof collision
-    if (player.y <= 0) {
-        player.y = 0;
-        player.bluehby = player.y + 11;
-        player.grounded = true;
-        return;
-    } else if (player.y <= newFloor.y && newFloor.canCollide) {
-        player.y = newFloor.y;
-        player.bluehby = player.y + 11;
-        player.grounded = true;
-        return;
-    } else if (player.y + player.h >= roof.y - roof.h && roof.canCollide) {
-        player.roofed = true;
-        player.y = roof.y - roof.h - player.h;
-        return;
-    }
-    player.grounded = false;
-    player.roofed = false;
-}
-
-function collides(Ax, Ay, Aw, Ah, Bx, By, Bw, Bh) {
-    if (Ax <= Bx + Bw &&
-        Ax + Aw >= Bx &&
-        Ay <= By + Bh &&
-        Ay + Ah >= By) {
-            return true;
-    }
-    return false;
-}
-
 function checkEnding() {
     if (player.x > maxX + 480 && !player.win) {
         player.win = true;
         setTimeout(initializeMenu, 2000)
     }
-}
-
-function playerDeath() {
-    player.dead = true;
-    setTimeout(initialize, 300)
 }
 
 function getDifficulty(n) {

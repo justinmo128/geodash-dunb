@@ -8,7 +8,7 @@ function moveCamera() {
     } else {
         camera.x = player.x - 90;
     }
-    if (player.y == 0 && player.mode == "cube" && !player.dead) {
+    if (player.y == 0 && player.mode == "cube" && !player.dead && !cubeTransition) {
         camera.y = 270;
     }
 }
@@ -57,19 +57,35 @@ function getRandomInt(min, max) {
 }
 
 // Easing
-function ease(instance, vector, duration, style) {
+function ease(instance, vector, duration = 200, style = "linear", doAfter = "", ignoreX = false, ignoreY = false, ignoreAngle = false) {
     let intervalID = 0;
     let instanceSave = Object.assign({}, instance);
-    if (style == "linear" && !instance.activated) {
+    if (style == "linear") {
         intervalID = setInterval(() => {
-            instance.x += vector[0]/duration*(1000/physicsTPS);
-            instance.y += vector[1]/duration*(1000/physicsTPS);
-            instance.angle += vector[2]/duration*(1000/physicsTPS);
+            if (!ignoreX) {
+                instance.x += vector[0]/duration*(1000/physicsTPS);
+            }
+            if (!ignoreY) {
+                instance.y += vector[1]/duration*(1000/physicsTPS);
+            }
+            if (!ignoreAngle) {
+                instance.angle += vector[2]/duration*(1000/physicsTPS);
+            }
         }, (1000/physicsTPS))
     }
     setTimeout(() => {
         clearInterval(intervalID);
-        instance.x = instanceSave.x + vector[0];
-        instance.y = instanceSave.y + vector[1];
+        if (!ignoreX) {
+            instance.x = instanceSave.x + vector[0];
+        }
+        if (!ignoreY) {
+            instance.y = instanceSave.y + vector[1];
+        }
+        if (!ignoreAngle) {
+            instance.angle = instanceSave.angle + vector[2];
+        }
+        if (doAfter !== "") {
+            doAfter();
+        }
     }, duration)
 }

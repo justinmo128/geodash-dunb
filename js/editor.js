@@ -54,14 +54,6 @@ function buildObjSelect(i) {
     currentObj = buildObjs[i].title.toLowerCase();
 }
 
-document.getElementById("editor-leave").addEventListener("click", editorLeave)
-function editorLeave() {
-    gameState = "menu";
-    for (let i = 0; i < editorDivs.length; i++) {
-        editorDivs[i].style.display = "none";
-    }
-}
-
 document.getElementById("delete-obj-btn").addEventListener("click", () => {
     deleteObject(selectedIndex)
 })
