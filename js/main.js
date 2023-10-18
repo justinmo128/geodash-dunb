@@ -8,9 +8,10 @@ let levelInfoDiffIcon = document.getElementById("level-info-difficon");
 let cubeTransition = false;
 
 class Block {
-    constructor(x, y) {
+    constructor(x, y, angle) {
         this.x = x;
         this.y = y;
+        this.angle = angle;
         this.h = 30;
         this.w = 30;
         this.type = "block";
@@ -23,9 +24,10 @@ class Block {
 }
 
 class Spike {
-    constructor(x, y) {
+    constructor(x, y, angle) {
         this.x = x;
         this.y = y;
+        this.angle = angle;
         this.h = 30;
         this.w = 30;
         this.type = "spike";
@@ -34,13 +36,19 @@ class Spike {
         this.hbw = 6;
         this.hbh = 9;
         this.hbType = "red";
+        if (angle !== 0) {
+            let newCoords = calculateRotatedPoint(this.x + 15, this.y + 15, this.hbx, this.hby, this.angle)
+            this.hbx = newCoords[0];
+            this.hby = newCoords[1];
+        }
     }
 }
 
 class Slab {
-    constructor(x, y) {
+    constructor(x, y, angle) {
         this.x = x;
         this.y = y;
+        this.angle = angle;
         this.h = 15;
         this.w = 30;
         this.type = "slab";
@@ -53,9 +61,10 @@ class Slab {
 }
 
 class Portal {
-    constructor(x, y, type) {
+    constructor(x, y, type, angle) {
         this.x = x;
         this.y = y;
+        this.angle = angle;
         this.h = 90;
         this.w = 30;
         this.type = "portal";
@@ -84,13 +93,13 @@ function createGameObjects() {
     gameObjs = [];
     for (let i = 0; i < levelJSON.objects.length; i++) {
         if (levelJSON.objects[i].type == "block") {
-            gameObjs[i] = new Block(levelJSON.objects[i].x, levelJSON.objects[i].y)
+            gameObjs[i] = new Block(levelJSON.objects[i].x, levelJSON.objects[i].y, levelJSON.objects[i].angle)
         } else if (levelJSON.objects[i].type == "spike") {
-            gameObjs[i] = new Spike(levelJSON.objects[i].x, levelJSON.objects[i].y)
+            gameObjs[i] = new Spike(levelJSON.objects[i].x, levelJSON.objects[i].y, levelJSON.objects[i].angle)
         } else if (levelJSON.objects[i].type == "slab") {
-            gameObjs[i] = new Slab(levelJSON.objects[i].x, levelJSON.objects[i].y)
+            gameObjs[i] = new Slab(levelJSON.objects[i].x, levelJSON.objects[i].y, levelJSON.objects[i].angle)
         } else if (levelJSON.objects[i].type.split("_")[0] == "portal") {
-            gameObjs[i] = new Portal(levelJSON.objects[i].x, levelJSON.objects[i].y, levelJSON.objects[i].type)
+            gameObjs[i] = new Portal(levelJSON.objects[i].x, levelJSON.objects[i].y, levelJSON.objects[i].type, levelJSON.objects[i].angle)
         }
         if (gameObjs[i].x > maxX) {
             maxX = gameObjs[i].x;
@@ -243,21 +252,5 @@ function checkEnding() {
     if (player.x > maxX + 480 && !player.win) {
         player.win = true;
         setTimeout(initializeMenu, 2000)
-    }
-}
-
-function getDifficulty(n) {
-    if (n == 10) {
-        return "Demon";
-    } else if (n >= 8) {
-        return "Insane";
-    } else if (n >= 6) {
-        return "Harder";
-    } else if (n >= 4) {
-        return "Hard";
-    } else if (n == 3) {
-        return "Normal";
-    } else {
-        return "Easy";
     }
 }

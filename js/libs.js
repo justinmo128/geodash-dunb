@@ -89,3 +89,27 @@ function ease(instance, vector, duration = 200, style = "linear", doAfter = "", 
         }
     }, duration)
 }
+
+function getDifficulty(n) {
+    if (n == 10) {
+        return "Demon";
+    } else if (n >= 8) {
+        return "Insane";
+    } else if (n >= 6) {
+        return "Harder";
+    } else if (n >= 4) {
+        return "Hard";
+    } else if (n == 3) {
+        return "Normal";
+    } else {
+        return "Easy";
+    }
+}
+
+function calculateRotatedPoint(centerX = 0, centerY = 0, x, y, angle) {
+    let rad = (360 - angle) * (Math.PI / 180);
+    let xPrime = (x - centerX) * Math.cos(rad) - (y - centerY) * Math.sin(rad);
+    let yPrime = (x - centerX) * Math.sin(rad) + (y - centerY) * Math.cos(rad);
+    let newCoords = [centerX + xPrime, centerY + yPrime];
+    return newCoords;
+}

@@ -102,7 +102,8 @@ function clickInEditor() {
             type: "portal",
             portalType: currentObj.split(" ")[0],
             h: 90,
-            w: 30
+            w: 30,
+            angle: 0
             })
         } else {
             editorObjects.push({
@@ -110,7 +111,8 @@ function clickInEditor() {
             y: snappedY,
             type: currentObj,
             h: 30,
-            w: 30
+            w: 30,
+            angle: 0
             })
         }
         selectedIndex = editorObjects.length - 1;
@@ -179,6 +181,7 @@ function exportLevel() {
             x: editorObjects[i].x,
             y: editorObjects[i].y,
             type: editorObjects[i].type,
+            angle: editorObjects[i].angle
         })
 
         if (exportArray[i].type == "portal") {

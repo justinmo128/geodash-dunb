@@ -15,5 +15,8 @@ function drawMenu() {
         ctx.drawImage(document.getElementById("greenarrow"), 10, 10);
         ctx.drawImage(document.getElementById("createbtn"), 75, 100);
         ctx.drawImage(document.getElementById("importbtn"), 275, 100);
+        if (importInput.files.length > 0) {
+            ctx.drawImage(document.getElementById("playlast"), 275, 240)
+        }
     }
 }

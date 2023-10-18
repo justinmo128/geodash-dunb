@@ -6,72 +6,104 @@
         {
             "x": 910,
             "y": 0,
-            "type": "spike"
+            "type": "spike",
+            "angle": 0
         },
         {
             "x": 930,
             "y": 0,
-            "type": "spike"
+            "type": "spike",
+            "angle": 0
         },
         {
             "x": 960,
             "y": 0,
-            "type": "spike"
+            "type": "spike",
+            "angle": 0
+        },
+        {
+            "x": 900,
+            "y": 120,
+            "type": "spike",
+            "angle": 90
+        },
+        {
+            "x": 930,
+            "y": 120,
+            "type": "spike",
+            "angle": 180
+        },
+        {
+            "x": 960,
+            "y": 120,
+            "type": "spike",
+            "angle": 270
         },
         {
             "x": 990,
             "y": 0,
-            "type": "block"
+            "type": "block",
+            "angle": 0
         },
         {
             "x": 1020,
             "y": 15,
-            "type": "slab"
+            "type": "slab",
+            "angle": 0
         },
         {
             "x": 1050,
             "y": 15,
-            "type": "slab"
+            "type": "slab",
+            "angle": 0
         },
         {
             "x": 1080,
             "y": 15,
-            "type": "slab"
+            "type": "slab",
+            "angle": 0
         },
         {
             "x": 1110,
             "y": 0,
-            "type": "block"
+            "type": "block",
+            "angle": 0
         },
         {
             "x": 1200,
             "y": 30,
-            "type": "slab"
+            "type": "slab",
+            "angle": 0
         },
         {
             "x": 1230,
             "y": 30,
-            "type": "slab"
+            "type": "slab",
+            "angle": 0
         },
         {
             "x": 1350,
             "y": 0,
-            "type": "portal_ship"
+            "type": "portal_ship",
+            "angle": 0
         },
         {
             "x": 1700,
             "y": 0,
-            "type": "block"
+            "type": "block",
+            "angle": 0
         },
         {
             "x": 1670,
             "y": 270,
-            "type": "portal_ship"
+            "type": "portal_ship",
+            "angle": 0
         },
         {
             "x": 2000,
             "y": 0,
-            "type": "spike"
+            "type": "spike",
+            "angle": 180
         }
     ]
 }

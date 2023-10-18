@@ -49,6 +49,8 @@ function clickInMenu() {
             initializeEditor();
         } else if (checkClick(275, 415, 100, 240)) {
             importInput.click();
+        } else if (checkClick(275, 407, 240, 288) && importInput.files.length > 0) {
+            initialize();
         }
     }
 }

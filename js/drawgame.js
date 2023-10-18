@@ -4,7 +4,7 @@ function drawGame() {
     drawBackgroundObjects();
     drawPlayer();
     drawGameObjects();
-    // drawHitboxes();
+    drawHitboxes();
 }
 
 function drawLevelComponents() {
@@ -36,10 +36,16 @@ function drawPlayer() {
 
 function drawGameObjects() {
     for (let i = 0; i < gameObjs.length; i++) {
+        let imgName = gameObjs[i].type;
+        let offset = 0
         if (gameObjs[i].type == "portal") {
-            drawImgCam(`portal${gameObjs[i].portalType}over`, gameObjs[i].x - 15, gameObjs[i].y, gameObjs[i].h);
+            imgName = `portal${gameObjs[i].portalType}over`
+            offset = 15;
+        }
+        if (gameObjs[i].angle !== 0) {
+            drawImgCamRotate(imgName, gameObjs[i].x - offset, gameObjs[i].y, gameObjs[i].w, gameObjs[i].h, gameObjs[i].angle);
         } else {
-            drawImgCam(gameObjs[i].type, gameObjs[i].x, gameObjs[i].y, gameObjs[i].h);
+            drawImgCam(imgName, gameObjs[i].x - offset, gameObjs[i].y, gameObjs[i].h);
         }
     }
     if (player.win) {
