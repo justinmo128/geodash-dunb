@@ -17,14 +17,17 @@
 
     <body>
         <div class="flex-container">
+            <!-- Left side editor -->
             <div class="card editor-div editor-side">
                 <button id="editor-leave"></button>
                 <button id="delete-obj-btn"></button>
                 <button id="deselect-btn">Deselect</button>
             </div>
+            <!-- Canvas -->
             <div class="card" id="canvas-div">
                 <canvas id="canvas"></canvas>
             </div>
+            <!-- Right side editor -->
             <div class="card editor-div editor-side">
                 <p>Level Name:<br>
                     <input id="level-name">
@@ -41,11 +44,13 @@
                 </p>
                 <p>
                     objX: <span id="obj-x"></span><br>
-                    objY: <span id="obj-y"></span>
+                    objY: <span id="obj-y"></span><br>
+                    objAngle: <span id="obj-angle"></span>
                 </p>
                 <button id="export-btn">Export</button>
             </div>
         </div>
+        <!-- Bottom side editor -->
         <div class="card editor-div" id="editor-main">
             <div class="editor-cats">
                 <button class="editor-tab-btn" id="build-btn">Build</button>
@@ -60,8 +65,11 @@
                 <button class="build-object" title="Cube Portal"><img src="img/portalcubeover.png" height="40px"></button>
             </div>
             <div class="editor-tab" id="edit-box">
-                <p>WASD - 1 block<br>
-                Arrow Keys - 1 unit</p>
+                <p>
+                    WASD - 1 block<br>
+                    Arrow Keys - 1 unit<br>
+                    R - Rotate 90 deg
+                </p>
             </div>
             <div class="editor-tab" id="delete-box">
                 <p>Click an object to delete it.</p>

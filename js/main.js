@@ -37,9 +37,10 @@ class Spike {
         this.hbh = 9;
         this.hbType = "red";
         if (angle !== 0) {
-            let newCoords = calculateRotatedPoint(this.x + 15, this.y + 15, this.hbx, this.hby, this.angle)
-            this.hbx = newCoords[0];
-            this.hby = newCoords[1];
+            this.hbx = calculateRotatedPoint(this.x + 15, this.y + 15, this.x + 12, this.y + 10, this.angle)[0];
+            this.hby = calculateRotatedPoint(this.x + 15, this.y + 15, this.x + 12, this.y + 10, this.angle)[1];
+            this.hbw = calculateRotatedPoint(this.x + 15, this.y + 15, this.x + 18, this.y + 19, this.angle)[0] - this.hbx;
+            this.hbh = calculateRotatedPoint(this.x + 15, this.y + 15, this.x + 18, this.y + 19, this.angle)[1] - this.hby;
         }
     }
 }
@@ -75,6 +76,18 @@ class Portal {
         this.hbType = "green";
         this.portalType = type.split("_").pop();
         this.activated = false;
+        if (angle !== 0) {
+            let botLeftPrime = calculateRotatedPoint(this.x + this.w / 2, this.y + this.h / 2, this.x, this.y, this.angle);
+            let topRightPrime = calculateRotatedPoint(this.x + this.w / 2, this.y + this.h / 2, this.x + this.w, this.y + this.h, this.angle);
+            this.x = Math.round(Math.min(botLeftPrime[0], topRightPrime[0]));
+            this.y = Math.round(Math.min(botLeftPrime[1], topRightPrime[1]));
+            this.w = Math.round(Math.max(botLeftPrime[0], topRightPrime[0])) - this.x;
+            this.h = Math.round(Math.max(botLeftPrime[1], topRightPrime[1])) - this.y;
+            this.hbx = this.x;
+            this.hby = this.y;
+            this.hbw = this.w;
+            this.hbh = this.h;
+        }
     }
 }
 
@@ -215,9 +228,10 @@ function applyGravity() {
 function rotatePlayer() {
     if (player.grounded && player.mode == "cube") {
         let roundedAngle = Math.round(player.angle/90)*90;
-        player.angle += 720/physicsTPS;
-        if (player.angle > roundedAngle) {
-            player.angle = roundedAngle;
+        let angleDiff = roundedAngle - player.angle;
+        if (!player.easing) {
+            player.easing = true;
+            ease(player, [0, 0, angleDiff], angleDiff * 2, "linear", () => {player.easing = false}, true, true);
         }
     } else {
         if (player.mode == "cube") {

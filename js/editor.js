@@ -10,10 +10,6 @@ let initMouseX = 0;
 let initMouseY = 0;
 let initCamX = 0;
 let initCamY = 0;
-let camXEl = document.getElementById("cam-x");
-let camYEl = document.getElementById("cam-y");
-let objXEl = document.getElementById("obj-x");
-let objYEl = document.getElementById("obj-y");
 let movedCam = false;
 let setDifficulty = document.getElementById("difficulty");
 let levelDiff = document.getElementById("level-diff");
@@ -84,8 +80,6 @@ function moveEditorCam() {
     if (camera.x < 0) {
         camera.x = 0;
     }
-    camXEl.innerHTML = camera.x;
-    camYEl.innerHTML = camera.y;
     setTimeout(moveEditorCam, 1000/240)
 }
 
@@ -162,8 +156,22 @@ function editorKeys(e) {
             editorObjects[selectedIndex].y--;
         } else if (e.key == "ArrowRight") {
             editorObjects[selectedIndex].x++;
+        } else if (e.key == "r") {
+            let oldAngle = editorObjects[selectedIndex].angle;
+            editorObjects[selectedIndex].angle += 90;
+            editorObjects[selectedIndex].angle %= 360;
+            rotateObject(editorObjects[selectedIndex], oldAngle);
         }
     }
+}
+
+function rotateObject(obj, oldAngle) {
+    let botLeftPrime = calculateRotatedPoint(obj.x + obj.w / 2, obj.y + obj.h / 2, obj.x, obj.y, oldAngle - obj.angle);
+    let topRightPrime = calculateRotatedPoint(obj.x + obj.w / 2, obj.y + obj.h / 2, obj.x + obj.w, obj.y + obj.h, oldAngle - obj.angle);
+    obj.x = Math.round(Math.min(botLeftPrime[0], topRightPrime[0]));
+    obj.y = Math.round(Math.min(botLeftPrime[1], topRightPrime[1]));
+    obj.w = Math.round(Math.max(botLeftPrime[0], topRightPrime[0])) - obj.x;
+    obj.h = Math.round(Math.max(botLeftPrime[1], topRightPrime[1])) - obj.y;
 }
 
 function mouseInBounds() {
