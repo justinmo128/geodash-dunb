@@ -14,11 +14,11 @@ function drawEditor() {
 
 function drawEditorObjects() {
     for (let i = 0; i < editorObjects.length; i++) {
-        let imgName = editorObjects[i].type;
+        let imgName = editorObjects[i].id;
         let xOffset = 0;
         let yOffset = 0;
-        if (editorObjects[i].type == "portal") {
-            imgName = `portal${editorObjects[i].portalType}over`;
+        if (editorObjects[i].isPortal) {
+            imgName = `portal_${editorObjects[i].portalType}_over`;
             if (editorObjects[i].angle == 0) {
                 xOffset = 15;
                 yOffset = 0;

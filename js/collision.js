@@ -29,7 +29,7 @@ function checkCollision() {
         }
         // Red Player + Green Obj (Portals, Orbs, Pads)
         else if (collides(player.x, player.y, player.w, player.h, gameObjs[i].hbx, gameObjs[i].hby, gameObjs[i].hbw, gameObjs[i].hbh) &&
-        gameObjs[i].type == "portal" && !gameObjs[i].activated) {
+        gameObjs[i].isPortal && !gameObjs[i].activated) {
             if (player.mode !== gameObjs[i].portalType) {
                 player.yVel = 0;
             }

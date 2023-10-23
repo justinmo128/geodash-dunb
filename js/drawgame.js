@@ -21,7 +21,7 @@ function drawLevelComponents() {
 function drawBackgroundObjects() {
     for (let i = 0; i < gameObjs.length; i++) {
         if (gameObjs[i].type == "portal") {
-            drawImgCam(`portal${gameObjs[i].portalType}under`, gameObjs[i].x - 15, gameObjs[i].y, gameObjs[i].h);
+            drawImgCam(`portal_${gameObjs[i].portalType}_under`, gameObjs[i].x - 15, gameObjs[i].y, gameObjs[i].h);
         }
     }
 }
@@ -31,15 +31,15 @@ function drawPlayer() {
     if (player.mode == "ship") {
         offset = 5;
     }
-    drawImgCamRotate(player.mode, player.x - offset, player.y, player.w, player.h, player.angle);
+    drawImgCamRotate(`player_${player.mode}`, player.x - offset, player.y, player.w, player.h, player.angle);
 }
 
 function drawGameObjects() {
     for (let i = 0; i < gameObjs.length; i++) {
-        let imgName = gameObjs[i].type;
+        let imgName = gameObjs[i].id;
         let offset = 0
-        if (gameObjs[i].type == "portal") {
-            imgName = `portal${gameObjs[i].portalType}over`
+        if (gameObjs[i].isPortal) {
+            imgName = `portal_${gameObjs[i].portalType}_over`
             offset = 15;
         }
         if (gameObjs[i].angle !== 0) {

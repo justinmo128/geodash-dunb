@@ -1,0 +1,59 @@
+[
+    {
+        "id": "block_standard",
+        "h": 30,
+        "w": 30,
+        "hbx": 0,
+        "hby": 0,
+        "hbw": 30,
+        "hbh": 30,
+        "hbType": "blue",
+        "isPortal": false
+    },
+    {
+        "id": "spike_standard",
+        "h": 30,
+        "w": 30,
+        "hbx": 12,
+        "hby": 10,
+        "hbw": 6,
+        "hbh": 9,
+        "hbType": "red",
+        "isPortal": false
+    },
+    {
+        "id": "slab_standard",
+        "h": 15,
+        "w": 30,
+        "hbx": 0,
+        "hby": 0,
+        "hbw": 30,
+        "hbh": 15,
+        "hbType": "blue",
+        "isPortal": false
+    },
+    {
+        "id": "portal_ship",
+        "h": 90,
+        "w": 30,
+        "hbx": 0,
+        "hby": 0,
+        "hbw": 30,
+        "hbh": 90,
+        "hbType": "green",
+        "portalType": "ship",
+        "isPortal": true
+    },
+    {
+        "id": "portal_cube",
+        "h": 90,
+        "w": 30,
+        "hbx": 0,
+        "hby": 0,
+        "hbw": 30,
+        "hbh": 90,
+        "hbType": "green",
+        "portalType": "cube",
+        "isPortal": true
+    }
+]

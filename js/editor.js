@@ -1,5 +1,5 @@
 let buildCategory = "build"; // The current category selected
-let currentObj = "block"; // The Object selected in the build menu
+let currentObj = "block_standard"; // The Object selected in the build menu
 let selectedIndex = -1; // The object selected in canvas
 let editorTabs = document.getElementsByClassName("editor-tab");
 let editorTabBtns = document.getElementsByClassName("editor-tab-btn");
@@ -47,7 +47,7 @@ function buildObjSelect(i) {
         buildObjs[j].style.backgroundImage = `url("img/buttongray.png")`
     }
     buildObjs[i].style.backgroundImage = `url("img/buttoncyan.png")`
-    currentObj = buildObjs[i].title.toLowerCase();
+    currentObj = buildObjs[i].title;
 }
 
 document.getElementById("delete-obj-btn").addEventListener("click", () => {
@@ -89,27 +89,21 @@ function clickInEditor() {
     let snappedX = Math.floor((coordX) /30) * 30;
     let snappedY = Math.floor((coordY) /30) * 30;
     if (buildCategory == "build" && mouseInBounds() && !movedCam) {
-        if (currentObj.split(" ")[1] == "portal") {
-            editorObjects.push({
-            x: snappedX,
-            y: snappedY - 30,
-            type: "portal",
-            portalType: currentObj.split(" ")[0],
-            h: 90,
-            w: 30,
-            angle: 0
-            })
-        } else {
-            editorObjects.push({
+        let objProps = objectList.find((element) => currentObj == element.id)
+        editorObjects.push({
+            id: currentObj,
             x: snappedX,
             y: snappedY,
-            type: currentObj,
-            h: 30,
-            w: 30,
-            angle: 0
-            })
-        }
+            angle: 0,
+            h: objProps.h,
+            w: objProps.w,
+            hbType: objProps.hbType,
+            isPortal: objProps.isPortal
+        })
         selectedIndex = editorObjects.length - 1;
+        if (editorObjects[selectedIndex].isPortal) {
+            editorObjects[selectedIndex].portalType = objProps.portalType;
+        }
     } else if (buildCategory == "edit" && mouseInBounds() && !movedCam) {
         let indices = [];
         let selectedInIndices = false;
@@ -165,15 +159,6 @@ function editorKeys(e) {
     }
 }
 
-function rotateObject(obj, oldAngle) {
-    let botLeftPrime = calculateRotatedPoint(obj.x + obj.w / 2, obj.y + obj.h / 2, obj.x, obj.y, oldAngle - obj.angle);
-    let topRightPrime = calculateRotatedPoint(obj.x + obj.w / 2, obj.y + obj.h / 2, obj.x + obj.w, obj.y + obj.h, oldAngle - obj.angle);
-    obj.x = Math.round(Math.min(botLeftPrime[0], topRightPrime[0]));
-    obj.y = Math.round(Math.min(botLeftPrime[1], topRightPrime[1]));
-    obj.w = Math.round(Math.max(botLeftPrime[0], topRightPrime[0])) - obj.x;
-    obj.h = Math.round(Math.max(botLeftPrime[1], topRightPrime[1])) - obj.y;
-}
-
 function mouseInBounds() {
     if (mouseX <= 480 && mouseX >= 0 && mouseY >= 0 && mouseY <= 330) {
         return true;
@@ -188,7 +173,7 @@ function exportLevel() {
         exportArray.push({
             x: editorObjects[i].x,
             y: editorObjects[i].y,
-            type: editorObjects[i].type,
+            id: editorObjects[i].id,
             angle: editorObjects[i].angle
         })
 

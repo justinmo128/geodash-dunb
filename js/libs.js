@@ -113,3 +113,25 @@ function calculateRotatedPoint(centerX = 0, centerY = 0, x, y, angle) {
     let newCoords = [centerX + xPrime, centerY + yPrime];
     return newCoords;
 }
+
+function rotateObject(obj, oldAngle, rotateHitbox = false) {
+    let botLeftPrime = calculateRotatedPoint(obj.x + obj.w / 2, obj.y + obj.h / 2, obj.x, obj.y, oldAngle - obj.angle);
+    let topRightPrime = calculateRotatedPoint(obj.x + obj.w / 2, obj.y + obj.h / 2, obj.x + obj.w, obj.y + obj.h, oldAngle - obj.angle);
+    obj.x = Math.round(Math.min(botLeftPrime[0], topRightPrime[0]));
+    obj.y = Math.round(Math.min(botLeftPrime[1], topRightPrime[1]));
+    obj.w = Math.round(Math.max(botLeftPrime[0], topRightPrime[0])) - obj.x;
+    obj.h = Math.round(Math.max(botLeftPrime[1], topRightPrime[1])) - obj.y;
+    if (rotateHitbox) {
+        botLeftPrime = calculateRotatedPoint(obj.hbx + obj.hbw / 2, obj.hby + obj.hbh / 2, obj.hbx, obj.hby, oldAngle - obj.angle);
+        topRightPrime = calculateRotatedPoint(obj.hbx + obj.hbw / 2, obj.hby + obj.hbh / 2, obj.hbx + obj.hbw, obj.hby + obj.hbh, oldAngle - obj.angle);
+        obj.hbx = Math.round(Math.min(botLeftPrime[0], topRightPrime[0]));
+        obj.hby = Math.round(Math.min(botLeftPrime[1], topRightPrime[1]));
+        obj.hbw = Math.round(Math.max(botLeftPrime[0], topRightPrime[0])) - obj.hbx;
+        obj.hbh = Math.round(Math.max(botLeftPrime[1], topRightPrime[1])) - obj.hby;
+    }
+}
+
+let objectList = [];
+    fetch(`js/objects.json`)
+    .then((res) => res.json())
+    .then((data) => objectList = data)
