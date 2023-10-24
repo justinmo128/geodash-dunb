@@ -194,3 +194,44 @@ function exportLevel() {
     a.download = `${exportObject.name}.json`
     a.click()
 }
+
+let editorImport = document.createElement('input');
+editorImport.type = 'file';
+editorImport.accept = '.json';
+editorImport.addEventListener("change", loadLevel)
+document.getElementById("load-btn").addEventListener("click", () => {editorImport.click()})
+function loadLevel() {
+    new Response(editorImport.files[0]).json()
+        .then(json => {levelJSON = json})
+        .then(createEditorObjects)
+}
+
+function createEditorObjects() {
+    editorObjects = [];
+    for (let i = 0; i < levelJSON.objects.length; i++) {
+        let objProps = objectList.find((element) => levelJSON.objects[i].id == element.id)
+
+        editorObjects.push({
+            id: levelJSON.objects[i].id,
+            x: levelJSON.objects[i].x,
+            y: levelJSON.objects[i].y,
+            angle: levelJSON.objects[i].angle,
+            h: objProps.h,
+            w: objProps.w,
+            hbType: objProps.hbType,
+            isPortal: objProps.isPortal
+        })
+        if (editorObjects[i].isPortal) {
+            editorObjects[i].portalType = objProps.portalType;
+        }
+        if (editorObjects[i].angle !== 0) {
+            rotateObject(editorObjects[i], 0, false);
+            let xDiff = editorObjects[i].x - levelJSON.objects[i].x;
+            let yDiff = editorObjects[i].y - levelJSON.objects[i].y;
+            editorObjects[i].x -= xDiff;
+            editorObjects[i].y -= yDiff;
+        }
+    }
+    setDifficulty.value = levelJSON.difficulty;
+    document.getElementById("level-name").value = levelJSON.name;
+}

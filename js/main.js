@@ -44,7 +44,6 @@ function createGameObjects() {
         if (gameObjs[i].angle !== 0) {
             rotateObject(gameObjs[i], 0, true);
             let xDiff = gameObjs[i].x - levelJSON.objects[i].x;
-            console.log(xDiff)
             let yDiff = gameObjs[i].y - levelJSON.objects[i].y;
             gameObjs[i].x -= xDiff;
             gameObjs[i].y -= yDiff;
@@ -117,8 +116,9 @@ function physics() {
         applyGravity();
         if (keyHeld) {jump()}
         rotatePlayer();
-        checkCollision();
         movePlayer();
+        checkFloorRoofCollision();
+        checkCollision();
         checkEnding();
     }
     setTimeout(physics, 1000/physicsTPS);
