@@ -1,0 +1,121 @@
+{
+    "name": "Stereo Madness",
+    "difficulty": 1,
+    "objects": 
+    [
+        {
+            "x": 910,
+            "y": 0,
+            "id": "spike_standard",
+            "angle": 0
+        },
+        {
+            "x": 930,
+            "y": 0,
+            "id": "spike_standard",
+            "angle": 0
+        },
+        {
+            "x": 960,
+            "y": 0,
+            "id": "spike_standard",
+            "angle": 0
+        },
+        {
+            "x": 900,
+            "y": 120,
+            "id": "spike_standard",
+            "angle": 90
+        },
+        {
+            "x": 930,
+            "y": 120,
+            "id": "spike_standard",
+            "angle": 180
+        },
+        {
+            "x": 960,
+            "y": 120,
+            "id": "spike_standard",
+            "angle": 270
+        },
+        {
+            "x": 990,
+            "y": 0,
+            "id": "block_standard",
+            "angle": 0
+        },
+        {
+            "x": 1020,
+            "y": 15,
+            "id": "slab_standard",
+            "angle": 0
+        },
+        {
+            "x": 1050,
+            "y": 15,
+            "id": "slab_standard",
+            "angle": 0
+        },
+        {
+            "x": 1080,
+            "y": 15,
+            "id": "slab_standard",
+            "angle": 0
+        },
+        {
+            "x": 1110,
+            "y": 0,
+            "id": "block_standard",
+            "angle": 0
+        },
+        {
+            "x": 1200,
+            "y": 30,
+            "id": "slab_standard",
+            "angle": 0
+        },
+        {
+            "x": 1230,
+            "y": 30,
+            "id": "slab_standard",
+            "angle": 0
+        },
+        {
+            "x": 1320,
+            "y": 30,
+            "id": "portal_ship",
+            "angle": 90
+        },
+        {
+            "x": 1350,
+            "y": 0,
+            "id": "portal_ship",
+            "angle": 0
+        },
+        {
+            "x": 1700,
+            "y": 0,
+            "id": "block_standard",
+            "angle": 0
+        },
+        {
+            "x": 1670,
+            "y": 270,
+            "id": "portal_ship",
+            "angle": 0
+        },
+        {
+            "x": 2000,
+            "y": 0,
+            "id": "spike_standard",
+            "angle": 180
+        },
+        {
+            "x": 2100,
+            "y": 0,
+            "id": "portal_cube",
+            "angle": 90
+        }
+    ]
+}

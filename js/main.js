@@ -43,6 +43,13 @@ function createGameObjects() {
         }
         if (gameObjs[i].angle !== 0) {
             rotateObject(gameObjs[i], 0, true);
+            let xDiff = gameObjs[i].x - levelJSON.objects[i].x;
+            console.log(xDiff)
+            let yDiff = gameObjs[i].y - levelJSON.objects[i].y;
+            gameObjs[i].x -= xDiff;
+            gameObjs[i].y -= yDiff;
+            gameObjs[i].hbx -= xDiff;
+            gameObjs[i].hby -= yDiff;
         }
 
         if (gameObjs[i].x > maxX) {
@@ -66,7 +73,7 @@ function initialize() {
         bluehby: 11,
         bluehbw: 8,
         bluehbh: 8,
-        xVel: 311.58, // units per second, 30 units is a block
+        xVel: 311.579742, // units per second, 30 units is a block
         gravity: -2851.5625, // units per second squared
         yVel: 0,
         grounded: true,
@@ -177,7 +184,7 @@ function rotatePlayer() {
 function jump() {
     if (player.mode == "cube") {
         if (player.grounded) {
-            player.yVel = 660;
+            player.yVel = 620;
         }
     } else if (player.mode == "ship" && player.y + player.h < roof.y && roof.canCollide && !player.roofed) {
         if (player.yVel > 66) {

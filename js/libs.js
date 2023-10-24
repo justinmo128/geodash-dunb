@@ -135,3 +135,15 @@ let objectList = [];
     fetch(`js/objects.json`)
     .then((res) => res.json())
     .then((data) => objectList = data)
+
+function setOffset(angle) {
+    if (angle == 0) {
+        return [10, 0];
+    } else if (angle == 90) {
+        return [-30, 20];
+    } else if (angle == 180) {
+        return [-10, 0];
+    } else if (angle == 270) {
+        return [30, -20];
+    }
+}

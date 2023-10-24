@@ -4,7 +4,7 @@ function drawGame() {
     drawBackgroundObjects();
     drawPlayer();
     drawGameObjects();
-    drawHitboxes();
+    // drawHitboxes();
 }
 
 function drawLevelComponents() {
@@ -20,8 +20,10 @@ function drawLevelComponents() {
 
 function drawBackgroundObjects() {
     for (let i = 0; i < gameObjs.length; i++) {
-        if (gameObjs[i].type == "portal") {
-            drawImgCam(`portal_${gameObjs[i].portalType}_under`, gameObjs[i].x - 15, gameObjs[i].y, gameObjs[i].h);
+        if (gameObjs[i].isPortal) {
+            let xOffset = setOffset(gameObjs[i].angle)[0];
+            let yOffset = setOffset(gameObjs[i].angle)[1];
+            drawImgCamRotate(`portal_${gameObjs[i].portalType}_under`, gameObjs[i].x - xOffset, gameObjs[i].y - yOffset, gameObjs[i].w, gameObjs[i].h, gameObjs[i].angle);
         }
     }
 }
@@ -37,15 +39,16 @@ function drawPlayer() {
 function drawGameObjects() {
     for (let i = 0; i < gameObjs.length; i++) {
         let imgName = gameObjs[i].id;
-        let offset = 0
+        let xOffset = 0, yOffset = 0;
         if (gameObjs[i].isPortal) {
             imgName = `portal_${gameObjs[i].portalType}_over`
-            offset = 15;
+            xOffset = setOffset(gameObjs[i].angle)[0];
+            yOffset = setOffset(gameObjs[i].angle)[1];
         }
         if (gameObjs[i].angle !== 0) {
-            drawImgCamRotate(imgName, gameObjs[i].x - offset, gameObjs[i].y, gameObjs[i].w, gameObjs[i].h, gameObjs[i].angle);
+            drawImgCamRotate(imgName, gameObjs[i].x - xOffset, gameObjs[i].y - yOffset, gameObjs[i].w, gameObjs[i].h, gameObjs[i].angle);
         } else {
-            drawImgCam(imgName, gameObjs[i].x - offset, gameObjs[i].y, gameObjs[i].h);
+            drawImgCam(imgName, gameObjs[i].x - xOffset, gameObjs[i].y - yOffset, gameObjs[i].h);
         }
     }
     if (player.win) {

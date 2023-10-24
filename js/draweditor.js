@@ -19,19 +19,8 @@ function drawEditorObjects() {
         let yOffset = 0;
         if (editorObjects[i].isPortal) {
             imgName = `portal_${editorObjects[i].portalType}_over`;
-            if (editorObjects[i].angle == 0) {
-                xOffset = 15;
-                yOffset = 0;
-            } else if (editorObjects[i].angle == 90) {
-                xOffset = -30;
-                yOffset = 15;
-            } else if (editorObjects[i].angle == 180) {
-                xOffset = -15;
-                yOffset = 0;
-            } else if (editorObjects[i].angle == 270) {
-                xOffset = 30;
-                yOffset = -15;
-            }
+            xOffset = setOffset(editorObjects[i].angle)[0];
+            yOffset = setOffset(editorObjects[i].angle)[1];
         }
         if (editorObjects[i].angle !== 0) {
             drawImgCamRotate(imgName, editorObjects[i].x - xOffset, editorObjects[i].y - yOffset, editorObjects[i].w, editorObjects[i].h, editorObjects[i].angle);
