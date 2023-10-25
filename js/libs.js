@@ -8,22 +8,25 @@ function moveCamera() {
     } else {
         camera.x = player.x - 90;
     }
+    console.log(player.y)
     if (player.y == 0 && player.mode == "cube" && !player.dead && !cubeTransition) {
-        camera.y = 270;
+        camera.y = 0;
     }
 }
 
 function fillRectCam(x, y, w, h) {
-    ctx.fillRect(x - camera.x, camera.y - y - h, w, h);
+    if (x - camera.x >= 0 && x - camera.x <= 480) {
+        ctx.fillRect(x - camera.x, camera.y - y - h + 270, w, h);
+    }
 }
 
 function drawImgCam(imgName, x, y, h) {
-    ctx.drawImage(document.getElementById(imgName), x - camera.x, camera.y - y - h)
+    ctx.drawImage(document.getElementById(imgName), x - camera.x, camera.y - y - h + 270)
 }
 
 function drawImgCamRotate(imgName, x, y, w, h, angle) {
     ctx.save();
-    ctx.translate(x - camera.x + w/2, camera.y - y - h + h/2);
+    ctx.translate(x - camera.x + w/2, camera.y - y - h + h/2 + 270);
     ctx.rotate(angle * Math.PI / 180);
     ctx.drawImage(document.getElementById(imgName), w/-2, h/-2);
     ctx.restore();
@@ -33,7 +36,7 @@ function drawImgCamRotate(imgName, x, y, w, h, angle) {
 function drawBG() {
     background.x = camera.x * -0.2;
     background.y = camera.y * 0.2;
-    ctx.drawImage(document.getElementById("gamebg"), background.x % 512, background.y % 512 - 245)
+    ctx.drawImage(document.getElementById("gamebg"), background.x % 512, background.y % 512 - 190)
     ctx.globalAlpha = 0.5;
     ctx.fillStyle = background.colour;
     ctx.fillRect(0, 0, cnv.width, cnv.height);
@@ -42,7 +45,7 @@ function drawBG() {
 
 function drawFloorRoof(type) {
     ctx.globalAlpha = 1;
-    ctx.drawImage(document.getElementById("floor"), player.x / 90 - camera.x % 90 - 90, camera.y - type.y)
+    ctx.drawImage(document.getElementById("floor"), camera.x * -1 % 90 - 90, camera.y - type.y + 270)
     ctx.globalAlpha = 0.6;
     ctx.fillStyle = type.colour;
     fillRectCam(camera.x, type.y, cnv.width, -90);
@@ -58,10 +61,10 @@ function getRandomInt(min, max) {
 
 // Easing
 function ease(instance, vector, duration = 200, style = "linear", doAfter = "", ignoreX = false, ignoreY = false, ignoreAngle = false) {
-    let intervalID = 0;
     let instanceSave = Object.assign({}, instance);
+    clearInterval(instance.easeId)
     if (style == "linear") {
-        intervalID = setInterval(() => {
+        instance.easeId = setInterval(() => {
             if (!ignoreX) {
                 instance.x += vector[0]/duration*(1000/physicsTPS);
             }
@@ -74,7 +77,7 @@ function ease(instance, vector, duration = 200, style = "linear", doAfter = "", 
         }, (1000/physicsTPS))
     }
     setTimeout(() => {
-        clearInterval(intervalID);
+        clearInterval(instance.easeId);
         if (!ignoreX) {
             instance.x = instanceSave.x + vector[0];
         }

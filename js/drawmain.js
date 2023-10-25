@@ -7,7 +7,7 @@ ctx.font = "30px Pusab";
 ctx.textAlign = "center";
 let camera = {
     x: 0,
-    y: 270
+    y: 0
 }
 
 window.addEventListener("load", draw);

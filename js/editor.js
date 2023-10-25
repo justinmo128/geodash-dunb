@@ -74,8 +74,8 @@ function moveEditorCam() {
             movedCam = false;
         }
     }
-    if (camera.y < 240) {
-        camera.y = 240;
+    if (camera.y < -30) {
+        camera.y = -30;
     }
     if (camera.x < 0) {
         camera.x = 0;
@@ -85,7 +85,7 @@ function moveEditorCam() {
 
 function clickInEditor() {
     let coordX = mouseX + camera.x;
-    let coordY = camera.y - mouseY;
+    let coordY = camera.y - mouseY + 270;
     let snappedX = Math.floor((coordX) /30) * 30;
     let snappedY = Math.floor((coordY) /30) * 30;
     if (buildCategory == "build" && mouseInBounds() && !movedCam) {

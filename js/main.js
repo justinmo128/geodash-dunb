@@ -6,6 +6,8 @@ let levelInfoName = document.getElementById("level-info-name");
 let levelInfoDiff = document.getElementById("level-info-diff");
 let levelInfoDiffIcon = document.getElementById("level-info-difficon");
 let cubeTransition = false;
+let lastUpdate = performance.now();
+let deltaTime = 0;
 
 let levelJSON = [];
 let gameObjs = [];
@@ -79,10 +81,14 @@ function initialize() {
         dead: false,
         win: false,
         easing: false,
+        easeId: 0,
         angle: 0
     };
     camera = {
-        x: 0, y: 270
+        x: 0,
+        y: 0,
+        easing: false,
+        easeId: 0
     };
     background = {
         colour: "#4287f5",
@@ -110,8 +116,11 @@ function initialize() {
     levelInfoDiffIcon.style.backgroundImage = `url(img/diff${getDifficulty(levelJSON.difficulty)}.png)`;
 }
 
-window.addEventListener("load", physics)
+setInterval(physics, 1000/physicsTPS)
 function physics() {
+    let now = performance.now();
+    deltaTime = now - lastUpdate;
+    lastUpdate = now;
     if (gameState == "gameLoop" && !player.dead) {
         applyGravity();
         if (keyHeld) {jump()}
@@ -121,13 +130,11 @@ function physics() {
         checkCollision();
         checkEnding();
     }
-    setTimeout(physics, 1000/physicsTPS);
 }
 
 function applyGravity() {
-    player.y += player.yVel /physicsTPS * 0.5;
-    player.yVel += player.gravity / physicsTPS;
-    player.y += player.yVel /physicsTPS * 0.5;
+    player.yVel += player.gravity / (1000/deltaTime);
+    player.y += player.yVel /(1000/deltaTime);
     
     // Max Velocity
     if (player.yVel >= 480 && player.mode == "ship") {
@@ -149,7 +156,7 @@ function applyGravity() {
         } else if (player.yVel > 66) {
             player.gravity = -745.2;
         } else {
-            player.gravity = -496.8;
+            player.gravity = -500;
         }
     }
 
@@ -173,7 +180,7 @@ function rotatePlayer() {
         }
     } else {
         if (player.mode == "cube") {
-            player.angle += 360/physicsTPS;
+            player.angle += 360/(1000/deltaTime);
         } else if (player.mode == "ship" && !player.easing) {
             player.angle = player.yVel / -8;
         }
@@ -182,21 +189,19 @@ function rotatePlayer() {
 }
 
 function jump() {
-    if (player.mode == "cube") {
-        if (player.grounded) {
-            player.yVel = 620;
-        }
+    if (player.mode == "cube" && player.grounded) {
+        player.yVel = 630;
     } else if (player.mode == "ship" && player.y + player.h < roof.y && roof.canCollide && !player.roofed) {
         if (player.yVel > 66) {
-            player.yVel += 621 / physicsTPS;
+            player.yVel += 621 / (1000/deltaTime);
         } else {
-            player.yVel += 761.4 / physicsTPS;
+            player.yVel += 761.4 / (1000/deltaTime);
         }
     }
 }
 
 function movePlayer() {
-    player.x += player.xVel / physicsTPS;
+    player.x += player.xVel / (1000/deltaTime);
     player.bluehbx = player.x + 11;
 }
 

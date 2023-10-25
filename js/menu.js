@@ -68,7 +68,7 @@ function initializeEditor() {
         editorDivs[i].style.display = "flex";
     }
     camera.x = 0;
-    camera.y = 270;
+    camera.y = 0;
     background = {
         colour: "#4287f5",
         x: 0,

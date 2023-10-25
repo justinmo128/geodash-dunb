@@ -1,14 +1,14 @@
 function drawGame() {
     moveCamera();
-    drawLevelComponents();
+    drawBG();
     drawBackgroundObjects();
     drawPlayer();
     drawGameObjects();
+    drawFloors();
     // drawHitboxes();
 }
 
-function drawLevelComponents() {
-    drawBG();
+function drawFloors() {
     drawFloorRoof(floor);
     if (newFloor.canCollide) {
         drawFloorRoof(newFloor);

@@ -16,12 +16,12 @@ function checkCollision() {
                     if (gameObjs[i].y - 120 < 0 && !gameObjs[i].activated) {
                         ease(newFloor, [0, newFloor.y * -1], 200, "linear")
                         ease(roof, [0, roof.y * -1 + 390], 200, "linear")
-                        ease(camera, [0, 315 - camera.y], 200, "linear")
+                        ease(camera, [0, 45 - camera.y], 200, "linear")
                         newFloor.hby = 0;
                     } else if (!gameObjs[i].activated) {
                         ease(newFloor, [0, gameObjs[i].y - 120 - newFloor.y], 200, "linear")
                         ease(roof, [0, gameObjs[i].y - 120 + 390 - roof.y], 200, "linear")
-                        ease(camera, [0, gameObjs[i].y - 120 + 315 - camera.y], 200, "linear")
+                        ease(camera, [0, gameObjs[i].y - 165 - camera.y], 200, "linear")
                         newFloor.hby = gameObjs[i].y - 120;
                     }
                     roof.hby = newFloor.hby + 390;
