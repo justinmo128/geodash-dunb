@@ -1,7 +1,7 @@
 function drawMenu() {
     drawBG()
     if (menuState == "top") { 
-        ctx.drawImage(document.getElementById("logo"), 40, 50);
+        ctx.drawImage(document.getElementById("logo"), 106, 10, 268, 100);
         ctx.drawImage(document.getElementById("playbtn"), 100, 120);
         ctx.drawImage(document.getElementById("editorbtn"), 300, 150);
     } else if (menuState == "mainLevels") {
