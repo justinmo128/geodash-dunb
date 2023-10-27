@@ -19,7 +19,6 @@ function checkClick(x1, x2, y1, y2) {
 }
 
 function clickInMenu() {
-    console.log(mouseX, mouseY)
     if (menuState == "top") {
         if (checkClick(100, 250, 120, 270)) {
             menuState = "mainLevels";

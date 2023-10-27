@@ -8,7 +8,6 @@ function moveCamera() {
     } else {
         camera.x = player.x - 90;
     }
-    console.log(player.y)
     if (player.y == 0 && player.mode == "cube" && !player.dead && !cubeTransition) {
         camera.y = 0;
     }
@@ -62,7 +61,8 @@ function getRandomInt(min, max) {
 // Easing
 function ease(instance, vector, duration = 200, style = "linear", doAfter = "", ignoreX = false, ignoreY = false, ignoreAngle = false) {
     let instanceSave = Object.assign({}, instance);
-    clearInterval(instance.easeId)
+    clearInterval(instance.easeId);
+    instance.easeId = 0;
     if (style == "linear") {
         instance.easeId = setInterval(() => {
             if (!ignoreX) {
@@ -78,13 +78,13 @@ function ease(instance, vector, duration = 200, style = "linear", doAfter = "", 
     }
     setTimeout(() => {
         clearInterval(instance.easeId);
-        if (!ignoreX) {
+        if (instance.easeId > 0 && !ignoreX) {
             instance.x = instanceSave.x + vector[0];
         }
-        if (!ignoreY) {
+        if (instance.easeId > 0 && !ignoreY) {
             instance.y = instanceSave.y + vector[1];
         }
-        if (!ignoreAngle) {
+        if (instance.easeId > 0 && !ignoreAngle) {
             instance.angle = instanceSave.angle + vector[2];
         }
         if (doAfter !== "") {

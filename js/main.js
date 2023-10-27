@@ -102,13 +102,15 @@ function initialize() {
     newFloor = {
         canCollide: false,
         y: 0,
-        hby: 0
+        hby: 0,
+        easeId: 0
     }
     roof = {
         canCollide: false,
         h: 90,
         y: 390,
-        hby: 390
+        hby: 390,
+        easeId: 0
     };
     levelInfo.style.display = "flex";
     levelInfoName.innerHTML = levelJSON.name;
@@ -156,7 +158,7 @@ function applyGravity() {
         } else if (player.yVel > 66) {
             player.gravity = -745.2;
         } else {
-            player.gravity = -500;
+            player.gravity = -525;
         }
     }
 
@@ -178,9 +180,14 @@ function rotatePlayer() {
             player.easing = true;
             ease(player, [0, 0, angleDiff], angleDiff * 2, "linear", () => {player.easing = false}, true, true);
         }
+    } else if (!player.easing && player.mode == "ship" && player.roofed || !player.easing && player.mode == "ship" && player.grounded) {
+        player.easing = true;
+        ease(player, [0, 0, 0-player.angle], 150, "linear", () => {player.easing = false}, true, true);
     } else {
+        player.easing = false;
+        clearInterval(player.easeId)
         if (player.mode == "cube") {
-            player.angle += 360/(1000/deltaTime);
+            player.angle += 380/(1000/deltaTime);
         } else if (player.mode == "ship" && !player.easing) {
             player.angle = player.yVel / -8;
         }
