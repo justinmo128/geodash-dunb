@@ -73,6 +73,7 @@ function moveEditorCam() {
         } else {
             movedCam = false;
         }
+        updateHTML();
     }
     if (camera.y < -30) {
         camera.y = -30;
@@ -89,11 +90,11 @@ function clickInEditor() {
     let snappedX = Math.floor((coordX) /30) * 30;
     let snappedY = Math.floor((coordY) /30) * 30;
     if (buildCategory == "build" && mouseInBounds() && !movedCam) {
-        let objProps = objectList.find((element) => currentObj == element.id)
+        let objProps = objectList.find((element) => currentObj == element.id);
         editorObjects.push({
             id: currentObj,
-            x: snappedX,
-            y: snappedY,
+            x: snappedX + objProps.editorOffsetx,
+            y: snappedY + objProps.editorOffsety,
             angle: 0,
             h: objProps.h,
             w: objProps.w,
@@ -104,6 +105,7 @@ function clickInEditor() {
         if (editorObjects[selectedIndex].isPortal) {
             editorObjects[selectedIndex].portalType = objProps.portalType;
         }
+        updateHTML();
     } else if (buildCategory == "edit" && mouseInBounds() && !movedCam) {
         let indices = [];
         let selectedInIndices = false;
@@ -122,6 +124,7 @@ function clickInEditor() {
         if (!selectedInIndices || selectedIndex === undefined) {
             selectedIndex = indices[0];
         }
+        updateHTML();
     } else if (mouseInBounds() && !movedCam) {
         for (let i = 0; i < editorObjects.length; i++) {
             if (coordX >= editorObjects[i].x && coordX <= editorObjects[i].x + editorObjects[i].w && coordY >= editorObjects[i].y && coordY <= editorObjects[i].y + editorObjects[i].h) {
@@ -129,6 +132,7 @@ function clickInEditor() {
                 break;
             }
         }
+        updateHTML();
     }
 }
 
@@ -136,25 +140,34 @@ function editorKeys(e) {
     if (selectedIndex > -1 && gameState == "editor") {
         if (e.key == "w") {
             editorObjects[selectedIndex].y += 30;
+            updateHTML();
         } else if (e.key == "a") {
             editorObjects[selectedIndex].x -= 30;
+            updateHTML();
         } else if (e.key == "s") {
             editorObjects[selectedIndex].y -= 30;
+            updateHTML();
         } else if (e.key == "d") {
             editorObjects[selectedIndex].x += 30;
+            updateHTML();
         } else if (e.key == "ArrowUp") {
             editorObjects[selectedIndex].y++;
+            updateHTML();
         } else if (e.key == "ArrowLeft") {
             editorObjects[selectedIndex].x--;
+            updateHTML();
         } else if (e.key == "ArrowDown") {
             editorObjects[selectedIndex].y--;
+            updateHTML();
         } else if (e.key == "ArrowRight") {
             editorObjects[selectedIndex].x++;
+            updateHTML();
         } else if (e.key == "r") {
             let oldAngle = editorObjects[selectedIndex].angle;
             editorObjects[selectedIndex].angle += 90;
             editorObjects[selectedIndex].angle %= 360;
             rotateObject(editorObjects[selectedIndex], oldAngle);
+            updateHTML();
         }
     }
 }

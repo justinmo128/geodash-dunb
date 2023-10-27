@@ -8,7 +8,9 @@
         "hbw": 30,
         "hbh": 30,
         "hbType": "blue",
-        "isPortal": false
+        "isPortal": false,
+        "editorOffsetx": 0,
+        "editorOffsety": 0
     },
     {
         "id": "spike_standard",
@@ -19,7 +21,9 @@
         "hbw": 6,
         "hbh": 9,
         "hbType": "red",
-        "isPortal": false
+        "isPortal": false,
+        "editorOffsetx": 0,
+        "editorOffsety": 0
     },
     {
         "id": "slab_standard",
@@ -30,7 +34,9 @@
         "hbw": 30,
         "hbh": 15,
         "hbType": "blue",
-        "isPortal": false
+        "isPortal": false,
+        "editorOffsetx": 0,
+        "editorOffsety": 15
     },
     {
         "id": "portal_ship",
@@ -42,7 +48,9 @@
         "hbh": 90,
         "hbType": "green",
         "portalType": "ship",
-        "isPortal": true
+        "isPortal": true,
+        "editorOffsetx": 0,
+        "editorOffsety": -30
     },
     {
         "id": "portal_cube",
@@ -54,6 +62,8 @@
         "hbh": 90,
         "hbType": "green",
         "portalType": "cube",
-        "isPortal": true
+        "isPortal": true,
+        "editorOffsetx": 0,
+        "editorOffsety": -30
     }
 ]

@@ -161,6 +161,26 @@ button:hover {
     width: 30px;
 }
 
+#cam-x {
+    width: 100px;
+}
+
+#cam-y {
+    width: 100px;
+}
+
+#obj-x {
+    width: 100px;
+}
+
+#obj-y {
+    width: 100px;
+}
+
+#obj-angle {
+    width: 50px;
+}
+
 #level-difficon {
     background-size: 30px;
     width: 30px;

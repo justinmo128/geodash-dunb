@@ -9,7 +9,6 @@ function drawEditor() {
     drawGrid();
     drawFloorRoof(floor);
     drawEditorObjects();
-    updateHTML();
 }
 
 function drawEditorObjects() {
@@ -47,15 +46,32 @@ function drawGrid() {
 }
 
 function updateHTML() {
-    camXEl.innerHTML = camera.x;
-    camYEl.innerHTML = camera.y;
+    camXEl.value = camera.x;
+    camYEl.value = camera.y;
     if (selectedIndex > -1) {
-        objXEl.innerHTML = editorObjects[selectedIndex].x;
-        objYEl.innerHTML = editorObjects[selectedIndex].y;
-        objAngleEl.innerHTML = editorObjects[selectedIndex].angle;
+        objXEl.value = editorObjects[selectedIndex].x;
+        objYEl.value = editorObjects[selectedIndex].y;
+        objAngleEl.value = editorObjects[selectedIndex].angle;
     } else {
-        objXEl.innerHTML = 0;
-        objYEl.innerHTML = 0;
-        objAngleEl.innerHTML = 0;
+        objXEl.value = 0;
+        objYEl.value = 0;
+        objAngleEl.value = 0;
     }
 }
+
+camXEl.addEventListener("change", () => {
+    camera.x = +camXEl.value;
+})
+camYEl.addEventListener("change", () => {
+    camera.x = +camXEl.value;
+})
+objXEl.addEventListener("change", () => {
+    editorObjects[selectedIndex].x = +objXEl.value;
+})
+objYEl.addEventListener("change", () => {
+    editorObjects[selectedIndex].y = +objYEl.value;
+})
+objAngleEl.addEventListener("change", () => {
+    editorObjects[selectedIndex].angle = +objAngleEl.value;
+    editorObjects[selectedIndex].angle %= 360;
+})

@@ -51,13 +51,6 @@ function drawFloorRoof(type) {
     ctx.globalAlpha = 1;
 }
 
-// Random
-function getRandomInt(min, max) {
-    min = Math.ceil(min);
-    max = Math.floor(max);
-    return Math.floor(Math.random() * (max - min) + min); // max exclusive, min inclusive
-}
-
 // Easing
 function ease(instance, vector, duration = 200, style = "linear", doAfter = "", ignoreX = false, ignoreY = false, ignoreAngle = false) {
     let instanceSave = Object.assign({}, instance);
