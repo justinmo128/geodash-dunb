@@ -1,6 +1,6 @@
 let gameState, background, floor, newFloor, roof, player;
 let maxX = 0;
-const physicsTPS = 120;
+const physicsTPS = 240;
 let levelInfo = document.getElementById("level-info");
 let levelInfoName = document.getElementById("level-info-name");
 let levelInfoDiff = document.getElementById("level-info-diff");
