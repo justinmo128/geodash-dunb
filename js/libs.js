@@ -8,7 +8,7 @@ function moveCamera() {
     } else {
         camera.x = player.x - 90;
     }
-    if (player.y == 0 && player.mode == "cube" && !player.dead && !cubeTransition) {
+    if (camera.y < 0) {
         camera.y = 0;
     }
 }
@@ -19,16 +19,16 @@ function fillRectCam(x, y, w, h) {
     }
 }
 
-function drawImgCam(imgName, x, y, h) {
-    ctx.drawImage(document.getElementById(imgName), x - camera.x, camera.y - y - h + 270)
-}
-
-function drawImgCamRotate(imgName, x, y, w, h, angle) {
-    ctx.save();
-    ctx.translate(x - camera.x + w/2, camera.y - y - h + h/2 + 270);
-    ctx.rotate(angle * Math.PI / 180);
-    ctx.drawImage(document.getElementById(imgName), w/-2, h/-2);
-    ctx.restore();
+function drawImgCamRotate(imgName, x, y, h, w = 0, angle = 0) {
+    if (angle !== 0) {
+        ctx.save();
+        ctx.translate(x - camera.x + w/2, camera.y - y - h + h/2 + 270);
+        ctx.rotate(angle * Math.PI / 180);
+        ctx.drawImage(document.getElementById(imgName), w/-2, h/-2);
+        ctx.restore();
+    } else {
+        ctx.drawImage(document.getElementById(imgName), x - camera.x, camera.y - y - h + 270)
+    }
 }
 
 // Drawing Common Elements
@@ -54,8 +54,6 @@ function drawFloorRoof(type) {
 // Easing
 function ease(instance, vector, duration = 200, style = "linear", doAfter = "", ignoreX = false, ignoreY = false, ignoreAngle = false) {
     let instanceSave = Object.assign({}, instance);
-    clearInterval(instance.easeId);
-    instance.easeId = 0;
     if (style == "linear") {
         instance.easeId = setInterval(() => {
             if (!ignoreX) {
@@ -84,6 +82,12 @@ function ease(instance, vector, duration = 200, style = "linear", doAfter = "", 
             doAfter();
         }
     }, duration)
+}
+
+function clearEase(instance) {
+    instance.easing = false;
+    clearInterval(instance.easeId);
+    instance.easeId = 0;
 }
 
 function getDifficulty(n) {
@@ -141,5 +145,7 @@ function setOffset(angle) {
         return [-10, 0];
     } else if (angle == 270) {
         return [30, -20];
+    } else {
+        return [0, 0];
     }
 }

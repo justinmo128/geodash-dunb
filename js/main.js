@@ -70,10 +70,10 @@ function initialize() {
         y: 0,
         w: 30,
         h: 30,
-        bluehbx: 11,
-        bluehby: 11,
-        bluehbw: 8,
-        bluehbh: 8,
+        bluehbx: 12,
+        bluehby: 12,
+        bluehbw: 6,
+        bluehbh: 6,
         xVel: 311.579742, // units per second, 30 units is a block
         gravity: -2851.5625, // units per second squared
         yVel: 0,
@@ -88,7 +88,7 @@ function initialize() {
         x: 0,
         y: 0,
         easing: false,
-        easeId: 0
+        easeIds: []
     };
     background = {
         colour: "#4287f5",
@@ -135,8 +135,9 @@ function physics() {
 }
 
 function applyGravity() {
+    player.y += player.yVel /(1000/deltaTime) * 0.5;
     player.yVel += player.gravity / (1000/deltaTime);
-    player.y += player.yVel /(1000/deltaTime);
+    player.y += player.yVel /(1000/deltaTime) * 0.5;
     
     // Max Velocity
     if (player.yVel >= 480 && player.mode == "ship") {
@@ -155,10 +156,10 @@ function applyGravity() {
     } else if (player.mode == "ship") {
         if (keyHeld) {
             player.gravity = 0;
-        } else if (player.yVel > 66) {
+        } else if (player.yVel > 66 || player.yVel < -66) {
             player.gravity = -745.2;
         } else {
-            player.gravity = -525;
+            player.gravity = -500;
         }
     }
 
@@ -166,7 +167,6 @@ function applyGravity() {
         player.yVel = 0;
     }
     if (player.roofed && !keyHeld) {
-        player.roofed = false;
         player.y--;
     }
     player.bluehby = player.y + 11;
@@ -182,11 +182,10 @@ function rotatePlayer() {
         }
     } else if (!player.easing && player.mode == "ship" && player.roofed || !player.easing && player.mode == "ship" && player.grounded) {
         player.easing = true;
-        ease(player, [0, 0, 0-player.angle], 150, "linear", () => {player.easing = false}, true, true);
+        ease(player, [0, 0, 0-player.angle], 100, "linear", () => {player.easing = false}, true, true);
     } else {
-        player.easing = false;
-        clearInterval(player.easeId)
         if (player.mode == "cube") {
+            clearEase(player)
             player.angle += 380/(1000/deltaTime);
         } else if (player.mode == "ship" && !player.easing) {
             player.angle = player.yVel / -8;

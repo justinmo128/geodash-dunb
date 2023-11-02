@@ -21,11 +21,7 @@ function drawEditorObjects() {
             xOffset = setOffset(editorObjects[i].angle)[0];
             yOffset = setOffset(editorObjects[i].angle)[1];
         }
-        if (editorObjects[i].angle !== 0) {
-            drawImgCamRotate(imgName, editorObjects[i].x - xOffset, editorObjects[i].y - yOffset, editorObjects[i].w, editorObjects[i].h, editorObjects[i].angle);
-        } else {
-            drawImgCam(imgName, editorObjects[i].x - xOffset, editorObjects[i].y - yOffset, editorObjects[i].h);
-        }
+        drawImgCamRotate(imgName, editorObjects[i].x - xOffset, editorObjects[i].y - yOffset, editorObjects[i].h, editorObjects[i].w, editorObjects[i].angle);
     }
     ctx.globalAlpha = 0.5;
     ctx.fillStyle = "lime";

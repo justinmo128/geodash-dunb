@@ -23,7 +23,7 @@ function drawBackgroundObjects() {
         if (gameObjs[i].isPortal) {
             let xOffset = setOffset(gameObjs[i].angle)[0];
             let yOffset = setOffset(gameObjs[i].angle)[1];
-            drawImgCamRotate(`portal_${gameObjs[i].portalType}_under`, gameObjs[i].x - xOffset, gameObjs[i].y - yOffset, gameObjs[i].w, gameObjs[i].h, gameObjs[i].angle);
+            drawImgCamRotate(`portal_${gameObjs[i].portalType}_under`, gameObjs[i].x - xOffset, gameObjs[i].y - yOffset, gameObjs[i].h, gameObjs[i].w, gameObjs[i].angle);
         }
     }
 }
@@ -33,7 +33,7 @@ function drawPlayer() {
     if (player.mode == "ship") {
         offset = 5;
     }
-    drawImgCamRotate(`player_${player.mode}`, player.x - offset, player.y, player.w, player.h, player.angle);
+    drawImgCamRotate(`player_${player.mode}`, player.x - offset, player.y, player.h, player.w, player.angle);
 }
 
 function drawGameObjects() {
@@ -45,11 +45,7 @@ function drawGameObjects() {
             xOffset = setOffset(gameObjs[i].angle)[0];
             yOffset = setOffset(gameObjs[i].angle)[1];
         }
-        if (gameObjs[i].angle !== 0) {
-            drawImgCamRotate(imgName, gameObjs[i].x - xOffset, gameObjs[i].y - yOffset, gameObjs[i].w, gameObjs[i].h, gameObjs[i].angle);
-        } else {
-            drawImgCam(imgName, gameObjs[i].x - xOffset, gameObjs[i].y - yOffset, gameObjs[i].h);
-        }
+        drawImgCamRotate(imgName, gameObjs[i].x - xOffset, gameObjs[i].y - yOffset, gameObjs[i].h, gameObjs[i].w, gameObjs[i].angle);
     }
     if (player.win) {
         ctx.drawImage(document.getElementById("levelcomplete"), 40, 100);
