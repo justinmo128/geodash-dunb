@@ -1,0 +1,14 @@
+orb_black
+orb_blue
+orb_green
+orb_pink
+orb_red
+orb_yellow
+pad_blue
+pad_pink
+pad_red
+pad_yellow
+spike_small
+spike_tiny
+spike_slab
+spike_ground

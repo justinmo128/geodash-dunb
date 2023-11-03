@@ -127,6 +127,15 @@ button:hover {
     display: none;
 }
 
+#editor-leave {
+    background-image: url("img/editor-leave.png");
+    background-color: transparent;
+    border-width: 0;
+    width: 60px;
+    height: 60px;
+    padding: 0;
+}
+
 #editor-leave:hover {
     cursor: pointer;
 }
@@ -140,21 +149,56 @@ button:hover {
     align-items: center;
 }
 
+#editor-left {
+    flex-flow: row wrap;
+    justify-content: left;
+    align-items: flex-start;
+    align-content: flex-start;
+}
+
+#editor-left > * {
+    margin-right: 5px;
+}
+
 #delete-obj-btn {
     background-image: url("img/deleteobjbtn.png");
     background-color: transparent;
     border-width: 0;
-    width: 50px;
-    height: 53px;
+    width: 60px;
+    height: 60px;
 }
 
-#editor-leave {
-    background-image: url("img/greenarrow.png");
+#swipe-btn {
+    background-image: url("img/swipe-btn.png");
     background-color: transparent;
     border-width: 0;
-    width: 50px;
-    height: 62px;
-    padding: 0;
+    width: 60px;
+    height: 60px;  
+}
+
+#deselect-btn {
+    background-image: url("img/desel-btn.png");
+    background-color: transparent;
+    border-width: 0;
+    width: 60px;
+    height: 60px;
+}
+
+#load-btn {
+    background-image: url("img/loadfromjson-btn.png");
+    background-color: transparent;
+    border-width: 0;
+    width: 60px;
+    height: 60px;
+}
+
+#export-btn {
+    background-image: url("img/export-btn.png");
+    background-color: transparent;
+    border-width: 0;
+    width: 184px;
+    height: 33px;
+    margin: auto;
 }
 
 #difficulty {

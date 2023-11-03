@@ -18,11 +18,12 @@
     <body>
         <div class="flex-container">
             <!-- Left side editor -->
-            <div class="card editor-div editor-side">
+            <div class="card editor-div editor-side" id="editor-left">
                 <button id="editor-leave"></button>
                 <button id="delete-obj-btn"></button>
-                <button id="deselect-btn">Deselect</button>
-                <button id="load-btn">Load from JSON</button>
+                <button id="swipe-btn"></button>
+                <button id="deselect-btn"></button>
+                <button id="load-btn"></button>
             </div>
             <!-- Canvas -->
             <div class="card" id="canvas-div">
@@ -48,7 +49,7 @@
                     objY: <input type="number" id="obj-y"><br>
                     objAngle: <input type="number" min="0" max="360" id="obj-angle"></span>
                 </p>
-                <button id="export-btn">Export</button>
+                <button id="export-btn"></button>
             </div>
         </div>
         <!-- Bottom side editor -->
@@ -114,6 +115,12 @@
             <img src="img/portal_cube_over.png" id="portal_cube_over">
             <img src="img/portal_cube_under.png" id="portal_cube_under">
             <img src="img/playlast.png" id="playlast">
+            <img src="img/pause-invisible.png" id="pause_invisible">
+            <img src="img/pause-menu.png" id="pause_menu">
+            <img src="img/pause-play.png" id="pause_play">
+            <img src="img/pause-practice.png" id="pause_practice">
+            <img src="img/pause-restart.png" id="pause_restart">
+            <img src="img/pause-visible.png" id="pause_visible">
         </div>
     </body>
 </html>

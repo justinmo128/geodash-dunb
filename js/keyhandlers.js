@@ -11,12 +11,11 @@ document.addEventListener("mousedown", (e) => {
     mouseDown(e);
 })
 document.addEventListener("mouseup", mouseUp)
-document.addEventListener("touchstart", keyDown)
-document.addEventListener("touchend", keyUp)
-
+document.addEventListener("touchstart", mouseDown)
+document.addEventListener("touchend", mouseUp)
 document.addEventListener("click", clicked)
-
 document.addEventListener("mousemove", mousemoveHandler);
+
 function mousemoveHandler(e) {
   // Get rectangle info about canvas location
   let cnvRect = cnv.getBoundingClientRect();
@@ -27,8 +26,12 @@ function mousemoveHandler(e) {
 }
 
 function mouseDown(e) {
-    if (gameState == "gameLoop") {
+    if (gameState == "gameLoop" && !gamePaused) {
         keyDown(e);
+    } else if (gameState == "gameLoop" && gamePaused) {
+        clickInPause();
+    } else if (gameState == "menu") {
+        clickInMenu();
     } else if (gameState == "editor") {
         mouseHeld = true;
         initMouseX = mouseX;
@@ -43,17 +46,33 @@ function mouseUp() {
 }
 
 function keyDown(e) {
-    keyHeld = true;
-    editorKeys(e);
+    console.log(e.key)
+    if (e.key === "Escape") {
+        escapePressed();
+    } else if (gameState == "editor") {
+        editorKeys(e);
+    } else {
+        keyHeld = true;
+    }
+}
+
+function escapePressed() {
+    if (gameState == "menu") {
+        if (menuState == "mainLevels" || menuState == "editorMenu") {
+            menuState = "top";
+        }
+    } else if (gameState == "editor") {
+        initializeMenu();
+    } else if (gameState == "gameLoop") {
+        gamePaused = !gamePaused;
+    }
 }
 function keyUp() {
     keyHeld = false;
 }
 
 function clicked() {
-    if (gameState == "menu") {
-        clickInMenu();
-    } else if (gameState == "editor") {
+    if (gameState == "editor") {
         clickInEditor();
     }
 }

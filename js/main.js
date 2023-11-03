@@ -6,6 +6,8 @@ let levelInfoName = document.getElementById("level-info-name");
 let levelInfoDiff = document.getElementById("level-info-diff");
 let levelInfoDiffIcon = document.getElementById("level-info-difficon");
 let cubeTransition = false;
+let gamePaused = false;
+let pauseVisible = true;
 let lastUpdate = performance.now();
 let deltaTime = 0;
 
@@ -64,6 +66,7 @@ function initialize() {
         gameObjs[i].activated = false;
     }
     gameState = "gameLoop";
+    gamePaused = false;
     player = {
         mode: "cube",
         x: 0,
@@ -123,7 +126,7 @@ function physics() {
     let now = performance.now();
     deltaTime = now - lastUpdate;
     lastUpdate = now;
-    if (gameState == "gameLoop" && !player.dead) {
+    if (gameState == "gameLoop" && !player.dead && !gamePaused) {
         applyGravity();
         if (keyHeld) {jump()}
         rotatePlayer();
@@ -215,5 +218,28 @@ function checkEnding() {
     if (player.x > maxX + 480 && !player.win) {
         player.win = true;
         setTimeout(initializeMenu, 2000)
+    }
+}
+
+function pauseGame() {
+    gamePaused = true;
+    pauseVisible = true;
+}
+
+function clickInPause() {
+    if (pauseVisible) {
+        if (checkClick(190, 290, 113, 217)) {
+            gamePaused = false;
+        } else if (checkClick(26, 96, 129, 202)) {
+            pauseVisible = false;
+        } else if (checkClick(108, 178, 129, 202)) {
+
+        } else if (checkClick(302, 372, 129, 202)) {
+            initializeMenu();
+        } else if (checkClick(384, 454, 129, 202)) {
+            initialize();
+        }
+    } else if (checkClick(6, 284, 46, 344)) {
+        pauseVisible = true;
     }
 }

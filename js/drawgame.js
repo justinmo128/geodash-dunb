@@ -6,6 +6,9 @@ function drawGame() {
     drawGameObjects();
     drawFloors();
     // drawHitboxes();
+    if (gamePaused) {
+        drawPause();
+    }
 }
 
 function drawFloors() {
@@ -65,4 +68,23 @@ function drawHitboxes() {
         fillRectCam(gameObjs[i].hbx, gameObjs[i].hby, gameObjs[i].hbw, gameObjs[i].hbh)
     }
     ctx.globalAlpha = 1;
+}
+
+function drawPause() {
+    if (pauseVisible) {
+        ctx.globalAlpha = 0.5;
+        ctx.fillStyle = "black";
+        ctx.fillRect(0, 0, cnv.width, cnv.height);
+        ctx.globalAlpha = 1;
+        ctx.drawImage(document.getElementById("pause_play"), 190, 113);
+        ctx.drawImage(document.getElementById("pause_invisible"), 26, 129);
+        ctx.drawImage(document.getElementById("pause_practice"), 108, 129);
+        ctx.drawImage(document.getElementById("pause_menu"), 302, 129);
+        ctx.drawImage(document.getElementById("pause_restart"), 384, 129);
+    } else {
+        ctx.globalAlpha = 0.5;
+        ctx.drawImage(document.getElementById("pause_visible"), 6, 284);
+    }
+    
+
 }
