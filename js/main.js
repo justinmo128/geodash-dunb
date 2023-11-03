@@ -239,7 +239,7 @@ function clickInPause() {
         } else if (checkClick(384, 454, 129, 202)) {
             initialize();
         }
-    } else if (checkClick(6, 284, 46, 344)) {
+    } else if (checkClick(6, 46, 284, 344)) {
         pauseVisible = true;
     }
 }
