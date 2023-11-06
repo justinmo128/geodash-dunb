@@ -14,6 +14,9 @@ let movedCam = false;
 let setDifficulty = document.getElementById("difficulty");
 let levelDiff = document.getElementById("level-diff");
 let levelDiffIcon = document.getElementById("level-difficon");
+let inputs = document.getElementsByTagName("input");
+let swipeEnabled = false;
+let swipeObjs = [];
 
 for (let i = 0; i < editorTabBtns.length; i++) {
     editorTabBtns[i].addEventListener("click", () => {
@@ -63,9 +66,19 @@ function deselect() {
     selectedIndex = -1;
 }
 
+document.getElementById("swipe-btn").addEventListener("click", toggleSwipe);
+function toggleSwipe() {
+    swipeEnabled = !swipeEnabled;
+    if (swipeEnabled) {
+        document.getElementById("swipe-btn").style.backgroundImage = `url("img/swipe-btnon.png")`;
+    } else {
+        document.getElementById("swipe-btn").style.backgroundImage = `url("img/swipe-btn.png")`;
+    }
+}
+
 window.addEventListener("load", moveEditorCam);
 function moveEditorCam() {
-    if (mouseInBounds() && mouseHeld) {
+    if (mouseInBounds() && mouseHeld && !swipeEnabled) {
         if ((initMouseX - mouseX) > 5 || (initMouseX - mouseX) < -5 || (initMouseY - mouseY) > 5 || (initMouseY - mouseY) < -5) {
             camera.x = initCamX + initMouseX - mouseX;
             camera.y = initCamY - (initMouseY - mouseY);
@@ -84,12 +97,51 @@ function moveEditorCam() {
     setTimeout(moveEditorCam, 1000/240)
 }
 
+window.addEventListener("load", swipe);
+function swipe() {
+    let coordX = mouseX + camera.x;
+    let coordY = camera.y - mouseY + 270;
+    let snappedX = Math.floor((coordX)/30) * 30;
+    let snappedY = Math.floor((coordY)/30) * 30;
+    if (mouseInBounds() && mouseHeld && swipeEnabled) {
+        if (buildCategory == "build") {
+            let objProps = objectList.find((element) => currentObj == element.id);
+            if (!swipeObjs.includes([snappedX + objProps.editorOffsetx, snappedY + objProps.editorOffsety])) {
+                editorObjects.push({
+                    id: currentObj,
+                    x: snappedX + objProps.editorOffsetx,
+                    y: snappedY + objProps.editorOffsety,
+                    angle: 0,
+                    h: objProps.h,
+                    w: objProps.w,
+                    hbType: objProps.hbType,
+                    isPortal: objProps.isPortal
+                })
+                swipeObjs.push([snappedX + objProps.editorOffsetx, snappedY + objProps.editorOffsety]);
+                selectedIndex = editorObjects.length - 1;
+                if (editorObjects[selectedIndex].isPortal) {
+                    editorObjects[selectedIndex].portalType = objProps.portalType;
+                }
+                updateHTML();
+            }
+        } else if (buildCategory == "delete") {
+            for (let i = 0; i < editorObjects.length; i++) {
+                if (coordX >= editorObjects[i].x && coordX <= editorObjects[i].x + editorObjects[i].w && coordY >= editorObjects[i].y && coordY <= editorObjects[i].y + editorObjects[i].h) {
+                    deleteObject(i)
+                }
+            }
+            updateHTML();
+        }
+    }
+    setTimeout(swipe, 1000/240)
+}
+
 function clickInEditor() {
     let coordX = mouseX + camera.x;
     let coordY = camera.y - mouseY + 270;
-    let snappedX = Math.floor((coordX) /30) * 30;
-    let snappedY = Math.floor((coordY) /30) * 30;
-    if (buildCategory == "build" && mouseInBounds() && !movedCam) {
+    let snappedX = Math.floor((coordX)/30) * 30;
+    let snappedY = Math.floor((coordY)/30) * 30;
+    if (buildCategory == "build" && mouseInBounds() && !movedCam && !swipeEnabled) {
         let objProps = objectList.find((element) => currentObj == element.id);
         editorObjects.push({
             id: currentObj,
@@ -125,7 +177,7 @@ function clickInEditor() {
             selectedIndex = indices[0];
         }
         updateHTML();
-    } else if (mouseInBounds() && !movedCam) {
+    } else if (mouseInBounds() && !movedCam && !swipeEnabled) {
         for (let i = 0; i < editorObjects.length; i++) {
             if (coordX >= editorObjects[i].x && coordX <= editorObjects[i].x + editorObjects[i].w && coordY >= editorObjects[i].y && coordY <= editorObjects[i].y + editorObjects[i].h) {
                 deleteObject(i)
@@ -137,7 +189,14 @@ function clickInEditor() {
 }
 
 function editorKeys(e) {
-    if (selectedIndex > -1 && gameState == "editor") {
+    let cursorInInput = false;
+    for (let i = 0; i < inputs.length; i++) {
+        if (inputs[i] === document.activeElement) {
+            cursorInInput = true;
+            
+        }
+    }
+    if (selectedIndex > -1 && gameState == "editor" && !cursorInInput) {
         if (e.key == "w") {
             editorObjects[selectedIndex].y += 30;
             updateHTML();

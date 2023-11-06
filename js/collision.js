@@ -43,10 +43,10 @@ function switchGamemode(obj) {
             ease(camera, [0, 45 - camera.y], 200, "linear")
             newFloor.hby = 0;
         } else if (!obj.activated) {
-            ease(newFloor, [0, obj.y - 120 - newFloor.y], 200, "linear")
-            ease(roof, [0, obj.y - 120 + 390 - roof.y], 200, "linear")
-            ease(camera, [0, obj.y - 75 - camera.y], 200, "linear")
-            newFloor.hby = obj.y - 120;
+            newFloor.hby = roundToNearest(obj.y - 120, 30);
+            ease(newFloor, [0, newFloor.hby - newFloor.y], 200, "linear")
+            ease(roof, [0, newFloor.hby + 390 - roof.y], 200, "linear")
+            ease(camera, [0, newFloor.hby + 45 - camera.y], 200, "linear")
         }
         roof.hby = newFloor.hby + 390;
         newFloor.canCollide = true;

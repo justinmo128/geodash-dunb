@@ -8,7 +8,12 @@ function moveCamera() {
     } else {
         camera.x = player.x - 90;
     }
-    if (camera.y < 0) {
+    if (player.y - camera.y > 155 && player.mode == "cube") {
+        camera.y += 1;
+    } else if (player.y - camera.y < 40 && player.mode == "cube") {
+        camera.y -= 1;
+    }
+    if (camera.y < 0 && player.mode == "cube") {
         camera.y = 0;
     }
 }
@@ -54,6 +59,8 @@ function drawFloorRoof(type) {
 // Easing
 function ease(instance, vector, duration = 200, style = "linear", doAfter = "", ignoreX = false, ignoreY = false, ignoreAngle = false) {
     let instanceSave = Object.assign({}, instance);
+    clearInterval(instance.easeId);
+    instance.easeId = 0;
     if (style == "linear") {
         instance.easeId = setInterval(() => {
             if (!ignoreX) {
@@ -148,4 +155,8 @@ function setOffset(angle) {
     } else {
         return [0, 0];
     }
+}
+
+function roundToNearest(num, roundTo) {
+    return Math.round((num)/roundTo) * roundTo;
 }

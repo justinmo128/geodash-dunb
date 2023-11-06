@@ -91,7 +91,7 @@ function initialize() {
         x: 0,
         y: 0,
         easing: false,
-        easeIds: []
+        easeId: 0
     };
     background = {
         colour: "#4287f5",

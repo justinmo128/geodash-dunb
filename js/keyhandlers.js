@@ -43,10 +43,10 @@ function mouseDown(e) {
 function mouseUp() {
     keyUp();
     mouseHeld = false;
+    swipeObjs = [];
 }
 
 function keyDown(e) {
-    console.log(e.key)
     if (e.key === "Escape") {
         escapePressed();
     } else if (gameState == "editor") {
