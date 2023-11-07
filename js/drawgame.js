@@ -64,8 +64,10 @@ function drawHitboxes() {
     fillRectCam(player.bluehbx, player.bluehby, player.bluehbw, player.bluehbh)
     // Objects
     for (let i = 0; i < gameObjs.length; i++) {
-        ctx.fillStyle = gameObjs[i].hbType;
-        fillRectCam(gameObjs[i].hbx, gameObjs[i].hby, gameObjs[i].hbw, gameObjs[i].hbh)
+        if (gameObjs[i].hasHitbox) {
+            ctx.fillStyle = gameObjs[i].hbType;
+            fillRectCam(gameObjs[i].hbx, gameObjs[i].hby, gameObjs[i].hbw, gameObjs[i].hbh)
+        }
     }
     ctx.globalAlpha = 1;
 }

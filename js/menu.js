@@ -87,6 +87,7 @@ function initializeEditor() {
         x: 0
     };
     movedCam = true;
+    updateHTML();
 }
 
 document.getElementById("editor-leave").addEventListener("click", initializeMenu)

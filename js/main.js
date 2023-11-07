@@ -34,11 +34,7 @@ function createGameObjects() {
             angle: levelJSON.objects[i].angle,
             h: objProps.h,
             w: objProps.w,
-            hbx: levelJSON.objects[i].x + objProps.hbx,
-            hby: levelJSON.objects[i].y + objProps.hby,
-            hbw: objProps.hbw,
-            hbh: objProps.hbh,
-            hbType: objProps.hbType,
+            hasHitbox: objProps.hasHitbox,
             isPortal: objProps.isPortal,
             activated: false
         })
@@ -54,7 +50,13 @@ function createGameObjects() {
             gameObjs[i].hbx -= xDiff;
             gameObjs[i].hby -= yDiff;
         }
-
+        if (gameObjs[i].hasHitbox) {
+            gameObjs[i].hbx = levelJSON.objects[i].x + objProps.hbx;
+            gameObjs[i].hby = levelJSON.objects[i].y + objProps.hby;
+            gameObjs[i].hbw = objProps.hbw;
+            gameObjs[i].hbh = objProps.hbh;
+            gameObjs[i].hbType = objProps.hbType;
+        }
         if (gameObjs[i].x > maxX) {
             maxX = gameObjs[i].x;
         }

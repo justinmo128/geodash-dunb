@@ -17,6 +17,7 @@ let levelDiffIcon = document.getElementById("level-difficon");
 let inputs = document.getElementsByTagName("input");
 let swipeEnabled = false;
 let swipeObjs = [];
+let editSwipeActive = false;
 
 for (let i = 0; i < editorTabBtns.length; i++) {
     editorTabBtns[i].addEventListener("click", () => {
@@ -90,23 +91,22 @@ function moveEditorCam() {
     }
     if (camera.y < -30) {
         camera.y = -30;
+        updateHTML();
     }
     if (camera.x < 0) {
         camera.x = 0;
+        updateHTML();
     }
     setTimeout(moveEditorCam, 1000/240)
 }
 
 window.addEventListener("load", swipe);
 function swipe() {
-    let coordX = mouseX + camera.x;
-    let coordY = camera.y - mouseY + 270;
-    let snappedX = Math.floor((coordX)/30) * 30;
-    let snappedY = Math.floor((coordY)/30) * 30;
     if (mouseInBounds() && mouseHeld && swipeEnabled) {
         if (buildCategory == "build") {
             let objProps = objectList.find((element) => currentObj == element.id);
-            if (!swipeObjs.includes([snappedX + objProps.editorOffsetx, snappedY + objProps.editorOffsety])) {
+            let same = swipeObjs.some(e => e[0] === snappedX + objProps.editorOffsetx && e[1] === snappedY + objProps.editorOffsety);
+            if (!same) {
                 editorObjects.push({
                     id: currentObj,
                     x: snappedX + objProps.editorOffsetx,
@@ -137,10 +137,6 @@ function swipe() {
 }
 
 function clickInEditor() {
-    let coordX = mouseX + camera.x;
-    let coordY = camera.y - mouseY + 270;
-    let snappedX = Math.floor((coordX)/30) * 30;
-    let snappedY = Math.floor((coordY)/30) * 30;
     if (buildCategory == "build" && mouseInBounds() && !movedCam && !swipeEnabled) {
         let objProps = objectList.find((element) => currentObj == element.id);
         editorObjects.push({
@@ -197,35 +193,32 @@ function editorKeys(e) {
         }
     }
     if (selectedIndex > -1 && gameState == "editor" && !cursorInInput) {
+        let validKeyPressed = true;
         if (e.key == "w") {
             editorObjects[selectedIndex].y += 30;
-            updateHTML();
         } else if (e.key == "a") {
             editorObjects[selectedIndex].x -= 30;
-            updateHTML();
         } else if (e.key == "s") {
             editorObjects[selectedIndex].y -= 30;
-            updateHTML();
         } else if (e.key == "d") {
             editorObjects[selectedIndex].x += 30;
-            updateHTML();
         } else if (e.key == "ArrowUp") {
             editorObjects[selectedIndex].y++;
-            updateHTML();
         } else if (e.key == "ArrowLeft") {
             editorObjects[selectedIndex].x--;
-            updateHTML();
         } else if (e.key == "ArrowDown") {
             editorObjects[selectedIndex].y--;
-            updateHTML();
         } else if (e.key == "ArrowRight") {
             editorObjects[selectedIndex].x++;
-            updateHTML();
         } else if (e.key == "r") {
             let oldAngle = editorObjects[selectedIndex].angle;
             editorObjects[selectedIndex].angle += 90;
             editorObjects[selectedIndex].angle %= 360;
             rotateObject(editorObjects[selectedIndex], oldAngle);
+        } else {
+            validKeyPressed = false;
+        }
+        if (validKeyPressed) {
             updateHTML();
         }
     }

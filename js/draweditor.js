@@ -12,23 +12,21 @@ function drawEditor() {
 }
 
 function drawEditorObjects() {
+    ctx.globalAlpha = 1;
     for (let i = 0; i < editorObjects.length; i++) {
         let imgName = editorObjects[i].id;
         let xOffset = 0;
         let yOffset = 0;
         if (editorObjects[i].isPortal) {
             imgName = `portal_${editorObjects[i].portalType}_over`;
-            xOffset = setOffset(editorObjects[i].angle)[0];
-            yOffset = setOffset(editorObjects[i].angle)[1];
         }
-        drawImgCamRotate(imgName, editorObjects[i].x - xOffset, editorObjects[i].y - yOffset, editorObjects[i].h, editorObjects[i].w, editorObjects[i].angle);
+        drawImgCamRotate(imgName, editorObjects[i].x, editorObjects[i].y, editorObjects[i].h, editorObjects[i].w, editorObjects[i].angle, 10);
     }
     ctx.globalAlpha = 0.5;
     ctx.fillStyle = "lime";
     if (selectedIndex > -1) {
         fillRectCam(editorObjects[selectedIndex].x, editorObjects[selectedIndex].y, editorObjects[selectedIndex].w, editorObjects[selectedIndex].h);
     }
-    ctx.globalAlpha = 1;
 }
 
 function drawGrid() {

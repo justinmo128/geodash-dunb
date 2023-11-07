@@ -24,15 +24,16 @@ function fillRectCam(x, y, w, h) {
     }
 }
 
-function drawImgCamRotate(imgName, x, y, h, w = 0, angle = 0) {
-    if (angle !== 0) {
+function drawImgCamRotate(imgName, x, y, h, w = 0, angle = 0, xOffset = 0, yOffset = 0) {
+    if (angle !== 0 || angle == 0) {
         ctx.save();
-        ctx.translate(x - camera.x + w/2, camera.y - y - h + h/2 + 270);
+        ctx.drawImage(document.getElementById(imgName), x - camera.x - xOffset, camera.y - y - h + 270 - yOffset)
+        ctx.translate(x - camera.x + w/2 - xOffset, camera.y - y - h + h/2 + 270 + yOffset);
         ctx.rotate(angle * Math.PI / 180);
         ctx.drawImage(document.getElementById(imgName), w/-2, h/-2);
         ctx.restore();
     } else {
-        ctx.drawImage(document.getElementById(imgName), x - camera.x, camera.y - y - h + 270)
+        ctx.drawImage(document.getElementById(imgName), x - camera.x - xOffset, camera.y - y - h + 270 - yOffset)
     }
 }
 
@@ -40,6 +41,7 @@ function drawImgCamRotate(imgName, x, y, h, w = 0, angle = 0) {
 function drawBG() {
     background.x = camera.x * -0.2;
     background.y = camera.y * 0.2;
+    ctx.globalAlpha = 1;
     ctx.drawImage(document.getElementById("gamebg"), background.x % 512, background.y % 512 - 190)
     ctx.globalAlpha = 0.5;
     ctx.fillStyle = background.colour;
@@ -145,13 +147,17 @@ let objectList = [];
 
 function setOffset(angle) {
     if (angle == 0) {
-        return [10, 0];
+        // return [10, 0];
+        return [0, 0];
     } else if (angle == 90) {
-        return [-30, 20];
+        // return [-30, 20];
+        return [0, 0];
     } else if (angle == 180) {
-        return [-10, 0];
+        // return [-10, 0];
+        return [0, 0];
     } else if (angle == 270) {
-        return [30, -20];
+        // return [30, -20];
+        return [0, 0];
     } else {
         return [0, 0];
     }

@@ -2,10 +2,10 @@ function checkCollision() {
     // Object collision
     for (let i = 0; i < gameObjs.length; i++) {
         // Blue Player + Blue Obj (Running into blocks)
-        if (collides(player.bluehbx, player.bluehby, player.bluehbw, player.bluehbh, gameObjs[i].hbx, gameObjs[i].hby, gameObjs[i].hbw, gameObjs[i].hbh) && gameObjs[i].hbType == "blue") {
+        if (gameObjs[i].hasHitbox && collides(player.bluehbx, player.bluehby, player.bluehbw, player.bluehbh, gameObjs[i].hbx, gameObjs[i].hby, gameObjs[i].hbw, gameObjs[i].hbh) && gameObjs[i].hbType == "blue") {
             playerDeath();
         }
-        else if (collides(player.x, player.y, player.w, player.h, gameObjs[i].hbx, gameObjs[i].hby, gameObjs[i].hbw, gameObjs[i].hbh)) {
+        else if (gameObjs[i].hasHitbox && collides(player.x, player.y, player.w, player.h, gameObjs[i].hbx, gameObjs[i].hby, gameObjs[i].hbw, gameObjs[i].hbh)) {
             // Red Player + Green Obj (Portals, Orbs, Pads)
             if (gameObjs[i].isPortal && !gameObjs[i].activated) {
                 if (player.mode !== gameObjs[i].portalType) {

@@ -10,7 +10,8 @@
         "hbType": "blue",
         "isPortal": false,
         "editorOffsetx": 0,
-        "editorOffsety": 0
+        "editorOffsety": 0,
+        "hasHitbox": true
     },
     {
         "id": "spike_standard",
@@ -23,7 +24,8 @@
         "hbType": "red",
         "isPortal": false,
         "editorOffsetx": 0,
-        "editorOffsety": 0
+        "editorOffsety": 0,
+        "hasHitbox": true
     },
     {
         "id": "slab_standard",
@@ -36,7 +38,8 @@
         "hbType": "blue",
         "isPortal": false,
         "editorOffsetx": 0,
-        "editorOffsety": 15
+        "editorOffsety": 15,
+        "hasHitbox": true
     },
     {
         "id": "portal_ship",
@@ -50,7 +53,8 @@
         "portalType": "ship",
         "isPortal": true,
         "editorOffsetx": 0,
-        "editorOffsety": -30
+        "editorOffsety": -30,
+        "hasHitbox": true
     },
     {
         "id": "portal_cube",
@@ -64,6 +68,233 @@
         "portalType": "cube",
         "isPortal": true,
         "editorOffsetx": 0,
-        "editorOffsety": -30
+        "editorOffsety": -30,
+        "hasHitbox": true
+    },
+    {
+        "id": "block_outline_2dots",
+        "h": 30,
+        "w": 30,
+        "hbx": 0,
+        "hby": 0,
+        "hbw": 30,
+        "hbh": 30,
+        "hbType": "blue",
+        "isPortal": false,
+        "editorOffsetx": 0,
+        "editorOffsety": 0,
+        "hasHitbox": true
+    },
+    {
+        "id": "block_outline_cap",
+        "h": 30,
+        "w": 30,
+        "hbx": 0,
+        "hby": 0,
+        "hbw": 30,
+        "hbh": 30,
+        "hbType": "blue",
+        "isPortal": false,
+        "editorOffsetx": 0,
+        "editorOffsety": 0,
+        "hasHitbox": true
+    },
+    {
+        "id": "block_outline_corner",
+        "h": 30,
+        "w": 30,
+        "hbx": 0,
+        "hby": 0,
+        "hbw": 30,
+        "hbh": 30,
+        "hbType": "blue",
+        "isPortal": false,
+        "editorOffsetx": 0,
+        "editorOffsety": 0,
+        "hasHitbox": true
+    },
+    {
+        "id": "block_outline_dot",
+        "h": 30,
+        "w": 30,
+        "hbx": 0,
+        "hby": 0,
+        "hbw": 30,
+        "hbh": 30,
+        "hbType": "blue",
+        "isPortal": false,
+        "editorOffsetx": 0,
+        "editorOffsety": 0,
+        "hasHitbox": true
+    },
+    {
+        "id": "block_outline_full",
+        "h": 30,
+        "w": 30,
+        "hbx": 0,
+        "hby": 0,
+        "hbw": 30,
+        "hbh": 30,
+        "hbType": "blue",
+        "isPortal": false,
+        "editorOffsetx": 0,
+        "editorOffsety": 0,
+        "hasHitbox": true
+    },
+    {
+        "id": "block_outline_line",
+        "h": 30,
+        "w": 30,
+        "hbx": 0,
+        "hby": 0,
+        "hbw": 30,
+        "hbh": 30,
+        "hbType": "blue",
+        "isPortal": false,
+        "editorOffsetx": 0,
+        "editorOffsety": 0,
+        "hasHitbox": true
+    },
+    {
+        "id": "block_outline_pillar",
+        "h": 30,
+        "w": 30,
+        "hbx": 0,
+        "hby": 0,
+        "hbw": 30,
+        "hbh": 30,
+        "hbType": "blue",
+        "isPortal": false,
+        "editorOffsetx": 0,
+        "editorOffsety": 0,
+        "hasHitbox": true
+    },
+    {
+        "id": "block_default1",
+        "h": 30,
+        "w": 30,
+        "isPortal": false,
+        "editorOffsetx": 0,
+        "editorOffsety": 0,
+        "hasHitbox": false
+    },
+    {
+        "id": "block_default2",
+        "h": 30,
+        "w": 30,
+        "isPortal": false,
+        "editorOffsetx": 0,
+        "editorOffsety": 0,
+        "hasHitbox": false
+    },
+    {
+        "id": "block_default3",
+        "h": 30,
+        "w": 30,
+        "isPortal": false,
+        "editorOffsetx": 0,
+        "editorOffsety": 0,
+        "hasHitbox": false
+    },
+    {
+        "id": "block_default4",
+        "h": 30,
+        "w": 30,
+        "isPortal": false,
+        "editorOffsetx": 0,
+        "editorOffsety": 0,
+        "hasHitbox": false
+    },
+    {
+        "id": "block_default5",
+        "h": 30,
+        "w": 30,
+        "isPortal": false,
+        "editorOffsetx": 0,
+        "editorOffsety": 0,
+        "hasHitbox": false
+    },
+    {
+        "id": "block_default6",
+        "h": 30,
+        "w": 30,
+        "isPortal": false,
+        "editorOffsetx": 0,
+        "editorOffsety": 0,
+        "hasHitbox": false
+    },
+    {
+        "id": "block_default7",
+        "h": 30,
+        "w": 30,
+        "isPortal": false,
+        "editorOffsetx": 0,
+        "editorOffsety": 0,
+        "hasHitbox": false
+    },
+    {
+        "id": "block_default8",
+        "h": 30,
+        "w": 30,
+        "isPortal": false,
+        "editorOffsetx": 0,
+        "editorOffsety": 0,
+        "hasHitbox": false
+    },
+    {
+        "id": "spike_small",
+        "h": 30,
+        "w": 30,
+        "hbx": 12,
+        "hby": 10,
+        "hbw": 6,
+        "hbh": 9,
+        "hbType": "red",
+        "isPortal": false,
+        "editorOffsetx": 0,
+        "editorOffsety": 0,
+        "hasHitbox": true
+    },
+    {
+        "id": "spike_tiny",
+        "h": 30,
+        "w": 30,
+        "hbx": 12,
+        "hby": 10,
+        "hbw": 6,
+        "hbh": 9,
+        "hbType": "red",
+        "isPortal": false,
+        "editorOffsetx": 0,
+        "editorOffsety": 0,
+        "hasHitbox": true
+    },
+    {
+        "id": "spike_slab",
+        "h": 15,
+        "w": 30,
+        "hbx": 12,
+        "hby": 10,
+        "hbw": 6,
+        "hbh": 9,
+        "hbType": "red",
+        "isPortal": false,
+        "editorOffsetx": 0,
+        "editorOffsety": 0,
+        "hasHitbox": true
+    },
+    {
+        "id": "spike_ground",
+        "h": 30,
+        "w": 30,
+        "hbx": 12,
+        "hby": 10,
+        "hbw": 6,
+        "hbh": 9,
+        "hbType": "red",
+        "isPortal": false,
+        "editorOffsetx": 0,
+        "editorOffsety": 0,
+        "hasHitbox": true
     }
 ]

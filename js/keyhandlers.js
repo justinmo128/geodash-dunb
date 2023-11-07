@@ -2,6 +2,10 @@ let keyHeld = false;
 let mouseHeld = false;
 let mouseX = 0;
 let mouseY = 0;
+let coordX = 0;
+let coordY = 0;
+let snappedX = 0;
+let snappedY = 0;
 
 document.addEventListener("keydown", (e) => {
     keyDown(e);
@@ -23,6 +27,10 @@ function mousemoveHandler(e) {
   // Calc mouse coordinates using mouse event and canvas location info
   mouseX = Math.round(e.clientX - cnvRect.left);
   mouseY = Math.round(e.clientY - cnvRect.top);
+  coordX = mouseX + camera.x;
+  coordY = camera.y - mouseY + 270;
+  snappedX = Math.floor((coordX)/30) * 30;
+  snappedY = Math.floor((coordY)/30) * 30;
 }
 
 function mouseDown(e) {
