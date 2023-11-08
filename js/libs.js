@@ -24,16 +24,16 @@ function fillRectCam(x, y, w, h) {
     }
 }
 
-function drawImgCamRotate(imgName, x, y, h, w = 0, angle = 0, xOffset = 0, yOffset = 0) {
-    if (angle !== 0 || angle == 0) {
+function drawImgCamRotate(imgName, x, y, h, w = 0, angle = 0, ogw, ogh, xOffset = 0, yOffset = 0) {
+    let objImg = document.getElementById(imgName);
+    if (angle !== 0) {
         ctx.save();
-        ctx.drawImage(document.getElementById(imgName), x - camera.x - xOffset, camera.y - y - h + 270 - yOffset)
-        ctx.translate(x - camera.x + w/2 - xOffset, camera.y - y - h + h/2 + 270 + yOffset);
+        ctx.translate(x - camera.x + w/2, camera.y - y - h + h/2 + 270);
         ctx.rotate(angle * Math.PI / 180);
-        ctx.drawImage(document.getElementById(imgName), w/-2, h/-2);
+        ctx.drawImage(objImg, ogw/-2 - xOffset, ogh/-2 - yOffset);
         ctx.restore();
     } else {
-        ctx.drawImage(document.getElementById(imgName), x - camera.x - xOffset, camera.y - y - h + 270 - yOffset)
+        ctx.drawImage(objImg, x - camera.x - xOffset, camera.y - y - h + 270 - yOffset)
     }
 }
 
@@ -145,24 +145,15 @@ let objectList = [];
     .then((res) => res.json())
     .then((data) => objectList = data)
 
-function setOffset(angle) {
-    if (angle == 0) {
-        // return [10, 0];
-        return [0, 0];
-    } else if (angle == 90) {
-        // return [-30, 20];
-        return [0, 0];
-    } else if (angle == 180) {
-        // return [-10, 0];
-        return [0, 0];
-    } else if (angle == 270) {
-        // return [30, -20];
-        return [0, 0];
-    } else {
-        return [0, 0];
-    }
-}
-
 function roundToNearest(num, roundTo) {
     return Math.round((num)/roundTo) * roundTo;
+}
+
+function translateAfterRotation(newobj, oldobj) {
+    let xDiff = newobj.x - oldobj.x;
+    let yDiff = newobj.y - oldobj.y;
+    newobj.x -= xDiff;
+    newobj.y -= yDiff;
+    newobj.hbx -= xDiff;
+    newobj.hby -= yDiff;
 }

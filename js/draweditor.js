@@ -15,12 +15,13 @@ function drawEditorObjects() {
     ctx.globalAlpha = 1;
     for (let i = 0; i < editorObjects.length; i++) {
         let imgName = editorObjects[i].id;
-        let xOffset = 0;
-        let yOffset = 0;
+        let objProps = objectList.find((element) => editorObjects[i].id == element.id)
+        let xOffset = objProps.visualOffsetx;
+        let yOffset = objProps.visualOffsety;
         if (editorObjects[i].isPortal) {
             imgName = `portal_${editorObjects[i].portalType}_over`;
         }
-        drawImgCamRotate(imgName, editorObjects[i].x, editorObjects[i].y, editorObjects[i].h, editorObjects[i].w, editorObjects[i].angle, 10);
+        drawImgCamRotate(imgName, editorObjects[i].x, editorObjects[i].y, editorObjects[i].h, editorObjects[i].w, editorObjects[i].angle, objProps.w, objProps.h, xOffset, yOffset);
     }
     ctx.globalAlpha = 0.5;
     ctx.fillStyle = "lime";
@@ -46,11 +47,13 @@ function updateHTML() {
         objXEl.value = editorObjects[selectedIndex].x;
         objYEl.value = editorObjects[selectedIndex].y;
         objAngleEl.value = editorObjects[selectedIndex].angle;
+        console.log(editorObjects[selectedIndex].w, editorObjects[selectedIndex].h)
     } else {
         objXEl.value = 0;
         objYEl.value = 0;
         objAngleEl.value = 0;
     }
+    
 }
 
 camXEl.addEventListener("change", () => {

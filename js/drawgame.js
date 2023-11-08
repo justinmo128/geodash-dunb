@@ -5,7 +5,7 @@ function drawGame() {
     drawPlayer();
     drawGameObjects();
     drawFloors();
-    // drawHitboxes();
+    drawHitboxes();
     if (gamePaused) {
         drawPause();
     }
@@ -24,9 +24,7 @@ function drawFloors() {
 function drawBackgroundObjects() {
     for (let i = 0; i < gameObjs.length; i++) {
         if (gameObjs[i].isPortal) {
-            let xOffset = setOffset(gameObjs[i].angle)[0];
-            let yOffset = setOffset(gameObjs[i].angle)[1];
-            drawImgCamRotate(`portal_${gameObjs[i].portalType}_under`, gameObjs[i].x - xOffset, gameObjs[i].y - yOffset, gameObjs[i].h, gameObjs[i].w, gameObjs[i].angle);
+            drawImgCamRotate(`portal_${gameObjs[i].portalType}_under`, gameObjs[i].x, gameObjs[i].y, gameObjs[i].h, gameObjs[i].w, gameObjs[i].angle, 30, 90, 10);
         }
     }
 }
@@ -36,19 +34,19 @@ function drawPlayer() {
     if (player.mode == "ship") {
         offset = 5;
     }
-    drawImgCamRotate(`player_${player.mode}`, player.x - offset, player.y, player.h, player.w, player.angle);
+    drawImgCamRotate(`player_${player.mode}`, player.x - offset, player.y, player.h, player.w, player.angle, 30, 30);
 }
 
 function drawGameObjects() {
     for (let i = 0; i < gameObjs.length; i++) {
+        let objProps = objectList.find((element) => gameObjs[i].id == element.id)
         let imgName = gameObjs[i].id;
-        let xOffset = 0, yOffset = 0;
+        let xOffset = objProps.visualOffsetx;
+        let yOffset = objProps.visualOffsety;
         if (gameObjs[i].isPortal) {
             imgName = `portal_${gameObjs[i].portalType}_over`
-            xOffset = setOffset(gameObjs[i].angle)[0];
-            yOffset = setOffset(gameObjs[i].angle)[1];
         }
-        drawImgCamRotate(imgName, gameObjs[i].x - xOffset, gameObjs[i].y - yOffset, gameObjs[i].h, gameObjs[i].w, gameObjs[i].angle);
+        drawImgCamRotate(imgName, gameObjs[i].x, gameObjs[i].y, gameObjs[i].h, gameObjs[i].w, gameObjs[i].angle, objProps.w, objProps.h, xOffset, yOffset);
     }
     if (player.win) {
         ctx.drawImage(document.getElementById("levelcomplete"), 40, 100);

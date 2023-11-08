@@ -43,12 +43,7 @@ function createGameObjects() {
         }
         if (gameObjs[i].angle !== 0) {
             rotateObject(gameObjs[i], 0, true);
-            let xDiff = gameObjs[i].x - levelJSON.objects[i].x;
-            let yDiff = gameObjs[i].y - levelJSON.objects[i].y;
-            gameObjs[i].x -= xDiff;
-            gameObjs[i].y -= yDiff;
-            gameObjs[i].hbx -= xDiff;
-            gameObjs[i].hby -= yDiff;
+            translateAfterRotation(gameObjs[i], levelJSON.objects[i]);
         }
         if (gameObjs[i].hasHitbox) {
             gameObjs[i].hbx = levelJSON.objects[i].x + objProps.hbx;
