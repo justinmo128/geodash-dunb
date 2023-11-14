@@ -79,13 +79,12 @@ function toggleSwipe() {
 
 window.addEventListener("load", moveEditorCam);
 function moveEditorCam() {
+    movedCam = false;
     if (mouseInBounds() && mouseHeld && !swipeEnabled) {
         if ((initMouseX - mouseX) > 5 || (initMouseX - mouseX) < -5 || (initMouseY - mouseY) > 5 || (initMouseY - mouseY) < -5) {
             camera.x = initCamX + initMouseX - mouseX;
             camera.y = initCamY - (initMouseY - mouseY);
             movedCam = true;
-        } else {
-            movedCam = false;
         }
         updateHTML();
     }

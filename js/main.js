@@ -41,16 +41,16 @@ function createGameObjects() {
         if (gameObjs[i].isPortal) {
             gameObjs[i].portalType = objProps.portalType;
         }
-        if (gameObjs[i].angle !== 0) {
-            rotateObject(gameObjs[i], 0, true);
-            translateAfterRotation(gameObjs[i], levelJSON.objects[i]);
-        }
         if (gameObjs[i].hasHitbox) {
             gameObjs[i].hbx = levelJSON.objects[i].x + objProps.hbx;
             gameObjs[i].hby = levelJSON.objects[i].y + objProps.hby;
             gameObjs[i].hbw = objProps.hbw;
             gameObjs[i].hbh = objProps.hbh;
             gameObjs[i].hbType = objProps.hbType;
+        }
+        if (gameObjs[i].angle !== 0) {
+            rotateObject(gameObjs[i], 0, true);
+            translateAfterRotation(gameObjs[i], levelJSON.objects[i]);
         }
         if (gameObjs[i].x > maxX) {
             maxX = gameObjs[i].x;
@@ -232,7 +232,7 @@ function clickInPause() {
         } else if (checkClick(26, 96, 129, 202)) {
             pauseVisible = false;
         } else if (checkClick(108, 178, 129, 202)) {
-
+            // This button does nothing because I decided to not implement the functionality.
         } else if (checkClick(302, 372, 129, 202)) {
             initializeMenu();
         } else if (checkClick(384, 454, 129, 202)) {

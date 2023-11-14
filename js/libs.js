@@ -133,6 +133,7 @@ function rotateObject(obj, oldAngle, rotateHitbox = false) {
     if (rotateHitbox) {
         botLeftPrime = calculateRotatedPoint(obj.hbx + obj.hbw / 2, obj.hby + obj.hbh / 2, obj.hbx, obj.hby, oldAngle - obj.angle);
         topRightPrime = calculateRotatedPoint(obj.hbx + obj.hbw / 2, obj.hby + obj.hbh / 2, obj.hbx + obj.hbw, obj.hby + obj.hbh, oldAngle - obj.angle);
+        console.log(botLeftPrime, topRightPrime)
         obj.hbx = Math.round(Math.min(botLeftPrime[0], topRightPrime[0]));
         obj.hby = Math.round(Math.min(botLeftPrime[1], topRightPrime[1]));
         obj.hbw = Math.round(Math.max(botLeftPrime[0], topRightPrime[0])) - obj.hbx;
