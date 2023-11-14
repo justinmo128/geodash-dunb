@@ -85,6 +85,4 @@ function drawPause() {
         ctx.globalAlpha = 0.5;
         ctx.drawImage(document.getElementById("pause_visible"), 6, 284);
     }
-    
-
 }

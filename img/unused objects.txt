@@ -8,7 +8,4 @@ pad_blue
 pad_pink
 pad_red
 pad_yellow
-spike_small
-spike_tiny
-spike_slab
-spike_ground
+color triggers

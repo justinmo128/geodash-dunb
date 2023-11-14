@@ -4,8 +4,7 @@ function checkCollision() {
         // Blue Player + Blue Obj (Running into blocks)
         if (gameObjs[i].hasHitbox && collides(player.bluehbx, player.bluehby, player.bluehbw, player.bluehbh, gameObjs[i].hbx, gameObjs[i].hby, gameObjs[i].hbw, gameObjs[i].hbh) && gameObjs[i].hbType == "blue") {
             playerDeath();
-        }
-        else if (gameObjs[i].hasHitbox && collides(player.x, player.y, player.w, player.h, gameObjs[i].hbx, gameObjs[i].hby, gameObjs[i].hbw, gameObjs[i].hbh)) {
+        } else if (gameObjs[i].hasHitbox && collides(player.x, player.y, player.w, player.h, gameObjs[i].hbx, gameObjs[i].hby, gameObjs[i].hbw, gameObjs[i].hbh)) {
             // Red Player + Green Obj (Portals, Orbs, Pads)
             if (gameObjs[i].isPortal && !gameObjs[i].activated) {
                 if (player.mode !== gameObjs[i].portalType) {
@@ -17,11 +16,11 @@ function checkCollision() {
             }
             // Red Player + Blue Obj (Landing on blocks)
             else if (gameObjs[i].hbType == "blue") {
-                if (player.yVel <= 0 && player.y > gameObjs[i].y) {
+                if (player.y <= gameObjs[i].y + gameObjs[i].h && player.y + 10 >= gameObjs[i].y + gameObjs[i].h) {
                     player.y = gameObjs[i].y + gameObjs[i].hbh;
                     player.bluehby = player.y + 11;
                     player.grounded = true;
-                } else if (player.y + player.h - player.bluehbh < gameObjs[i].y && player.mode == "ship") {
+                } else if (player.y + player.h - 10 < gameObjs[i].y && player.y + player.h > gameObjs[i].y && player.mode == "ship") {
                     player.roofed = true;
                     player.y = gameObjs[i].y - player.h;
                     player.bluehby = player.y + 11;

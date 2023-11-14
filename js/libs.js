@@ -19,7 +19,7 @@ function moveCamera() {
 }
 
 function fillRectCam(x, y, w, h) {
-    if (x - camera.x >= 0 && x - camera.x <= 480) {
+    if (x - camera.x >= -30 && x - camera.x <= 480) {
         ctx.fillRect(x - camera.x, camera.y - y - h + 270, w, h);
     }
 }

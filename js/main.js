@@ -70,10 +70,10 @@ function initialize() {
         y: 0,
         w: 30,
         h: 30,
-        bluehbx: 12,
-        bluehby: 12,
-        bluehbw: 6,
-        bluehbh: 6,
+        bluehbx: 10,
+        bluehby: 10,
+        bluehbw: 8,
+        bluehbh: 8,
         xVel: 311.579742, // units per second, 30 units is a block
         gravity: -2851.5625, // units per second squared
         yVel: 0,
@@ -135,31 +135,32 @@ function physics() {
 }
 
 function applyGravity() {
+    // Max Velocity
+    if (player.yVel >= 432 && player.mode == "ship") {
+        player.yVel = 432;
+    } else if (player.yVel <= -345.6 && player.mode == "ship") {
+        player.yVel = -345.6
+    }  
+
+    // Apply Velocity and Gravity
     player.y += player.yVel /(1000/deltaTime) * 0.5;
     player.yVel += player.gravity / (1000/deltaTime);
     player.y += player.yVel /(1000/deltaTime) * 0.5;
     
-    // Max Velocity
-    if (player.yVel >= 480 && player.mode == "ship") {
-        player.yVel = 480;
-    } else if (player.yVel <= -384 && player.mode == "ship") {
-        player.yVel = -384
-    }  
-
     // Set Gravity
     if (player.mode == "cube") {
-        if (player.yVel > -812.5) {
-            player.gravity = -2851.5625;
+        if (player.yVel > -810) {
+            player.gravity = -2472;
         } else {
             player.gravity = 0;
         }
     } else if (player.mode == "ship") {
         if (keyHeld) {
             player.gravity = 0;
-        } else if (player.yVel > 66 || player.yVel < -66) {
-            player.gravity = -745.2;
+        } else if (player.yVel > 110) {
+            player.gravity = -1419.584;
         } else {
-            player.gravity = -500;
+            player.gravity = -894.11526;
         }
     }
 
@@ -176,7 +177,7 @@ function rotatePlayer() {
     if (player.grounded && player.mode == "cube") {
         let roundedAngle = Math.round(player.angle/90)*90;
         let angleDiff = roundedAngle - player.angle;
-        if (!player.easing) {
+        if (!player.easing && player.angle % 90 != 0) {
             player.easing = true;
             ease(player, [0, 0, angleDiff], angleDiff * 2, "linear", () => {player.easing = false}, true, true);
         }
@@ -188,7 +189,7 @@ function rotatePlayer() {
             clearEase(player)
             player.angle += 380/(1000/deltaTime);
         } else if (player.mode == "ship" && !player.easing) {
-            player.angle = player.yVel / -8;
+            player.angle = Math.atan(player.yVel/player.xVel) * -180 / Math.PI;
         }
     }
     player.angle = player.angle % 360;
@@ -196,12 +197,13 @@ function rotatePlayer() {
 
 function jump() {
     if (player.mode == "cube" && player.grounded) {
-        player.yVel = 630;
+        player.yVel = 556.2;
+        // To convert from GD velocity to my velocity, multiply by 54
     } else if (player.mode == "ship" && player.y + player.h < roof.y && roof.canCollide && !player.roofed) {
-        if (player.yVel > 66) {
-            player.yVel += 621 / (1000/deltaTime);
+        if (player.yVel > 120) {
+            player.yVel += 1180.5102 / (1000/deltaTime);
         } else {
-            player.yVel += 761.4 / (1000/deltaTime);
+            player.yVel += 1341.1656 / (1000/deltaTime);
         }
     }
 }

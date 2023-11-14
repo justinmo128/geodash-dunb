@@ -47,7 +47,6 @@ function updateHTML() {
         objXEl.value = editorObjects[selectedIndex].x;
         objYEl.value = editorObjects[selectedIndex].y;
         objAngleEl.value = editorObjects[selectedIndex].angle;
-        console.log(editorObjects[selectedIndex].w, editorObjects[selectedIndex].h)
     } else {
         objXEl.value = 0;
         objYEl.value = 0;
