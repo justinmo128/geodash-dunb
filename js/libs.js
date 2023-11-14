@@ -39,8 +39,8 @@ function drawImgCamRotate(imgName, x, y, h, w = 0, angle = 0, ogw, ogh, xOffset 
 
 // Drawing Common Elements
 function drawBG() {
-    background.x = camera.x * -0.2;
-    background.y = camera.y * 0.2;
+    background.x = camera.x * -0.05;
+    background.y = camera.y * 0.05;
     ctx.globalAlpha = 1;
     ctx.drawImage(document.getElementById("gamebg"), background.x % 512, background.y % 512 - 190)
     ctx.globalAlpha = 0.5;
