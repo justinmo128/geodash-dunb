@@ -74,7 +74,7 @@ function initialize() {
         bluehby: 10,
         bluehbw: 8,
         bluehbh: 8,
-        xVel: 311.579742, // units per second, 30 units is a block
+        xVel: 311.581, // units per second, 30 units is a block
         gravity: -2851.5625, // units per second squared
         yVel: 0,
         grounded: true,
@@ -143,9 +143,8 @@ function applyGravity() {
     }  
 
     // Apply Velocity and Gravity
-    player.y += player.yVel /(1000/deltaTime) * 0.5;
     player.yVel += player.gravity / (1000/deltaTime);
-    player.y += player.yVel /(1000/deltaTime) * 0.5;
+    player.y += player.yVel /(1000/deltaTime);
     
     // Set Gravity
     if (player.mode == "cube") {

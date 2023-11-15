@@ -5,7 +5,7 @@ function drawGame() {
     drawPlayer();
     drawGameObjects();
     drawFloors();
-    drawHitboxes();
+    // drawHitboxes();
     if (gamePaused) {
         drawPause();
     }
