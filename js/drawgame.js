@@ -5,7 +5,7 @@ function drawGame() {
     drawPlayer();
     drawGameObjects();
     drawFloors();
-    // drawHitboxes();
+    drawHitboxes();
     if (gamePaused) {
         drawPause();
     }
@@ -30,11 +30,15 @@ function drawBackgroundObjects() {
 }
 
 function drawPlayer() {
-    let offset = 0;
     if (player.mode == "ship") {
-        offset = 5;
+        ctx.save();
+        ctx.translate(player.x - camera.x + 15, camera.y - player.y - player.h + player.h/2 + 270);
+        ctx.rotate(player.angle * Math.PI / 180);
+        ctx.drawImage(document.getElementById("player_ship"), -20, -15);
+        ctx.restore();
+    } else {
+        drawImgCamRotate(`player_${player.mode}`, player.x, player.y, player.h, player.w, player.angle, 30, 30);
     }
-    drawImgCamRotate(`player_${player.mode}`, player.x - offset, player.y, player.h, player.w, player.angle, 30, 30);
 }
 
 function drawGameObjects() {
