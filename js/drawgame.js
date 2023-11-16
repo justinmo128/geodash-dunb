@@ -2,8 +2,8 @@ function drawGame() {
     moveCamera();
     drawBG();
     drawBackgroundObjects();
-    drawPlayer();
     drawGameObjects();
+    drawPlayer();
     drawFloors();
     drawHitboxes();
     if (gamePaused) {
