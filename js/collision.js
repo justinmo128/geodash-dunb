@@ -1,4 +1,5 @@
 function checkCollision() {
+    player.touchingBlock = false;
     // Object collision
     for (let i = 0; i < gameObjs.length; i++) {
         // Blue Player + Blue Obj (Running into blocks)
@@ -13,6 +14,10 @@ function checkCollision() {
                 if (gameObjs[i].portalType == "ship" || gameObjs[i].portalType == "cube") {
                     switchGamemode(gameObjs[i]);
                 }
+            } else if (gameObjs[i].isPad && !gameObjs[i].activated) {
+                if (gameObjs[i].padType == "yellow") {
+                    player.yVel = 800;
+                }
             }
             // Red Player + Blue Obj (Landing on blocks)
             else if (gameObjs[i].hbType == "blue") {
@@ -20,10 +25,12 @@ function checkCollision() {
                     player.y = gameObjs[i].y + gameObjs[i].hbh;
                     player.bluehby = player.y + 11;
                     player.grounded = true;
+                    player.touchingBlock = true;
                 } else if (player.y + player.h - 10 < gameObjs[i].y && player.y + player.h > gameObjs[i].y && player.mode == "ship") {
                     player.roofed = true;
                     player.y = gameObjs[i].y - player.h;
                     player.bluehby = player.y + 11;
+                    player.touchingBlock = true;
                 }
             // Red Player + Red Obj (Spikes)
             } else if (gameObjs[i].hbType == "red") {
@@ -76,9 +83,10 @@ function checkFloorRoofCollision() {
         player.roofed = true;
         player.y = roof.y - roof.h - player.h;
         return;
+    } else if (!player.touchingBlock) {
+        player.grounded = false;
+        player.roofed = false;
     }
-    player.grounded = false;
-    player.roofed = false;
 }
 
 function collides(Ax, Ay, Aw, Ah, Bx, By, Bw, Bh) {

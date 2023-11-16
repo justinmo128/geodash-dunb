@@ -36,10 +36,13 @@ function createGameObjects() {
             w: objProps.w,
             hasHitbox: objProps.hasHitbox,
             isPortal: objProps.isPortal,
+            isPad: objProps.isPad,
             activated: false
         })
         if (gameObjs[i].isPortal) {
             gameObjs[i].portalType = objProps.portalType;
+        } else if (gameObjs[i].isPad) {
+            gameObjs[i].padType = objProps.padType;
         }
         if (gameObjs[i].hasHitbox) {
             gameObjs[i].hbx = levelJSON.objects[i].x + objProps.hbx;
@@ -82,7 +85,8 @@ function initialize() {
         win: false,
         easing: false,
         easeId: 0,
-        angle: 0
+        angle: 0,
+        touchingBlock: false
     };
     camera = {
         x: 0,
@@ -128,8 +132,8 @@ function physics() {
         if (keyHeld) {jump()}
         rotatePlayer();
         movePlayer();
-        checkFloorRoofCollision();
         checkCollision();
+        checkFloorRoofCollision();
         checkEnding();
     }
 }

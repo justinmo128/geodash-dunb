@@ -18,6 +18,7 @@ let inputs = document.getElementsByTagName("input");
 let swipeEnabled = false;
 let swipeObjs = [];
 let editSwipeActive = false;
+let savedAngle = 0;
 
 for (let i = 0; i < editorTabBtns.length; i++) {
     editorTabBtns[i].addEventListener("click", () => {
@@ -52,6 +53,7 @@ function buildObjSelect(i) {
     }
     buildObjs[i].style.backgroundImage = `url("img/buttoncyan.png")`
     currentObj = buildObjs[i].title;
+    savedAngle = 0;
 }
 
 document.getElementById("delete-obj-btn").addEventListener("click", () => {
@@ -110,7 +112,7 @@ function swipe() {
                     id: currentObj,
                     x: snappedX + objProps.editorOffsetx,
                     y: snappedY + objProps.editorOffsety,
-                    angle: 0,
+                    angle: savedAngle,
                     h: objProps.h,
                     w: objProps.w,
                     hbType: objProps.hbType,
@@ -120,6 +122,9 @@ function swipe() {
                 selectedIndex = editorObjects.length - 1;
                 if (editorObjects[selectedIndex].isPortal) {
                     editorObjects[selectedIndex].portalType = objProps.portalType;
+                }
+                if (editorObjects[selectedIndex].angle !== 0) {
+                    rotateObject(editorObjects[selectedIndex]);
                 }
                 updateHTML();
             }
@@ -142,7 +147,7 @@ function clickInEditor() {
             id: currentObj,
             x: snappedX + objProps.editorOffsetx,
             y: snappedY + objProps.editorOffsety,
-            angle: 0,
+            angle: savedAngle,
             h: objProps.h,
             w: objProps.w,
             hbType: objProps.hbType,
@@ -151,6 +156,9 @@ function clickInEditor() {
         selectedIndex = editorObjects.length - 1;
         if (editorObjects[selectedIndex].isPortal) {
             editorObjects[selectedIndex].portalType = objProps.portalType;
+        }
+        if (editorObjects[selectedIndex].angle !== 0) {
+            rotateObject(editorObjects[selectedIndex]);
         }
         updateHTML();
     } else if (buildCategory == "edit" && mouseInBounds() && !movedCam) {
@@ -213,6 +221,7 @@ function editorKeys(e) {
             let oldAngle = editorObjects[selectedIndex].angle;
             editorObjects[selectedIndex].angle += 90;
             editorObjects[selectedIndex].angle %= 360;
+            savedAngle = editorObjects[selectedIndex].angle;
             rotateObject(editorObjects[selectedIndex], oldAngle);
         } else {
             validKeyPressed = false;
