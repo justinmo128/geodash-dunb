@@ -3,9 +3,7 @@ orb_blue
 orb_green
 orb_pink
 orb_red
-orb_yellow
 pad_blue
 pad_pink
 pad_red
-pad_yellow
 color triggers

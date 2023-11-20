@@ -60,6 +60,7 @@ function keyDown(e) {
     } else if (gameState == "editor") {
         editorKeys(e);
     } else {
+        bufferAvailable = true;
         keyHeld = true;
     }
 }
@@ -77,6 +78,7 @@ function escapePressed() {
 }
 function keyUp() {
     keyHeld = false;
+    bufferAvailable = false;
 }
 
 function clicked() {

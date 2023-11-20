@@ -18,6 +18,11 @@ function checkCollision() {
                 if (gameObjs[i].padType == "yellow") {
                     player.yVel = 800;
                 }
+            } else if (gameObjs[i].isOrb && !gameObjs[i].activated) {
+                if (gameObjs[i].orbType == "yellow" && bufferAvailable) {
+                    player.yVel = 500;
+                    bufferAvailable = false;
+                }
             }
             // Red Player + Blue Obj (Landing on blocks)
             else if (gameObjs[i].hbType == "blue") {

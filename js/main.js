@@ -37,12 +37,15 @@ function createGameObjects() {
             hasHitbox: objProps.hasHitbox,
             isPortal: objProps.isPortal,
             isPad: objProps.isPad,
+            isOrb: objProps.isOrb,
             activated: false
         })
         if (gameObjs[i].isPortal) {
             gameObjs[i].portalType = objProps.portalType;
         } else if (gameObjs[i].isPad) {
             gameObjs[i].padType = objProps.padType;
+        } else if (gameObjs[i].isOrb) {
+            gameObjs[i].orbType = objProps.orbType;
         }
         if (gameObjs[i].hasHitbox) {
             gameObjs[i].hbx = levelJSON.objects[i].x + objProps.hbx;
