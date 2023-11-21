@@ -1,5 +1,6 @@
 function checkCollision() {
     player.touchingBlock = false;
+    player.touchingOrb = [];
     // Object collision
     for (let i = 0; i < gameObjs.length; i++) {
         // Blue Player + Blue Obj (Running into blocks)
@@ -19,10 +20,7 @@ function checkCollision() {
                     player.yVel = 800;
                 }
             } else if (gameObjs[i].isOrb && !gameObjs[i].activated) {
-                if (gameObjs[i].orbType == "yellow" && bufferAvailable) {
-                    player.yVel = 500;
-                    bufferAvailable = false;
-                }
+                player.touchingOrb.push(i)
             }
             // Red Player + Blue Obj (Landing on blocks)
             else if (gameObjs[i].hbType == "blue") {
@@ -91,6 +89,12 @@ function checkFloorRoofCollision() {
     } else if (!player.touchingBlock) {
         player.grounded = false;
         player.roofed = false;
+    }
+    if (player.grounded || player.roofed) {
+        player.yVel = 0;
+    }
+    if (player.roofed && !keyHeld) {
+        player.y--;
     }
 }
 

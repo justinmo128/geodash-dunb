@@ -108,25 +108,8 @@ function swipe() {
             let objProps = objectList.find((element) => currentObj == element.id);
             let same = swipeObjs.some(e => e[0] === snappedX + objProps.editorOffsetx && e[1] === snappedY + objProps.editorOffsety);
             if (!same) {
-                editorObjects.push({
-                    id: currentObj,
-                    x: snappedX + objProps.editorOffsetx,
-                    y: snappedY + objProps.editorOffsety,
-                    angle: savedAngle,
-                    h: objProps.h,
-                    w: objProps.w,
-                    hbType: objProps.hbType,
-                    isPortal: objProps.isPortal
-                })
+                buildObject()
                 swipeObjs.push([snappedX + objProps.editorOffsetx, snappedY + objProps.editorOffsety]);
-                selectedIndex = editorObjects.length - 1;
-                if (editorObjects[selectedIndex].isPortal) {
-                    editorObjects[selectedIndex].portalType = objProps.portalType;
-                }
-                if (editorObjects[selectedIndex].angle !== 0) {
-                    rotateObject(editorObjects[selectedIndex]);
-                }
-                updateHTML();
             }
         } else if (buildCategory == "delete") {
             for (let i = 0; i < editorObjects.length; i++) {
@@ -140,27 +123,36 @@ function swipe() {
     setTimeout(swipe, 1000/240)
 }
 
+function buildObject() {
+    let objProps = objectList.find((element) => currentObj == element.id);
+    editorObjects.push({
+        id: currentObj,
+        x: snappedX + objProps.editorOffsetx,
+        y: snappedY + objProps.editorOffsety,
+        angle: savedAngle,
+        h: objProps.h,
+        w: objProps.w,
+        hbType: objProps.hbType,
+        isPortal: objProps.isPortal
+    })
+    selectedIndex = editorObjects.length - 1;
+    if (editorObjects[selectedIndex].w < 30 || editorObjects[selectedIndex].h < 30) {
+        editorObjects[selectedIndex].rotCenter = [editorObjects[selectedIndex].x + 15, editorObjects[selectedIndex].y + 15];
+    } else {
+        editorObjects[selectedIndex].rotCenter = [editorObjects[selectedIndex].x + editorObjects[selectedIndex].w / 2, editorObjects[selectedIndex].y + editorObjects[selectedIndex].h / 2];
+    }
+    if (editorObjects[selectedIndex].isPortal) {
+        editorObjects[selectedIndex].portalType = objProps.portalType;
+    }
+    if (editorObjects[selectedIndex].angle !== 0) {
+        rotateObject(editorObjects[selectedIndex]);
+    }
+    updateHTML();
+}
+
 function clickInEditor() {
     if (buildCategory == "build" && mouseInBounds() && !movedCam && !swipeEnabled) {
-        let objProps = objectList.find((element) => currentObj == element.id);
-        editorObjects.push({
-            id: currentObj,
-            x: snappedX + objProps.editorOffsetx,
-            y: snappedY + objProps.editorOffsety,
-            angle: savedAngle,
-            h: objProps.h,
-            w: objProps.w,
-            hbType: objProps.hbType,
-            isPortal: objProps.isPortal
-        })
-        selectedIndex = editorObjects.length - 1;
-        if (editorObjects[selectedIndex].isPortal) {
-            editorObjects[selectedIndex].portalType = objProps.portalType;
-        }
-        if (editorObjects[selectedIndex].angle !== 0) {
-            rotateObject(editorObjects[selectedIndex]);
-        }
-        updateHTML();
+        buildObject();
     } else if (buildCategory == "edit" && mouseInBounds() && !movedCam) {
         let indices = [];
         let selectedInIndices = false;

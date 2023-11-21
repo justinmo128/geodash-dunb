@@ -13,6 +13,7 @@
         <script defer src="js/drawgame.js"></script>
         <script defer src="js/draweditor.js"></script>
         <script defer src="js/collision.js"></script>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
 
     <body>
@@ -25,9 +26,15 @@
                 <button id="deselect-btn"></button>
                 <button id="load-btn"></button>
             </div>
+            
+            <div id="pause-balance"></div>
             <!-- Canvas -->
             <div class="card" id="canvas-div">
                 <canvas id="canvas"></canvas>
+            </div>
+            <!-- Pause Button -->
+            <div id="pause-box">
+                <button id="pause-btn"></button>
             </div>
             <!-- Right side editor -->
             <div class="card editor-div editor-side">

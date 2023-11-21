@@ -49,8 +49,13 @@ canvas {
 
 .flex-container {
     display: flex;
+    flex-direction: row;
     justify-content: center;
     align-items: center;
+}
+
+#hi {
+    display: none;
 }
 
 #canvas-div {
@@ -204,6 +209,26 @@ button:hover {
     margin: auto;
 }
 
+#pause-btn {
+    background-image: url("img/pause-btn.png");
+    background-color: transparent;
+    border-width: 0;
+    width: 30px;
+    height: 30px;
+    margin: auto;
+    margin-top: 10px;
+}
+
+#pause-box {
+    display: none;
+    align-self: flex-start
+}
+
+#pause-balance {
+    display: none;
+    width: 30px;
+}
+
 #difficulty {
     width: 30px;
 }
@@ -256,4 +281,23 @@ button:hover {
     margin-top: 10px;
     display: none;
     justify-content: center;
+}
+
+@media only screen and (max-width: 800px) {
+    body {
+        width: 100%;
+    }
+    .flex-container {
+        flex-direction: column;
+        margin: auto;
+    }
+    #canvas-div {
+        order: 0;
+    }
+    #editor-left {
+        order: 1;
+    }
+    #editor-right {
+        order: 2;
+    }
 }

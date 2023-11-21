@@ -38,8 +38,13 @@ function createGameObjects() {
             isPortal: objProps.isPortal,
             isPad: objProps.isPad,
             isOrb: objProps.isOrb,
-            activated: false
+            activated: false,
         })
+        if (gameObjs[i].w < 30 || gameObjs[i].h < 30) {
+            gameObjs[i].rotCenter = [gameObjs[i].x + 15, gameObjs[i].y + 15];
+        } else {
+            gameObjs[i].rotCenter = [gameObjs[i].x + gameObjs[i].w / 2, gameObjs[i].y + gameObjs[i].h / 2];
+        }
         if (gameObjs[i].isPortal) {
             gameObjs[i].portalType = objProps.portalType;
         } else if (gameObjs[i].isPad) {
@@ -56,7 +61,13 @@ function createGameObjects() {
         }
         if (gameObjs[i].angle !== 0) {
             rotateObject(gameObjs[i], 0, true);
+            if (levelJSON.objects[i].x == 2624) {
+                console.log(gameObjs[i].hbx, gameObjs[i].x)
+            }
             translateAfterRotation(gameObjs[i], levelJSON.objects[i]);
+            if (gameObjs[i].x == 2624) {
+                console.log(gameObjs[i].hbx, gameObjs[i].x)
+            }
         }
         if (gameObjs[i].x > maxX) {
             maxX = gameObjs[i].x;
@@ -65,6 +76,8 @@ function createGameObjects() {
 }
 
 function initialize() {
+    document.getElementById("pause-box").style.display = "block";
+    document.getElementById("pause-balance").style.display = "block";
     for (let i = 0; i < gameObjs.length; i++) {
         gameObjs[i].activated = false;
     }
@@ -89,7 +102,8 @@ function initialize() {
         easing: false,
         easeId: 0,
         angle: 0,
-        touchingBlock: false
+        touchingBlock: false,
+        touchingOrb: []
     };
     camera = {
         x: 0,
@@ -131,12 +145,12 @@ function physics() {
     deltaTime = now - lastUpdate;
     lastUpdate = now;
     if (gameState == "gameLoop" && !player.dead && !gamePaused) {
-        applyGravity();
-        if (keyHeld) {jump()}
-        rotatePlayer();
         movePlayer();
-        checkCollision();
+        if (keyHeld) {jump()}
+        applyGravity();
         checkFloorRoofCollision();
+        checkCollision();
+        rotatePlayer();
         checkEnding();
     }
 }
@@ -149,10 +163,6 @@ function applyGravity() {
         player.yVel = -345.6
     }  
 
-    // Apply Velocity and Gravity
-    player.yVel += player.gravity / (1000/deltaTime);
-    player.y += player.yVel /(1000/deltaTime);
-    
     // Set Gravity
     if (player.mode == "cube") {
         if (player.yVel > -810) {
@@ -170,12 +180,9 @@ function applyGravity() {
         }
     }
 
-    if (player.grounded || player.roofed) {
-        player.yVel = 0;
-    }
-    if (player.roofed && !keyHeld) {
-        player.y--;
-    }
+    // Apply Velocity and Gravity
+    player.yVel += player.gravity / (1000/deltaTime);
+    player.y += player.yVel /(1000/deltaTime);
     player.bluehby = player.y + 11;
 }
 
@@ -202,8 +209,19 @@ function rotatePlayer() {
 }
 
 function jump() {
+    for (let i = 0; i < player.touchingOrb.length; i++) {
+        if (bufferAvailable) {
+            if (gameObjs[player.touchingOrb[i]].orbType == "yellow") {
+                player.yVel = 547.6;
+                bufferAvailable = false;
+                gameObjs[player.touchingOrb[i]].activated = true;
+                return;
+            }
+        }
+    }
     if (player.mode == "cube" && player.grounded) {
         player.yVel = 556.2;
+        bufferAvailable = false;
         // To convert from GD velocity to my velocity, multiply by 54
     } else if (player.mode == "ship" && player.y + player.h < roof.y && roof.canCollide && !player.roofed) {
         if (player.yVel > 120) {
@@ -226,15 +244,21 @@ function checkEnding() {
     }
 }
 
+document.getElementById("pause-btn").addEventListener("click", pauseGame)
+
 function pauseGame() {
     gamePaused = true;
     pauseVisible = true;
+    document.getElementById("pause-box").style.display = "none";
+    document.getElementById("pause-balance").style.display = "none";
 }
 
 function clickInPause() {
     if (pauseVisible) {
         if (checkClick(190, 290, 113, 217)) {
             gamePaused = false;
+            document.getElementById("pause-box").style.display = "block";
+            document.getElementById("pause-balance").style.display = "block";
         } else if (checkClick(26, 96, 129, 202)) {
             pauseVisible = false;
         } else if (checkClick(108, 178, 129, 202)) {

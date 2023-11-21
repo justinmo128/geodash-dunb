@@ -15,7 +15,7 @@ document.addEventListener("mousedown", (e) => {
     mouseDown(e);
 })
 document.addEventListener("mouseup", mouseUp)
-document.addEventListener("touchstart", mouseDown)
+document.addEventListener("touchstart", touchstart)
 document.addEventListener("touchend", mouseUp)
 document.addEventListener("click", clicked)
 document.addEventListener("mousemove", mousemoveHandler);
@@ -52,6 +52,20 @@ function mouseUp() {
     keyUp();
     mouseHeld = false;
     swipeObjs = [];
+}
+
+function touchstart() {
+    if (gameState == "gameLoop" && !gamePaused) {
+        keyDown("hi");
+    } else if (gameState == "gameLoop" && gamePaused) {
+        clickInPause();
+    } else if (gameState == "editor") {
+        mouseHeld = true;
+        initMouseX = mouseX;
+        initMouseY = mouseY;
+        initCamX = camera.x;
+        initCamY = camera.y;
+    }
 }
 
 function keyDown(e) {

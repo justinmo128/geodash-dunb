@@ -124,22 +124,15 @@ function calculateRotatedPoint(centerX = 0, centerY = 0, x, y, angle) {
 }
 
 function rotateObject(obj, oldAngle = 0, rotateHitbox = false) {
-    let rotCenter = [obj.x + obj.w / 2, obj.y + obj.h / 2];
-    if (obj.w <= 30) {
-        rotCenter[0] = Math.floor((obj.x)/30) * 30 + 15;
-    }
-    if (obj.h <= 30) {
-        rotCenter[1] = Math.floor((obj.y)/30) * 30 + 15;
-    }
-    let botLeftPrime = calculateRotatedPoint(rotCenter[0], rotCenter[1], obj.x, obj.y, oldAngle - obj.angle);
-    let topRightPrime = calculateRotatedPoint(rotCenter[0], rotCenter[1], obj.x + obj.w, obj.y + obj.h, oldAngle - obj.angle);
+    let botLeftPrime = calculateRotatedPoint(obj.rotCenter[0], obj.rotCenter[1], obj.x, obj.y, oldAngle - obj.angle);
+    let topRightPrime = calculateRotatedPoint(obj.rotCenter[0], obj.rotCenter[1], obj.x + obj.w, obj.y + obj.h, oldAngle - obj.angle);
     obj.x = Math.min(botLeftPrime[0], topRightPrime[0]);
     obj.y = Math.min(botLeftPrime[1], topRightPrime[1]);
     obj.w = Math.max(botLeftPrime[0], topRightPrime[0]) - obj.x;
     obj.h = Math.max(botLeftPrime[1], topRightPrime[1]) - obj.y;
     if (rotateHitbox) {
-        botLeftPrime = calculateRotatedPoint(obj.hbx + obj.hbw / 2, obj.hby + obj.hbh / 2, obj.hbx, obj.hby, oldAngle - obj.angle);
-        topRightPrime = calculateRotatedPoint(obj.hbx + obj.hbw / 2, obj.hby + obj.hbh / 2, obj.hbx + obj.hbw, obj.hby + obj.hbh, oldAngle - obj.angle);
+        botLeftPrime = calculateRotatedPoint(obj.rotCenter[0], obj.rotCenter[1], obj.hbx, obj.hby, oldAngle - obj.angle);
+        topRightPrime = calculateRotatedPoint(obj.rotCenter[0], obj.rotCenter[1], obj.hbx + obj.hbw, obj.hby + obj.hbh, oldAngle - obj.angle);
         obj.hbx = Math.min(botLeftPrime[0], topRightPrime[0]);
         obj.hby = Math.min(botLeftPrime[1], topRightPrime[1]);
         obj.hbw = Math.max(botLeftPrime[0], topRightPrime[0]) - obj.hbx;
