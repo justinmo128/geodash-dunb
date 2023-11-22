@@ -61,13 +61,7 @@ function createGameObjects() {
         }
         if (gameObjs[i].angle !== 0) {
             rotateObject(gameObjs[i], 0, true);
-            if (levelJSON.objects[i].x == 2624) {
-                console.log(gameObjs[i].hbx, gameObjs[i].x)
-            }
             translateAfterRotation(gameObjs[i], levelJSON.objects[i]);
-            if (gameObjs[i].x == 2624) {
-                console.log(gameObjs[i].hbx, gameObjs[i].x)
-            }
         }
         if (gameObjs[i].x > maxX) {
             maxX = gameObjs[i].x;

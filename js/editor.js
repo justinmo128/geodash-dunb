@@ -108,7 +108,7 @@ function swipe() {
             let objProps = objectList.find((element) => currentObj == element.id);
             let same = swipeObjs.some(e => e[0] === snappedX + objProps.editorOffsetx && e[1] === snappedY + objProps.editorOffsety);
             if (!same) {
-                buildObject()
+                buildObject(currentObj, snappedX, snappedY, savedAngle, true);
                 swipeObjs.push([snappedX + objProps.editorOffsetx, snappedY + objProps.editorOffsety]);
             }
         } else if (buildCategory == "delete") {
@@ -123,18 +123,32 @@ function swipe() {
     setTimeout(swipe, 1000/240)
 }
 
-function buildObject() {
-    let objProps = objectList.find((element) => currentObj == element.id);
-    editorObjects.push({
-        id: currentObj,
-        x: snappedX + objProps.editorOffsetx,
-        y: snappedY + objProps.editorOffsety,
-        angle: savedAngle,
-        h: objProps.h,
-        w: objProps.w,
-        hbType: objProps.hbType,
-        isPortal: objProps.isPortal
-    })
+function buildObject(id, x, y, angle, offset) {
+    let objProps = objectList.find((element) => id == element.id);
+    if (offset) {
+        editorObjects.push({
+            id: id,
+            x: x + objProps.editorOffsetx,
+            y: y + objProps.editorOffsety,
+            angle: angle,
+            h: objProps.h,
+            w: objProps.w,
+            hbType: objProps.hbType,
+            isPortal: objProps.isPortal
+        })
+    } else {
+        editorObjects.push({
+            id: id,
+            x: x,
+            y: y,
+            angle: angle,
+            h: objProps.h,
+            w: objProps.w,
+            hbType: objProps.hbType,
+            isPortal: objProps.isPortal
+        })
+    }
+
     selectedIndex = editorObjects.length - 1;
     if (editorObjects[selectedIndex].w < 30 || editorObjects[selectedIndex].h < 30) {
         editorObjects[selectedIndex].rotCenter = [editorObjects[selectedIndex].x + 15, editorObjects[selectedIndex].y + 15];
@@ -152,7 +166,7 @@ function buildObject() {
 
 function clickInEditor() {
     if (buildCategory == "build" && mouseInBounds() && !movedCam && !swipeEnabled) {
-        buildObject();
+        buildObject(currentObj, snappedX, snappedY, savedAngle, true);
     } else if (buildCategory == "edit" && mouseInBounds() && !movedCam) {
         let indices = [];
         let selectedInIndices = false;
@@ -274,23 +288,8 @@ function loadLevel() {
 function createEditorObjects() {
     editorObjects = [];
     for (let i = 0; i < levelJSON.objects.length; i++) {
-        let objProps = objectList.find((element) => levelJSON.objects[i].id == element.id)
-
-        editorObjects.push({
-            id: levelJSON.objects[i].id,
-            x: levelJSON.objects[i].x,
-            y: levelJSON.objects[i].y,
-            angle: levelJSON.objects[i].angle,
-            h: objProps.h,
-            w: objProps.w,
-            hbType: objProps.hbType,
-            isPortal: objProps.isPortal
-        })
-        if (editorObjects[i].isPortal) {
-            editorObjects[i].portalType = objProps.portalType;
-        }
+        buildObject(levelJSON.objects[i].id, levelJSON.objects[i].x, levelJSON.objects[i].y, levelJSON.objects[i].angle, false)
         if (editorObjects[i].angle !== 0) {
-            rotateObject(editorObjects[i], 0, false);
             let xDiff = editorObjects[i].x - levelJSON.objects[i].x;
             let yDiff = editorObjects[i].y - levelJSON.objects[i].y;
             editorObjects[i].x -= xDiff;

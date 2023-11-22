@@ -283,21 +283,52 @@ button:hover {
     justify-content: center;
 }
 
+#canvas-div-div {
+    display: flex;
+}
+
 @media only screen and (max-width: 800px) {
     body {
         width: 100%;
+        margin: auto;
+        margin-top: 5px;
     }
     .flex-container {
         flex-direction: column;
         margin: auto;
     }
     #canvas-div {
-        order: 0;
+        margin: 0;
+        width: 100%;
+        padding: 0;
+    }
+    #canvas {
+        width: 100%;
+    }
+    .editor-side {
+        flex-direction: row;
+        flex-wrap: wrap;
+        height: auto;
     }
     #editor-left {
         order: 1;
     }
     #editor-right {
         order: 2;
+    }
+    #editor-main {
+        width: 95%;
+    }
+    .card {
+        width: 95%;
+    }
+    #canvas-div-div {
+        flex-direction: column;
+    }
+    #level-info {
+        width: 95%;
+    }
+    #pause-box {
+        width: 100%;
     }
 }

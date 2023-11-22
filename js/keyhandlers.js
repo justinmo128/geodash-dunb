@@ -6,6 +6,7 @@ let coordX = 0;
 let coordY = 0;
 let snappedX = 0;
 let snappedY = 0;
+let K = 1;
 
 document.addEventListener("keydown", (e) => {
     keyDown(e);
@@ -23,10 +24,11 @@ document.addEventListener("mousemove", mousemoveHandler);
 function mousemoveHandler(e) {
   // Get rectangle info about canvas location
   let cnvRect = cnv.getBoundingClientRect();
+  K = cnvRect.width / cnv.width;
 
   // Calc mouse coordinates using mouse event and canvas location info
-  mouseX = Math.round(e.clientX - cnvRect.left);
-  mouseY = Math.round(e.clientY - cnvRect.top);
+  mouseX = Math.round(e.clientX - cnvRect.left) / K;
+  mouseY = Math.round(e.clientY - cnvRect.top) / K;
   coordX = mouseX + camera.x;
   coordY = camera.y - mouseY + 270;
   snappedX = Math.floor((coordX)/30) * 30;
