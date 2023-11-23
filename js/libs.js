@@ -24,6 +24,14 @@ function fillRectCam(x, y, w, h) {
     }
 }
 
+function fillRectCamRotate(x, y, w, h, angle) {
+    ctx.save();
+    ctx.translate(x - camera.x + w/2, camera.y - y - h + h/2 + 270);
+    ctx.rotate(angle * Math.PI / 180);
+    ctx.fillRect(w/-2, h/-2, w, h);
+    ctx.restore();
+}
+
 function drawImgCamRotate(imgName, x, y, h, w = 0, angle = 0, ogw, ogh, xOffset = 0, yOffset = 0) {
     let objImg = document.getElementById(imgName);
     if (angle !== 0) {
@@ -43,18 +51,20 @@ function drawBG() {
     background.y = camera.y * 0.05;
     ctx.globalAlpha = 1;
     ctx.drawImage(document.getElementById("gamebg"), background.x % 512, background.y % 512 - 175)
-    ctx.globalAlpha = 0.5;
+    ctx.globalCompositeOperation = "multiply"
     ctx.fillStyle = background.colour;
     ctx.fillRect(0, 0, cnv.width, cnv.height);
+    ctx.globalCompositeOperation = "source-over"
     ctx.globalAlpha = 1;
 }
 
 function drawFloorRoof(type) {
     ctx.globalAlpha = 1;
     ctx.drawImage(document.getElementById("floor"), camera.x * -1 % 90 - 90, camera.y - type.y + 270)
-    ctx.globalAlpha = 0.6;
+    ctx.globalCompositeOperation = "multiply"
     ctx.fillStyle = type.colour;
     fillRectCam(camera.x, type.y, cnv.width, -90);
+    ctx.globalCompositeOperation = "source-over"
     ctx.globalAlpha = 1;
 }
 

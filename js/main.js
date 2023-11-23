@@ -10,6 +10,7 @@ let gamePaused = false;
 let pauseVisible = true;
 let lastUpdate = performance.now();
 let deltaTime = 0;
+let showHitboxes = false;
 
 let levelJSON = [];
 let gameObjs = [];
@@ -160,7 +161,7 @@ function applyGravity() {
     // Set Gravity
     if (player.mode == "cube") {
         if (player.yVel > -810) {
-            player.gravity = -2472;
+            player.gravity = -2793.528;
         } else {
             player.gravity = 0;
         }
@@ -178,6 +179,8 @@ function applyGravity() {
     player.yVel += player.gravity / (1000/deltaTime);
     player.y += player.yVel /(1000/deltaTime);
     player.bluehby = player.y + 11;
+
+
 }
 
 function rotatePlayer() {
@@ -206,7 +209,11 @@ function jump() {
     for (let i = 0; i < player.touchingOrb.length; i++) {
         if (bufferAvailable) {
             if (gameObjs[player.touchingOrb[i]].orbType == "yellow") {
-                player.yVel = 547.6;
+                if (player.mode == "cube") {
+                    player.yVel = 595.9602;
+                } else if (player.mode == "ship") {
+                    player.yVel = 432;
+                }
                 bufferAvailable = false;
                 gameObjs[player.touchingOrb[i]].activated = true;
                 return;
@@ -214,15 +221,16 @@ function jump() {
         }
     }
     if (player.mode == "cube" && player.grounded) {
-        player.yVel = 556.2;
+        player.yVel = 603.72;
         bufferAvailable = false;
         // To convert from GD velocity to my velocity, multiply by 54
-    } else if (player.mode == "ship" && player.y + player.h < roof.y && roof.canCollide && !player.roofed) {
+    } else if (player.mode == "ship" && player.y + player.h < roof.y && roof.canCollide) {
         if (player.yVel > 120) {
             player.yVel += 1180.5102 / (1000/deltaTime);
         } else {
             player.yVel += 1341.1656 / (1000/deltaTime);
         }
+        bufferAvailable = false;
     }
 }
 

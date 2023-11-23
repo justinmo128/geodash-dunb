@@ -5,7 +5,9 @@ function drawGame() {
     drawGameObjects();
     drawPlayer();
     drawFloors();
-    // drawHitboxes();
+    if (showHitboxes) {
+        drawHitboxes();
+    }
     if (gamePaused) {
         drawPause();
     }
@@ -62,6 +64,7 @@ function drawHitboxes() {
     // Player
     ctx.fillStyle = "red";
     fillRectCam(player.x, player.y, player.w, player.h)
+    fillRectCamRotate(player.x, player.y, player.w, player.h, player.angle);
     ctx.fillStyle = "blue";
     fillRectCam(player.bluehbx, player.bluehby, player.bluehbw, player.bluehbh)
     // Objects

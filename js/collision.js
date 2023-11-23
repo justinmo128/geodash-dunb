@@ -17,19 +17,24 @@ function checkCollision() {
                 }
             } else if (gameObjs[i].isPad && !gameObjs[i].activated) {
                 if (gameObjs[i].padType == "yellow") {
-                    player.yVel = 800;
+                    if (player.mode == "cube") {
+                        player.yVel = 862.0614;
+                    } else if (player.mode == "ship") {
+                        player.yVel = 432;
+                    }
+                    return;
                 }
             } else if (gameObjs[i].isOrb && !gameObjs[i].activated) {
                 player.touchingOrb.push(i)
             }
             // Red Player + Blue Obj (Landing on blocks)
             else if (gameObjs[i].hbType == "blue") {
-                if (player.y <= gameObjs[i].y + gameObjs[i].h && player.y + 10 >= gameObjs[i].y + gameObjs[i].h) {
+                if (player.y <= gameObjs[i].y + gameObjs[i].h && player.y + 10 >= gameObjs[i].y + gameObjs[i].h && player.yVel <= 0) {
                     player.y = gameObjs[i].y + gameObjs[i].hbh;
                     player.bluehby = player.y + 11;
                     player.grounded = true;
                     player.touchingBlock = true;
-                } else if (player.y + player.h - 10 < gameObjs[i].y && player.y + player.h > gameObjs[i].y && player.mode == "ship") {
+                } else if (player.y + player.h - 10 < gameObjs[i].y && player.y + player.h > gameObjs[i].y && player.mode == "ship" && player.yVel >= 0) {
                     player.roofed = true;
                     player.y = gameObjs[i].y - player.h;
                     player.bluehby = player.y + 11;
@@ -40,6 +45,9 @@ function checkCollision() {
                 playerDeath();
             }
         }
+    }
+    if (player.grounded || player.roofed) {
+        player.yVel = 0;
     }
 }
 
@@ -90,11 +98,8 @@ function checkFloorRoofCollision() {
         player.grounded = false;
         player.roofed = false;
     }
-    if (player.grounded || player.roofed) {
-        player.yVel = 0;
-    }
     if (player.roofed && !keyHeld) {
-        player.y--;
+        player.roofed = false;
     }
 }
 

@@ -31,11 +31,11 @@ function drawEditorObjects() {
 }
 
 function drawGrid() {
-    ctx.globalAlpha = 0.7;
-    ctx.fillStyle = "gray";
+    ctx.globalAlpha = 1;
+    ctx.fillStyle = "black";
     for (let i = 0; i < 30; i++) {
-        ctx.fillRect(i * 30 - camera.x % 30, 0, 1, 330);
-        ctx.fillRect(0, i*30 + camera.y % 30, 480, 1);
+        ctx.fillRect(i * 30 - camera.x % 30 - 0.25, 0, 0.5, 330);
+        ctx.fillRect(0, i*30 + camera.y % 30 - 0.25, 480, 0.5);
     }
     ctx.globalAlpha = 1;
 }
