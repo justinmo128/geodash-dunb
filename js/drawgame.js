@@ -36,7 +36,11 @@ function drawPlayer() {
         ctx.save();
         ctx.translate(player.x - camera.x + 15, camera.y - player.y - player.h + player.h/2 + 270);
         ctx.rotate(player.angle * Math.PI / 180);
-        ctx.drawImage(document.getElementById("player_ship"), -20, -15);
+        if (player.gravityStatus == 1) {
+            ctx.drawImage(document.getElementById("player_ship"), -20, -15);
+        } else {
+            ctx.drawImage(document.getElementById("player_ship_upsidedown"), -20, -15);
+        }
         ctx.restore();
     } else {
         drawImgCamRotate(`player_${player.mode}`, player.x, player.y, player.h, player.w, player.angle, 30, 30);

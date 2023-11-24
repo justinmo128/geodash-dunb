@@ -440,5 +440,41 @@
         "hasHitbox": true,
         "visualOffsetx": 0,
         "visualOffsety": 0
+    },
+    {
+        "id": "portal_upsidedown",
+        "h": 90,
+        "w": 30,
+        "hbx": 0,
+        "hby": 0,
+        "hbw": 30,
+        "hbh": 90,
+        "hbType": "green",
+        "portalType": "upsidedown",
+        "isPortal": true,
+        "isPad": false,
+        "editorOffsetx": 0,
+        "editorOffsety": -30,
+        "hasHitbox": true,
+        "visualOffsetx": 10,
+        "visualOffsety": 0
+    },
+    {
+        "id": "portal_rightsideup",
+        "h": 90,
+        "w": 30,
+        "hbx": 0,
+        "hby": 0,
+        "hbw": 30,
+        "hbh": 90,
+        "hbType": "green",
+        "portalType": "rightsideup",
+        "isPortal": true,
+        "isPad": false,
+        "editorOffsetx": 0,
+        "editorOffsety": -30,
+        "hasHitbox": true,
+        "visualOffsetx": 10,
+        "visualOffsety": 0
     }
 ]

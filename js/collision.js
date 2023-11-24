@@ -14,6 +14,10 @@ function checkCollision() {
                 }
                 if (gameObjs[i].portalType == "ship" || gameObjs[i].portalType == "cube") {
                     switchGamemode(gameObjs[i]);
+                } else if (gameObjs[i].portalType == "upsidedown") {
+                    player.gravityStatus = -1;
+                } else if (gameObjs[i].portalType == "rightsideup") {
+                    player.gravityStatus = 1;
                 }
             } else if (gameObjs[i].isPad && !gameObjs[i].activated) {
                 if (gameObjs[i].padType == "yellow") {
@@ -29,17 +33,7 @@ function checkCollision() {
             }
             // Red Player + Blue Obj (Landing on blocks)
             else if (gameObjs[i].hbType == "blue") {
-                if (player.y <= gameObjs[i].y + gameObjs[i].h && player.y + 10 >= gameObjs[i].y + gameObjs[i].h && player.yVel <= 0) {
-                    player.y = gameObjs[i].y + gameObjs[i].hbh;
-                    player.bluehby = player.y + 11;
-                    player.grounded = true;
-                    player.touchingBlock = true;
-                } else if (player.y + player.h - 10 < gameObjs[i].y && player.y + player.h > gameObjs[i].y && player.mode == "ship" && player.yVel >= 0) {
-                    player.roofed = true;
-                    player.y = gameObjs[i].y - player.h;
-                    player.bluehby = player.y + 11;
-                    player.touchingBlock = true;
-                }
+                checkBlockCollision(i);
             // Red Player + Red Obj (Spikes)
             } else if (gameObjs[i].hbType == "red") {
                 playerDeath();
@@ -48,6 +42,34 @@ function checkCollision() {
     }
     if (player.grounded || player.roofed) {
         player.yVel = 0;
+    }
+}
+
+function checkBlockCollision(i) {
+    if (player.gravityStatus == 1) {
+        if (player.y <= gameObjs[i].y + gameObjs[i].h && player.y + 10 >= gameObjs[i].y + gameObjs[i].h && player.yVel <= 0) {
+            player.y = gameObjs[i].y + gameObjs[i].hbh;
+            player.bluehby = player.y + 11;
+            player.grounded = true;
+            player.touchingBlock = true;
+        } else if (player.y + player.h - 10 < gameObjs[i].y && player.y + player.h > gameObjs[i].y && player.mode == "ship" && player.yVel >= 0) {
+            player.roofed = true;
+            player.y = gameObjs[i].y - player.h;
+            player.bluehby = player.y + 11;
+            player.touchingBlock = true;
+        }
+    } else {
+        if (player.y + player.h >= gameObjs[i].y && player.y + player.h - 10 <= gameObjs[i].y && player.yVel >= 0) {
+            player.y = gameObjs[i].y - player.h;
+            player.bluehby = player.y + 11;
+            player.grounded = true;
+            player.touchingBlock = true;
+        } else if (player.y < gameObjs[i].y + gameObjs[i].h && player.y + 10 > gameObjs[i].y + gameObjs[i].h && player.mode == "ship" && player.yVel <= 0) {
+            player.roofed = true;
+            player.y = gameObjs[i].y + gameObjs[i].hbh;
+            player.bluehby = player.y + 11;
+            player.touchingBlock = true;
+        }
     }
 }
 
