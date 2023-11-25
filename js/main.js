@@ -82,13 +82,15 @@ function initialize() {
         mode: "cube",
         x: 0,
         y: 0,
+        oldx: 0,
+        oldy: 0,
         w: 30,
         h: 30,
         bluehbx: 10,
         bluehby: 10,
         bluehbw: 8,
         bluehbh: 8,
-        xVel: 311.581, // units per second, 30 units is a block
+        xVel: 311.576, // units per second, 30 units is a block
         gravity: -2851.5625, // units per second squared
         gravityStatus: 1,
         yVel: 0,
@@ -141,6 +143,8 @@ function physics() {
     deltaTime = now - lastUpdate;
     lastUpdate = now;
     if (gameState == "gameLoop" && !player.dead && !gamePaused) {
+        player.oldx = player.x;
+        player.oldy = player.y;
         movePlayer();
         if (keyHeld) {jump()}
         applyGravity();
@@ -153,10 +157,10 @@ function physics() {
 
 function applyGravity() {
     // Max Velocity
-    if (player.yVel >= 432 && player.mode == "ship") {
-        player.yVel = 432;
-    } else if (player.yVel <= -345.6 && player.mode == "ship") {
-        player.yVel = -345.6;
+    if (player.yVel >= 432 && player.mode == "ship" && player.gravityStatus == 1 || player.yVel <= -432 && player.mode == "ship" && player.gravityStatus == -1) {
+        player.yVel = 432 * player.gravityStatus;
+    } else if (player.yVel <= -345.6 && player.mode == "ship" && player.gravityStatus == 1 || player.yVel >= 345.6 && player.mode == "ship" && player.gravityStatus == -1) {
+        player.yVel = -345.6 * player.gravityStatus;
     }  
 
     // Set Gravity
@@ -190,15 +194,20 @@ function rotatePlayer() {
             player.easing = true;
             ease(player, [0, 0, angleDiff], angleDiff * 2, "linear", () => {player.easing = false}, true, true);
         }
-    } else if (!player.easing && player.mode == "ship" && player.roofed || !player.easing && player.mode == "ship" && player.grounded) {
+    } 
+    else if (!player.easing && player.mode == "ship" && player.roofed || !player.easing && player.mode == "ship" && player.grounded) {
         player.easing = true;
         ease(player, [0, 0, 0-player.angle], 100, "linear", () => {player.easing = false}, true, true);
-    } else {
+    } 
+    else {
         if (player.mode == "cube") {
             clearEase(player)
-            player.angle += 380/(1000/deltaTime);
+            player.angle += 380/(1000/deltaTime) * player.gravityStatus;
         } else if (player.mode == "ship" && !player.easing) {
-            player.angle = Math.atan(player.yVel/player.xVel) * -180 / Math.PI;
+            let dy = player.y - player.oldy;
+            let dx = player.x - player.oldx;
+            let newAngle = Math.atan(dy/dx) * -180 / Math.PI
+            player.angle = (newAngle + player.angle)/2;
         }
     }
     player.angle = player.angle % 360;
