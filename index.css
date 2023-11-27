@@ -287,6 +287,19 @@ button:hover {
     display: flex;
 }
 
+#trigger-col-edit {
+    display: none;
+}
+
+#col-colour {
+    width: 100px;
+    padding: 0;
+}
+
+#fade-time {
+    width: 40px;
+}
+
 @media only screen and (max-width: 800px) {
     body {
         width: 100%;

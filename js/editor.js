@@ -125,29 +125,21 @@ function swipe() {
 
 function buildObject(id, x, y, angle, offset) {
     let objProps = objectList.find((element) => id == element.id);
-    if (offset) {
-        editorObjects.push({
-            id: id,
-            x: x + objProps.editorOffsetx,
-            y: y + objProps.editorOffsety,
-            angle: angle,
-            h: objProps.h,
-            w: objProps.w,
-            hbType: objProps.hbType,
-            isPortal: objProps.isPortal
-        })
-    } else {
-        editorObjects.push({
-            id: id,
-            x: x,
-            y: y,
-            angle: angle,
-            h: objProps.h,
-            w: objProps.w,
-            hbType: objProps.hbType,
-            isPortal: objProps.isPortal
-        })
+    if (!offset) {
+        objProps.editorOffsetx = 0;
+        objProps.editorOffsety = 0;
     }
+
+    editorObjects.push({
+        id: id,
+        x: x + objProps.editorOffsetx,
+        y: y + objProps.editorOffsety,
+        angle: angle,
+        h: objProps.h,
+        w: objProps.w,
+        hbType: objProps.hbType,
+        type: objProps.type
+    })
 
     selectedIndex = editorObjects.length - 1;
     if (editorObjects[selectedIndex].w < 30 || editorObjects[selectedIndex].h < 30) {
@@ -155,11 +147,16 @@ function buildObject(id, x, y, angle, offset) {
     } else {
         editorObjects[selectedIndex].rotCenter = [editorObjects[selectedIndex].x + editorObjects[selectedIndex].w / 2, editorObjects[selectedIndex].y + editorObjects[selectedIndex].h / 2];
     }
-    if (editorObjects[selectedIndex].isPortal) {
+    if (editorObjects[selectedIndex].type == "portal") {
         editorObjects[selectedIndex].portalType = objProps.portalType;
     }
     if (editorObjects[selectedIndex].angle !== 0) {
         rotateObject(editorObjects[selectedIndex]);
+    }
+    if (editorObjects[selectedIndex].type == "trigger") {
+        editorObjects[selectedIndex].colour = "#000000";
+        editorObjects[selectedIndex].fadeTime = 0;
+        editorObjects[selectedIndex].target = "background";
     }
     updateHTML();
 }
@@ -202,7 +199,6 @@ function editorKeys(e) {
     for (let i = 0; i < inputs.length; i++) {
         if (inputs[i] === document.activeElement) {
             cursorInInput = true;
-            
         }
     }
     if (selectedIndex > -1 && gameState == "editor" && !cursorInInput) {
@@ -256,8 +252,10 @@ function exportLevel() {
             angle: editorObjects[i].angle
         })
 
-        if (exportArray[i].type == "portal") {
-            exportArray[i].type = `portal_${editorObjects[i].portalType}`;
+        if (exportArray[i].id.split('_')[0] == "trigger") {
+            exportArray[i].colour = editorObjects[i].colour;
+            exportArray[i].fadeTime = editorObjects[i].fadeTime;
+            exportArray[i].target = editorObjects[i].target;
         }
     }
     let exportObject = {
@@ -289,6 +287,12 @@ function createEditorObjects() {
     editorObjects = [];
     for (let i = 0; i < levelJSON.objects.length; i++) {
         buildObject(levelJSON.objects[i].id, levelJSON.objects[i].x, levelJSON.objects[i].y, levelJSON.objects[i].angle, false)
+        if (editorObjects[i].type == "trigger") {
+            editorObjects[i].colour = levelJSON.objects[i].colour;
+            editorObjects[i].fadeTime = levelJSON.objects[i].fadeTime;
+            editorObjects[i].target = levelJSON.objects[i].target;
+            updateHTML();
+        }
         if (editorObjects[i].angle !== 0) {
             let xDiff = editorObjects[i].x - levelJSON.objects[i].x;
             let yDiff = editorObjects[i].y - levelJSON.objects[i].y;

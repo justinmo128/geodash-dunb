@@ -2,7 +2,10 @@ let camXEl = document.getElementById("cam-x");
 let camYEl = document.getElementById("cam-y");
 let objXEl = document.getElementById("obj-x");
 let objYEl = document.getElementById("obj-y");
-let objAngleEl = document.getElementById("obj-angle")
+let objAngleEl = document.getElementById("obj-angle");
+let triggerColColourEl = document.getElementById("col-colour");
+let triggerColTimeEl = document.getElementById("fade-time");
+let triggerColTargetEl = document.getElementById("col-target");
 
 function drawEditor() {
     drawBG();
@@ -18,7 +21,7 @@ function drawEditorObjects() {
         let objProps = objectList.find((element) => editorObjects[i].id == element.id)
         let xOffset = objProps.visualOffsetx;
         let yOffset = objProps.visualOffsety;
-        if (editorObjects[i].isPortal) {
+        if (editorObjects[i].type == "portal") {
             imgName = `portal_${editorObjects[i].portalType}_over`;
         }
         drawImgCamRotate(imgName, editorObjects[i].x, editorObjects[i].y, editorObjects[i].h, editorObjects[i].w, editorObjects[i].angle, objProps.w, objProps.h, xOffset, yOffset);
@@ -51,8 +54,16 @@ function updateHTML() {
         objXEl.value = 0;
         objYEl.value = 0;
         objAngleEl.value = 0;
+        triggerColTimeEl.value = 0;
     }
-    
+    if (selectedIndex > -1 && editorObjects[selectedIndex].type == "trigger") {
+        document.getElementById("trigger-col-edit").style.display = "flex";
+        triggerColColourEl.value = editorObjects[selectedIndex].colour;
+        triggerColTimeEl.value = editorObjects[selectedIndex].fadeTime;
+        triggerColTargetEl.value = editorObjects[selectedIndex].target;
+    } else {
+        document.getElementById("trigger-col-edit").style.display = "none";
+    }
 }
 
 camXEl.addEventListener("change", () => {
@@ -70,4 +81,13 @@ objYEl.addEventListener("change", () => {
 objAngleEl.addEventListener("change", () => {
     editorObjects[selectedIndex].angle = +objAngleEl.value;
     editorObjects[selectedIndex].angle %= 360;
+})
+triggerColColourEl.addEventListener("change", () => {
+    editorObjects[selectedIndex].colour = triggerColColourEl.value;
+})
+triggerColTimeEl.addEventListener("change", () => {
+    editorObjects[selectedIndex].fadeTime = triggerColTimeEl.value;
+})
+triggerColTargetEl.addEventListener("change", () => {
+    editorObjects[selectedIndex].target = triggerColTargetEl.value;
 })

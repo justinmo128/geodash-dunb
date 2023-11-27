@@ -25,7 +25,7 @@ function drawFloors() {
 
 function drawBackgroundObjects() {
     for (let i = 0; i < gameObjs.length; i++) {
-        if (gameObjs[i].isPortal) {
+        if (gameObjs[i].type == "portal") {
             drawImgCamRotate(`portal_${gameObjs[i].portalType}_under`, gameObjs[i].x, gameObjs[i].y, gameObjs[i].h, gameObjs[i].w, gameObjs[i].angle, 30, 90, 10);
         }
     }
@@ -53,7 +53,7 @@ function drawGameObjects() {
         let imgName = gameObjs[i].id;
         let xOffset = objProps.visualOffsetx;
         let yOffset = objProps.visualOffsety;
-        if (gameObjs[i].isPortal) {
+        if (gameObjs[i].type == "portal") {
             imgName = `portal_${gameObjs[i].portalType}_over`
         }
         drawImgCamRotate(imgName, gameObjs[i].x, gameObjs[i].y, gameObjs[i].h, gameObjs[i].w, gameObjs[i].angle, objProps.w, objProps.h, xOffset, yOffset);

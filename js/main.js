@@ -36,9 +36,7 @@ function createGameObjects() {
             h: objProps.h,
             w: objProps.w,
             hasHitbox: objProps.hasHitbox,
-            isPortal: objProps.isPortal,
-            isPad: objProps.isPad,
-            isOrb: objProps.isOrb,
+            type: objProps.type,
             activated: false,
         })
         if (gameObjs[i].w < 30 || gameObjs[i].h < 30) {
@@ -46,12 +44,16 @@ function createGameObjects() {
         } else {
             gameObjs[i].rotCenter = [gameObjs[i].x + gameObjs[i].w / 2, gameObjs[i].y + gameObjs[i].h / 2];
         }
-        if (gameObjs[i].isPortal) {
+        if (gameObjs[i].type == "portal") {
             gameObjs[i].portalType = objProps.portalType;
-        } else if (gameObjs[i].isPad) {
+        } else if (gameObjs[i].type == "pad") {
             gameObjs[i].padType = objProps.padType;
-        } else if (gameObjs[i].isOrb) {
+        } else if (gameObjs[i].type == "orb") {
             gameObjs[i].orbType = objProps.orbType;
+        } else if (gameObjs[i].type == "trigger") {
+            gameObjs[i].colour = levelJSON.objects[i].colour;
+            gameObjs[i].fadeTime = levelJSON.objects[i].fadeTime;
+            gameObjs[i].target = levelJSON.objects[i].target;
         }
         if (gameObjs[i].hasHitbox) {
             gameObjs[i].hbx = levelJSON.objects[i].x + objProps.hbx;
@@ -112,24 +114,28 @@ function initialize() {
     background = {
         colour: "#4287f5",
         x: 0,
-        y: 0
+        y: 0,
+        fadeStart: 0
     }
     floor = {
         colour: "#0548b3",
-        y: 0
+        y: 0,
+        fadeStart: 0
     }
     newFloor = {
         canCollide: false,
         y: 0,
         hby: 0,
-        easeId: 0
+        easeId: 0,
+        fadeStart: 0
     }
     roof = {
         canCollide: false,
         h: 90,
         y: 390,
         hby: 390,
-        easeId: 0
+        easeId: 0,
+        fadeStart: 0
     };
     levelInfo.style.display = "flex";
     levelInfoName.innerHTML = levelJSON.name;

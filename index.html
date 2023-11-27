@@ -25,6 +25,17 @@
                 <button id="swipe-btn"></button>
                 <button id="deselect-btn"></button>
                 <button id="load-btn"></button>
+                <div id="trigger-col-edit">
+                    <p>
+                        Colour: <input type="color" id="col-colour" min="0" max="255"><br>
+                        Fade Time: <input type="number" id="fade-time" min="0" max="10">s
+                        Target: <select id="col-target" name="target">
+                            <option value="background">Background</option>
+                            <option value="floor">Floor</option>
+                            <option value="roof">Roof</option>
+                        </select>
+                    </p>
+                </div>
             </div>
             
             <div id="canvas-div-div">
@@ -98,6 +109,7 @@
                 <button class="build-object" title="block_outline_pillar"><img src="img/block_outline_pillar.png" id="block_outline_pillar"></button>
                 <button class="build-object" title="pad_yellow"><img src="img/pad_yellow.png" id="pad_yellow"></button>
                 <button class="build-object" title="orb_yellow"><img src="img/orb_yellow.png" id="orb_yellow"></button>
+                <button class="build-object" title="trigger_col"><img src="img/trigger_col.png" id="trigger_col"></button>
             </div>
             <div class="editor-tab" id="edit-box">
                 <p>

@@ -4,11 +4,13 @@ function checkCollision() {
     // Object collision
     for (let i = 0; i < gameObjs.length; i++) {
         // Blue Player + Blue Obj (Running into blocks)
-        if (gameObjs[i].hasHitbox && collides(player.bluehbx, player.bluehby, player.bluehbw, player.bluehbh, gameObjs[i].hbx, gameObjs[i].hby, gameObjs[i].hbw, gameObjs[i].hbh) && gameObjs[i].hbType == "blue") {
+        if (gameObjs[i].type == "trigger") {
+            checkTriggerCollision(gameObjs[i]);
+        } else if (gameObjs[i].hasHitbox && collides(player.bluehbx, player.bluehby, player.bluehbw, player.bluehbh, gameObjs[i].hbx, gameObjs[i].hby, gameObjs[i].hbw, gameObjs[i].hbh) && gameObjs[i].hbType == "blue") {
             playerDeath();
         } else if (gameObjs[i].hasHitbox && collides(player.x, player.y, player.w, player.h, gameObjs[i].hbx, gameObjs[i].hby, gameObjs[i].hbw, gameObjs[i].hbh)) {
             // Red Player + Green Obj (Portals, Orbs, Pads)
-            if (gameObjs[i].isPortal && !gameObjs[i].activated) {
+            if (gameObjs[i].type == "portal" && !gameObjs[i].activated) {
                 if (player.mode !== gameObjs[i].portalType) {
                     player.yVel = 0;
                 }
@@ -19,7 +21,7 @@ function checkCollision() {
                 } else if (gameObjs[i].portalType == "rightsideup") {
                     player.gravityStatus = 1;
                 }
-            } else if (gameObjs[i].isPad && !gameObjs[i].activated) {
+            } else if (gameObjs[i].type == "pad" && !gameObjs[i].activated) {
                 if (gameObjs[i].padType == "yellow") {
                     if (player.mode == "cube") {
                         player.yVel = 862.0614;
@@ -28,7 +30,7 @@ function checkCollision() {
                     }
                     return;
                 }
-            } else if (gameObjs[i].isOrb && !gameObjs[i].activated) {
+            } else if (gameObjs[i].type == "orb" && !gameObjs[i].activated) {
                 player.touchingOrb.push(i)
             }
             // Red Player + Blue Obj (Landing on blocks)
@@ -43,6 +45,36 @@ function checkCollision() {
     if (player.grounded || player.roofed) {
         player.yVel = 0;
     }
+}
+
+function checkTriggerCollision(obj) {
+    if (player.x + player.w >= obj.x && !obj.activated) {
+        obj.activated = true;
+        if (obj.target == "floor") {
+            fadeColour(floor, obj.colour, obj.fadeTime);
+            fadeColour(newFloor, obj.colour, obj.fadeTime);
+        } else if (obj.target == "background") {
+            fadeColour(background, obj.colour, obj.fadeTime);
+        } else {
+            fadeColour(roof, obj.colour, obj.fadeTime);
+        }
+    }
+}
+
+function fadeColour(target, colour, fadeTime) {
+    target.fadeStart = performance.now();
+    let r = parseInt(colour.slice(1, 3), 16);
+    let g = parseInt(colour.slice(3, 5), 16);
+    let b = parseInt(colour.slice(5, 7), 16);
+    let fadeInterval = setInterval(() => {
+        let timePassed = performance.now - target.fadeStart;
+        if (timePassed > fadeTime) {
+            target.colour = colour;
+            clearInterval(fadeInterval);
+        } else {
+            target.colour = `rgb(${r}, ${g}, ${b})`
+        }
+    }, 0)
 }
 
 function checkBlockCollision(i) {
