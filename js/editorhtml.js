@@ -14,8 +14,9 @@ let triggerColTargetEl = document.getElementById("col-target");
 let editorDivs = document.getElementsByClassName("editor-div");
 let buildObjs = document.getElementsByClassName("build-object");
 let levelBGColEl = document.getElementById("level-bg-col");
+levelBGColEl.value = "#287DFF";
 let levelBGFloorEl = document.getElementById("level-floor-col");
-let levelBGRoofEl = document.getElementById("level-roof-col");
+levelBGFloorEl = "#0066FF";
 let editorImport = document.createElement('input');
 editorImport.type = 'file';
 editorImport.accept = '.json';
@@ -143,16 +144,12 @@ function exportLevel() {
             exportArray[i].target = editorObjects[i].target;
         }
     }
-    let selectedMode = "cube";
-    if (document.querySelector('input[name="mode-select"]:checked').value != null) {
-        selectedMode = document.querySelector('input[name="mode-select"]:checked').value;
-    }
+    selectedMode = document.querySelector('input[name="mode-select"]:checked').value;
     let exportObject = {
         name: document.getElementById("level-name").value,
         difficulty: setDifficulty.value,
         bgCol: levelBGColEl.value,
         floorCol: levelBGColEl.value,
-        roofCol: levelBGColEl.value,
         mode: selectedMode,
         objects: exportArray
     }

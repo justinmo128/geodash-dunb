@@ -69,12 +69,12 @@ function initializeEditor() {
     camera.x = 0;
     camera.y = 0;
     background = {
-        colour: "#4287f5",
+        colour: "#287DFF",
         x: 0,
         y: 0
     }
     floor = {
-        colour: "#0548b3",
+        colour: "#0066FF",
         y: 0
     }
     newFloor = {

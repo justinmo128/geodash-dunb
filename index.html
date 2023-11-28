@@ -29,12 +29,11 @@
                 <button id="level-settings-btn"></button>
                 <div id="trigger-col-edit">
                     <p>
-                        Colour: <input type="color" id="col-colour" min="0" max="255"><br>
+                        Colour: <input type="color" id="col-colour"><br>
                         Fade Time: <input type="number" id="fade-time" min="0">s
                         Target: <select id="col-target" name="target">
                             <option value="background">Background</option>
                             <option value="floor">Floor</option>
-                            <option value="roof">Roof</option>
                         </select>
                     </p>
                 </div>
@@ -78,13 +77,12 @@
         <div class="card" id="level-settings-box">
             <p>
                 Select Color:<br>
-                BG: <input type="color" id="col-colour" min="0" max="255" id="level-bg-col"><br>
-                Floor: <input type="color" id="col-colour" min="0" max="255" id="level-floor-col"><br>
-                Roof: <input type="color" id="col-colour" min="0" max="255" id="level-roof-col"><br>
+                BG: <input type="color" id="level-bg-col"><br>
+                Floor: <input type="color" id="level-floor-col"><br>
             </p>
             <p>
                 Select Mode:<br>
-                <input type="radio" id="cube-radio" name="mode-select" value="cube">
+                <input type="radio" id="cube-radio" name="mode-select" value="cube" checked="checked">
                 <label for="cube-radio">Cube</label><br>
                 <input type="radio" id="ship-radio" name="mode-select" value="ship">
                 <label for="ship-radio">Ship</label><br>

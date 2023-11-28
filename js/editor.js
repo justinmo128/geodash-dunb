@@ -39,8 +39,8 @@ function moveEditorCam() {
         camera.y = -30;
         updateHTML();
     }
-    if (camera.x < -30) {
-        camera.x = -30;
+    if (camera.x < 0) {
+        camera.x = 0;
         updateHTML();
     }
     setTimeout(moveEditorCam, 1000/240)

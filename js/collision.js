@@ -52,10 +52,8 @@ function checkTriggerCollision(obj) {
         obj.activated = true;
         if (obj.target == "floor") {
             fadeColour(floor, obj.colour, obj.fadeTime);
-        } else if (obj.target == "background") {
-            fadeColour(background, obj.colour, obj.fadeTime);
         } else {
-            fadeColour(roof, obj.colour, obj.fadeTime);
+            fadeColour(background, obj.colour, obj.fadeTime);
         }
     }
 }

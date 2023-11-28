@@ -81,7 +81,7 @@ function initialize() {
     gameState = "gameLoop";
     gamePaused = false;
     player = {
-        mode: "cube",
+        mode: levelJSON.mode,
         x: 0,
         y: 0,
         oldx: 0,
@@ -112,13 +112,13 @@ function initialize() {
         easeId: 0
     };
     background = {
-        colour: "#4287f5",
+        colour: levelJSON.bgCol,
         x: 0,
         y: 0,
         fadeStart: 0
     }
     floor = {
-        colour: "#0548b3",
+        colour: levelJSON.floorCol,
         y: 0,
         fadeStart: 0
     }
@@ -261,7 +261,6 @@ function checkEnding() {
 }
 
 document.getElementById("pause-btn").addEventListener("click", pauseGame)
-
 function pauseGame() {
     gamePaused = true;
     pauseVisible = true;
