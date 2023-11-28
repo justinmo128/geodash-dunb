@@ -33,17 +33,7 @@ canvas {
     border-radius: 5px;
 }
 
-#imgs {
-    display: none;
-}
-
-.editor-div {
-    display: none;
-}
-
-#editor-main {
-    width: 930px;
-    margin: auto;
+#imgs, .editor-div {
     display: none;
 }
 
@@ -52,6 +42,17 @@ canvas {
     flex-direction: row;
     justify-content: center;
     align-items: center;
+}
+
+#editor-main, #level-settings-box {
+    width: 930px;
+    margin: auto;
+    display: none;
+    margin-bottom: 10px;
+}
+
+#level-settings-box {
+    justify-content: space-around;
 }
 
 #hi {
@@ -77,7 +78,6 @@ canvas {
 
 input {
     height: 20px;
-    width: 180px;
 }
 
 .last-card {
@@ -194,6 +194,14 @@ button:hover {
 
 #load-btn {
     background-image: url("img/loadfromjson-btn.png");
+    background-color: transparent;
+    border-width: 0;
+    width: 60px;
+    height: 60px;
+}
+
+#level-settings-btn {
+    background-image: url("img/editor-options-btn.png");
     background-color: transparent;
     border-width: 0;
     width: 60px;
@@ -328,9 +336,6 @@ button:hover {
     }
     #editor-right {
         order: 2;
-    }
-    #editor-main {
-        width: 95%;
     }
     .card {
         width: 95%;

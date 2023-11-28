@@ -5,6 +5,7 @@
         <link rel="stylesheet" href="index.css">
         <script defer src="js/drawmain.js"></script>
         <script defer src="js/main.js"></script>
+        <script defer src="js/editorhtml.js"></script>
         <script defer src="js/editor.js"></script>
         <script defer src="js/libs.js"></script>
         <script defer src="js/keyhandlers.js"></script>
@@ -25,10 +26,11 @@
                 <button id="swipe-btn"></button>
                 <button id="deselect-btn"></button>
                 <button id="load-btn"></button>
+                <button id="level-settings-btn"></button>
                 <div id="trigger-col-edit">
                     <p>
                         Colour: <input type="color" id="col-colour" min="0" max="255"><br>
-                        Fade Time: <input type="number" id="fade-time" min="0" max="10">s
+                        Fade Time: <input type="number" id="fade-time" min="0">s
                         Target: <select id="col-target" name="target">
                             <option value="background">Background</option>
                             <option value="floor">Floor</option>
@@ -72,6 +74,24 @@
                 </p>
                 <button id="export-btn"></button>
             </div>
+        </div>
+        <div class="card" id="level-settings-box">
+            <p>
+                Select Color:<br>
+                BG: <input type="color" id="col-colour" min="0" max="255" id="level-bg-col"><br>
+                Floor: <input type="color" id="col-colour" min="0" max="255" id="level-floor-col"><br>
+                Roof: <input type="color" id="col-colour" min="0" max="255" id="level-roof-col"><br>
+            </p>
+            <p>
+                Select Mode:<br>
+                <input type="radio" id="cube-radio" name="mode-select" value="cube">
+                <label for="cube-radio">Cube</label><br>
+                <input type="radio" id="ship-radio" name="mode-select" value="ship">
+                <label for="ship-radio">Ship</label><br>
+            </p>
+            <p>
+                Select Song:<br>
+            </p>
         </div>
         <!-- Bottom side editor -->
         <div class="card editor-div" id="editor-main">

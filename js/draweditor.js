@@ -1,12 +1,3 @@
-let camXEl = document.getElementById("cam-x");
-let camYEl = document.getElementById("cam-y");
-let objXEl = document.getElementById("obj-x");
-let objYEl = document.getElementById("obj-y");
-let objAngleEl = document.getElementById("obj-angle");
-let triggerColColourEl = document.getElementById("col-colour");
-let triggerColTimeEl = document.getElementById("fade-time");
-let triggerColTargetEl = document.getElementById("col-target");
-
 function drawEditor() {
     drawBG();
     drawGrid();
@@ -42,52 +33,3 @@ function drawGrid() {
     }
     ctx.globalAlpha = 1;
 }
-
-function updateHTML() {
-    camXEl.value = camera.x;
-    camYEl.value = camera.y;
-    if (selectedIndex > -1) {
-        objXEl.value = editorObjects[selectedIndex].x;
-        objYEl.value = editorObjects[selectedIndex].y;
-        objAngleEl.value = editorObjects[selectedIndex].angle;
-    } else {
-        objXEl.value = 0;
-        objYEl.value = 0;
-        objAngleEl.value = 0;
-        triggerColTimeEl.value = 0;
-    }
-    if (selectedIndex > -1 && editorObjects[selectedIndex].type == "trigger") {
-        document.getElementById("trigger-col-edit").style.display = "flex";
-        triggerColColourEl.value = editorObjects[selectedIndex].colour;
-        triggerColTimeEl.value = editorObjects[selectedIndex].fadeTime;
-        triggerColTargetEl.value = editorObjects[selectedIndex].target;
-    } else {
-        document.getElementById("trigger-col-edit").style.display = "none";
-    }
-}
-
-camXEl.addEventListener("change", () => {
-    camera.x = +camXEl.value;
-})
-camYEl.addEventListener("change", () => {
-    camera.x = +camXEl.value;
-})
-objXEl.addEventListener("change", () => {
-    editorObjects[selectedIndex].x = +objXEl.value;
-})
-objYEl.addEventListener("change", () => {
-    editorObjects[selectedIndex].y = +objYEl.value;
-})
-objAngleEl.addEventListener("change", () => {
-    editorObjects[selectedIndex].angle = +objAngleEl.value;
-    editorObjects[selectedIndex].angle %= 360;
-})
-triggerColColourEl.addEventListener("change", () => {
-    editorObjects[selectedIndex].colour = triggerColColourEl.value;
-})
-triggerColTimeEl.addEventListener("change", () => {
-    editorObjects[selectedIndex].fadeTime = triggerColTimeEl.value;
-})
-triggerColTargetEl.addEventListener("change", () => {
-    editorObjects[selectedIndex].target = triggerColTargetEl.value;
-})

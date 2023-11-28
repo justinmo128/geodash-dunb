@@ -52,7 +52,6 @@ function checkTriggerCollision(obj) {
         obj.activated = true;
         if (obj.target == "floor") {
             fadeColour(floor, obj.colour, obj.fadeTime);
-            fadeColour(newFloor, obj.colour, obj.fadeTime);
         } else if (obj.target == "background") {
             fadeColour(background, obj.colour, obj.fadeTime);
         } else {
@@ -63,16 +62,25 @@ function checkTriggerCollision(obj) {
 
 function fadeColour(target, colour, fadeTime) {
     target.fadeStart = performance.now();
-    let r = parseInt(colour.slice(1, 3), 16);
-    let g = parseInt(colour.slice(3, 5), 16);
-    let b = parseInt(colour.slice(5, 7), 16);
+    let toR = parseInt(colour.slice(1, 3), 16);
+    let toG = parseInt(colour.slice(3, 5), 16);
+    let toB = parseInt(colour.slice(5, 7), 16);
+    let fromR, fromG, fromB;
+    if (target.colour.split('(')[0] != "rgb") {
+        fromR = parseInt(target.colour.slice(1, 3), 16);
+        fromG = parseInt(target.colour.slice(3, 5), 16);
+        fromB = parseInt(target.colour.slice(5, 7), 16);
+    }
     let fadeInterval = setInterval(() => {
-        let timePassed = performance.now - target.fadeStart;
+        let timePassed = (performance.now() - target.fadeStart) / 1000;
         if (timePassed > fadeTime) {
             target.colour = colour;
             clearInterval(fadeInterval);
         } else {
-            target.colour = `rgb(${r}, ${g}, ${b})`
+            let newR = Math.round(fromR + (toR - fromR) * (timePassed/fadeTime));
+            let newG = Math.round(fromG + (toG - fromG) * (timePassed/fadeTime));
+            let newB = Math.round(fromB + (toB - fromB) * (timePassed/fadeTime));
+            target.colour = `rgb(${newR}, ${newG}, ${newB})`
         }
     }, 0)
 }

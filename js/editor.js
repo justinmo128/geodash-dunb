@@ -1,19 +1,12 @@
 let buildCategory = "build"; // The current category selected
 let currentObj = "block_standard"; // The Object selected in the build menu
 let selectedIndex = -1; // The object selected in canvas
-let editorTabs = document.getElementsByClassName("editor-tab");
-let editorTabBtns = document.getElementsByClassName("editor-tab-btn");
-let editorDivs = document.getElementsByClassName("editor-div");
-let buildObjs = document.getElementsByClassName("build-object");
 let editorObjects = [];
 let initMouseX = 0;
 let initMouseY = 0;
 let initCamX = 0;
 let initCamY = 0;
 let movedCam = false;
-let setDifficulty = document.getElementById("difficulty");
-let levelDiff = document.getElementById("level-diff");
-let levelDiffIcon = document.getElementById("level-difficon");
 let inputs = document.getElementsByTagName("input");
 let swipeEnabled = false;
 let swipeObjs = [];
@@ -31,54 +24,6 @@ for (let i = 0; i < buildObjs.length; i++) {
     })
 }
 
-setDifficulty.addEventListener("change", changeDifficulty)
-function changeDifficulty() {
-    levelDiff.innerHTML = getDifficulty(setDifficulty.value);
-    levelDiffIcon.style.backgroundImage = `url(img/diff${getDifficulty(setDifficulty.value)}.png)`;
-}
-
-function switchCategory(newCat) {
-    buildCategory = newCat;
-    for (let i = 0; i < editorTabs.length; i++) {
-        editorTabs[i].style.display = "none";
-        editorTabBtns[i].style.backgroundImage = `url("img/editorselectbtn.png")`;
-    }
-    document.getElementById(`${newCat}-box`).style.display = "flex";
-    document.getElementById(`${newCat}-btn`).style.backgroundImage = `url("img/editorselectbtnon.png")`;
-}
-
-function buildObjSelect(i) {
-    for (let j = 0; j < buildObjs.length; j++) {
-        buildObjs[j].style.backgroundImage = `url("img/buttongray.png")`
-    }
-    buildObjs[i].style.backgroundImage = `url("img/buttoncyan.png")`
-    currentObj = buildObjs[i].title;
-    savedAngle = 0;
-}
-
-document.getElementById("delete-obj-btn").addEventListener("click", () => {
-    deleteObject(selectedIndex)
-})
-function deleteObject(index) {
-    selectedIndex = -1;
-    editorObjects.splice(index, 1)
-}
-
-document.getElementById("deselect-btn").addEventListener("click", deselect)
-function deselect() {
-    selectedIndex = -1;
-}
-
-document.getElementById("swipe-btn").addEventListener("click", toggleSwipe);
-function toggleSwipe() {
-    swipeEnabled = !swipeEnabled;
-    if (swipeEnabled) {
-        document.getElementById("swipe-btn").style.backgroundImage = `url("img/swipe-btnon.png")`;
-    } else {
-        document.getElementById("swipe-btn").style.backgroundImage = `url("img/swipe-btn.png")`;
-    }
-}
-
 window.addEventListener("load", moveEditorCam);
 function moveEditorCam() {
     movedCam = false;
@@ -94,8 +39,8 @@ function moveEditorCam() {
         camera.y = -30;
         updateHTML();
     }
-    if (camera.x < 0) {
-        camera.x = 0;
+    if (camera.x < -30) {
+        camera.x = -30;
         updateHTML();
     }
     setTimeout(moveEditorCam, 1000/240)
@@ -239,67 +184,4 @@ function mouseInBounds() {
         return true;
     }
     return false;
-}
-
-document.getElementById("export-btn").addEventListener("click", exportLevel)
-function exportLevel() {
-    let exportArray = [];
-    for (let i = 0; i < editorObjects.length; i++) {
-        exportArray.push({
-            x: editorObjects[i].x,
-            y: editorObjects[i].y,
-            id: editorObjects[i].id,
-            angle: editorObjects[i].angle
-        })
-
-        if (exportArray[i].id.split('_')[0] == "trigger") {
-            exportArray[i].colour = editorObjects[i].colour;
-            exportArray[i].fadeTime = editorObjects[i].fadeTime;
-            exportArray[i].target = editorObjects[i].target;
-        }
-    }
-    let exportObject = {
-        name: document.getElementById("level-name").value,
-        difficulty: setDifficulty.value,
-        objects: exportArray
-    }
-    let jsonExport = JSON.stringify(exportObject)
-    let a = document.createElement("a");
-    a.href = URL.createObjectURL(
-        new Blob([jsonExport], {type:"application/json"})
-    )
-    a.download = `${exportObject.name}.json`
-    a.click()
-}
-
-let editorImport = document.createElement('input');
-editorImport.type = 'file';
-editorImport.accept = '.json';
-editorImport.addEventListener("change", loadLevel)
-document.getElementById("load-btn").addEventListener("click", () => {editorImport.click()})
-function loadLevel() {
-    new Response(editorImport.files[0]).json()
-        .then(json => {levelJSON = json})
-        .then(createEditorObjects)
-}
-
-function createEditorObjects() {
-    editorObjects = [];
-    for (let i = 0; i < levelJSON.objects.length; i++) {
-        buildObject(levelJSON.objects[i].id, levelJSON.objects[i].x, levelJSON.objects[i].y, levelJSON.objects[i].angle, false)
-        if (editorObjects[i].type == "trigger") {
-            editorObjects[i].colour = levelJSON.objects[i].colour;
-            editorObjects[i].fadeTime = levelJSON.objects[i].fadeTime;
-            editorObjects[i].target = levelJSON.objects[i].target;
-            updateHTML();
-        }
-        if (editorObjects[i].angle !== 0) {
-            let xDiff = editorObjects[i].x - levelJSON.objects[i].x;
-            let yDiff = editorObjects[i].y - levelJSON.objects[i].y;
-            editorObjects[i].x -= xDiff;
-            editorObjects[i].y -= yDiff;
-        }
-    }
-    setDifficulty.value = levelJSON.difficulty;
-    document.getElementById("level-name").value = levelJSON.name;
 }
