@@ -96,6 +96,7 @@ function initializeMenu() {
     levelInfo.style.display = "none";
     document.getElementById("pause-box").style.display = "none";
     document.getElementById("pause-balance").style.display = "none";
+    document.getElementById("level-settings-box").style.display = "none";
     camera.x = 0;
     camera.y = 500;
     background = {

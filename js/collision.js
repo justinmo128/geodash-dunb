@@ -50,37 +50,28 @@ function checkCollision() {
 function checkTriggerCollision(obj) {
     if (player.x + player.w >= obj.x && !obj.activated) {
         obj.activated = true;
+        obj.startTime = levelTime;
         if (obj.target == "floor") {
-            fadeColour(floor, obj.colour, obj.fadeTime);
+            obj.oldColour = floor.colour;
         } else {
-            fadeColour(background, obj.colour, obj.fadeTime);
+            obj.oldColour = background.colour;
         }
-    }
-}
 
-function fadeColour(target, colour, fadeTime) {
-    target.fadeStart = performance.now();
-    let toR = parseInt(colour.slice(1, 3), 16);
-    let toG = parseInt(colour.slice(3, 5), 16);
-    let toB = parseInt(colour.slice(5, 7), 16);
-    let fromR, fromG, fromB;
-    if (target.colour.split('(')[0] != "rgb") {
-        fromR = parseInt(target.colour.slice(1, 3), 16);
-        fromG = parseInt(target.colour.slice(3, 5), 16);
-        fromB = parseInt(target.colour.slice(5, 7), 16);
-    }
-    let fadeInterval = setInterval(() => {
-        let timePassed = (performance.now() - target.fadeStart) / 1000;
-        if (timePassed > fadeTime) {
-            target.colour = colour;
-            clearInterval(fadeInterval);
-        } else {
-            let newR = Math.round(fromR + (toR - fromR) * (timePassed/fadeTime));
-            let newG = Math.round(fromG + (toG - fromG) * (timePassed/fadeTime));
-            let newB = Math.round(fromB + (toB - fromB) * (timePassed/fadeTime));
-            target.colour = `rgb(${newR}, ${newG}, ${newB})`
+        obj.newCol = [];
+        obj.oldCol = [];
+        for (let i = 0; i < 3; i++) {
+            obj.newCol[i] = parseInt(obj.colour.slice(i*2+1, i*2+3), 16);
+            obj.oldCol[i] = parseInt(obj.oldColour.slice(i*2+1, i*2+3), 16);
         }
-    }, 0)
+        
+        for (let i = 0; i < activeTriggers.length; i++) {
+            if (obj.target == activeTriggers[i].target) {
+                activeTriggers.splice(i, 1);
+            }
+        }
+        activeTriggers.push(obj);
+        console.log(activeTriggers)
+    }
 }
 
 function checkBlockCollision(i) {

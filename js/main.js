@@ -11,6 +11,8 @@ let pauseVisible = true;
 let lastUpdate = performance.now();
 let deltaTime = 0;
 let showHitboxes = false;
+let levelTime = 0;
+let activeTriggers = [];
 
 let levelJSON = [];
 let gameObjs = [];
@@ -79,6 +81,8 @@ function initialize() {
         gameObjs[i].activated = false;
     }
     gameState = "gameLoop";
+    levelTime = 0;
+    activeTriggers = [];
     gamePaused = false;
     player = {
         mode: levelJSON.mode,
@@ -119,15 +123,13 @@ function initialize() {
     }
     floor = {
         colour: levelJSON.floorCol,
-        y: 0,
-        fadeStart: 0
+        y: 0
     }
     newFloor = {
         canCollide: false,
         y: 0,
         hby: 0,
-        easeId: 0,
-        fadeStart: 0
+        easeId: 0
     }
     roof = {
         canCollide: false,
@@ -149,8 +151,10 @@ function physics() {
     deltaTime = now - lastUpdate;
     lastUpdate = now;
     if (gameState == "gameLoop" && !player.dead && !gamePaused) {
+        levelTime += deltaTime;
         player.oldx = player.x;
         player.oldy = player.y;
+        updateTriggers();
         movePlayer();
         if (keyHeld) {jump()}
         applyGravity();
@@ -159,6 +163,49 @@ function physics() {
         rotatePlayer();
         checkEnding();
     }
+}
+
+function updateTriggers() {
+    for (let i = 0; i < activeTriggers.length; i++) {
+        let timePassed = (levelTime - activeTriggers[i].startTime) / 1000;
+        let fadeTime = activeTriggers[i].fadeTime;
+        if (timePassed >= fadeTime) {
+            if (activeTriggers[i].target == "floor") {
+                floor.colour = activeTriggers[i].colour;
+            } else {
+                background.colour = activeTriggers[i].colour;
+            }
+            activeTriggers.splice(i, 1);
+            break;
+        }
+
+        let oldCol = activeTriggers[i].oldCol;
+        let newCol = activeTriggers[i].newCol;
+        let setCol = [];
+        for (let i = 0; i < 3; i++) {
+            setCol[i] = Math.round(oldCol[i] + (newCol[i] - oldCol[i]) * (timePassed/fadeTime));
+        }
+        
+        if (activeTriggers[i].target == "floor") {
+            changeColour(floor, `rgb(${setCol[0]}, ${setCol[1]}, ${setCol[2]})`);
+        } else {
+            changeColour(background, `rgb(${setCol[0]}, ${setCol[1]}, ${setCol[2]})`);
+        }
+    }
+}
+
+function changeColour(target, colour) {
+    let rgb = colour.match(/\d+/g).map(Number);
+    target.colour = rgbToHex(rgb[0], rgb[1], rgb[2]);
+}
+
+function rgbToHex(r, g, b) {
+    return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
+}
+
+function componentToHex(c) {
+    var hex = c.toString(16);
+    return hex.length == 1 ? "0" + hex : hex;
 }
 
 function applyGravity() {

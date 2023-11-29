@@ -188,5 +188,16 @@ function createEditorObjects() {
         }
     }
     setDifficulty.value = levelJSON.difficulty;
+    levelBGColEl.value = levelJSON.bgCol;
+    levelBGFloorEl.value = levelJSON.floorCol;
+    let modeSelectBtns = document.getElementsByClassName("mode-select");
+    for (let i = 0; i < modeSelectBtns.length; i++) {
+        if (modeSelectBtns[i].id == `${levelJSON.mode}-radio`) {
+            modeSelectBtns[i].checked = true;
+        } else {
+            modeSelectBtns[i].checked = false;
+        }
+    }
+
     document.getElementById("level-name").value = levelJSON.name;
 }
