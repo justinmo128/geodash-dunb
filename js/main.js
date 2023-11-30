@@ -162,6 +162,9 @@ function physics() {
         checkCollision();
         rotatePlayer();
         checkEnding();
+    } else if (gameState == "editor") {
+        swipe();
+        moveEditorCam();
     }
 }
 

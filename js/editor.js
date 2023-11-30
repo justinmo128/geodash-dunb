@@ -24,7 +24,6 @@ for (let i = 0; i < buildObjs.length; i++) {
     })
 }
 
-window.addEventListener("load", moveEditorCam);
 function moveEditorCam() {
     movedCam = false;
     if (mouseInBounds() && mouseHeld && !swipeEnabled) {
@@ -43,10 +42,8 @@ function moveEditorCam() {
         camera.x = 0;
         updateHTML();
     }
-    setTimeout(moveEditorCam, 1000/240)
 }
 
-window.addEventListener("load", swipe);
 function swipe() {
     if (mouseInBounds() && mouseHeld && swipeEnabled) {
         if (buildCategory == "build") {
@@ -65,7 +62,6 @@ function swipe() {
             updateHTML();
         }
     }
-    setTimeout(swipe, 1000/240)
 }
 
 function buildObject(id, x, y, angle, offset) {
