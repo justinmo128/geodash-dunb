@@ -56,6 +56,7 @@ function createGameObjects() {
             gameObjs[i].colour = levelJSON.objects[i].colour;
             gameObjs[i].fadeTime = levelJSON.objects[i].fadeTime;
             gameObjs[i].target = levelJSON.objects[i].target;
+            gameObjs[i].touchActivated = levelJSON.objects[i].touchActivated;
         }
         if (gameObjs[i].hasHitbox) {
             gameObjs[i].hbx = levelJSON.objects[i].x + objProps.hbx;

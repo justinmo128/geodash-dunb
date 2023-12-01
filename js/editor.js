@@ -66,15 +66,17 @@ function swipe() {
 
 function buildObject(id, x, y, angle, offset) {
     let objProps = objectList.find((element) => id == element.id);
-    if (!offset) {
-        objProps.editorOffsetx = 0;
-        objProps.editorOffsety = 0;
+    let offsetX = 0;
+    let offsetY = 0;
+    if (offset) {
+        offsetX = objProps.editorOffsetx;
+        offsetY = objProps.editorOffsety;
     }
 
     editorObjects.push({
         id: id,
-        x: x + objProps.editorOffsetx,
-        y: y + objProps.editorOffsety,
+        x: x + offsetX,
+        y: y + offsetY,
         angle: angle,
         h: objProps.h,
         w: objProps.w,
@@ -98,6 +100,7 @@ function buildObject(id, x, y, angle, offset) {
         editorObjects[selectedIndex].colour = "#000000";
         editorObjects[selectedIndex].fadeTime = 0;
         editorObjects[selectedIndex].target = "background";
+        editorObjects[selectedIndex].touchActivated = false;
     }
     updateHTML();
 }

@@ -48,7 +48,8 @@ function checkCollision() {
 }
 
 function checkTriggerCollision(obj) {
-    if (player.x + player.w >= obj.x && !obj.activated) {
+    if (((player.x + player.w >= obj.x && !obj.touchActivated) || 
+    (collides(player.x, player.y, player.w, player.h, obj.hbx, obj.hby, obj.hbw, obj.hbh) && obj.touchActivated)) && !obj.activated) {
         obj.activated = true;
         obj.startTime = levelTime;
         if (obj.target == "floor") {
@@ -70,7 +71,6 @@ function checkTriggerCollision(obj) {
             }
         }
         activeTriggers.push(obj);
-        console.log(activeTriggers)
     }
 }
 

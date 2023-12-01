@@ -9,9 +9,9 @@ function moveCamera() {
         camera.x = player.x - 90;
     }
     if (player.y - camera.y > 155 && player.mode == "cube") {
-        camera.y += 1;
+        camera.y = player.y - 155;
     } else if (player.y - camera.y < 40 && player.mode == "cube") {
-        camera.y -= 1;
+        camera.y = player.y - 40;
     }
     if (camera.y < 0 && player.mode == "cube") {
         camera.y = 0;

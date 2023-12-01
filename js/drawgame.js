@@ -56,7 +56,9 @@ function drawGameObjects() {
         if (gameObjs[i].type == "portal") {
             imgName = `portal_${gameObjs[i].portalType}_over`
         }
-        drawImgCamRotate(imgName, gameObjs[i].x, gameObjs[i].y, gameObjs[i].h, gameObjs[i].w, gameObjs[i].angle, objProps.w, objProps.h, xOffset, yOffset);
+        if (gameObjs[i].type != "trigger") {
+            drawImgCamRotate(imgName, gameObjs[i].x, gameObjs[i].y, gameObjs[i].h, gameObjs[i].w, gameObjs[i].angle, objProps.w, objProps.h, xOffset, yOffset);
+        }
     }
     if (player.win) {
         ctx.drawImage(document.getElementById("levelcomplete"), 40, 100);

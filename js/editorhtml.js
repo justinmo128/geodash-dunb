@@ -11,12 +11,13 @@ let objAngleEl = document.getElementById("obj-angle");
 let triggerColColourEl = document.getElementById("col-colour");
 let triggerColTimeEl = document.getElementById("fade-time");
 let triggerColTargetEl = document.getElementById("col-target");
+let triggerColTouchEl = document.getElementById("touch-trigger");
 let editorDivs = document.getElementsByClassName("editor-div");
 let buildObjs = document.getElementsByClassName("build-object");
 let levelBGColEl = document.getElementById("level-bg-col");
 levelBGColEl.value = "#287DFF";
-let levelBGFloorEl = document.getElementById("level-floor-col");
-levelBGFloorEl = "#0066FF";
+let levelFloorColEl = document.getElementById("level-floor-col");
+levelFloorColEl.value = "#0066FF";
 let editorImport = document.createElement('input');
 editorImport.type = 'file';
 editorImport.accept = '.json';
@@ -126,6 +127,9 @@ triggerColTimeEl.addEventListener("change", () => {
 triggerColTargetEl.addEventListener("change", () => {
     editorObjects[selectedIndex].target = triggerColTargetEl.value;
 })
+triggerColTouchEl.addEventListener("change", () => {
+    editorObjects[selectedIndex].touchActivated = triggerColTouchEl.checked;
+})
 
 document.getElementById("export-btn").addEventListener("click", exportLevel)
 function exportLevel() {
@@ -142,6 +146,7 @@ function exportLevel() {
             exportArray[i].colour = editorObjects[i].colour;
             exportArray[i].fadeTime = editorObjects[i].fadeTime;
             exportArray[i].target = editorObjects[i].target;
+            exportArray[i].touchActivated = editorObjects[i].touchActivated;
         }
     }
     selectedMode = document.querySelector('input[name="mode-select"]:checked').value;
@@ -178,18 +183,22 @@ function createEditorObjects() {
             editorObjects[i].colour = levelJSON.objects[i].colour;
             editorObjects[i].fadeTime = levelJSON.objects[i].fadeTime;
             editorObjects[i].target = levelJSON.objects[i].target;
+            if (levelJSON.objects[i].touchActivated) {
+                editorObjects[i].touchActivated = levelJSON.objects[i].touchActivated;
+            } else {
+                editorObjects[i].touchActivated = false;
+            }
+            
             updateHTML();
         }
         if (editorObjects[i].angle !== 0) {
-            let xDiff = editorObjects[i].x - levelJSON.objects[i].x;
-            let yDiff = editorObjects[i].y - levelJSON.objects[i].y;
-            editorObjects[i].x -= xDiff;
-            editorObjects[i].y -= yDiff;
+            editorObjects[i].x = levelJSON.objects[i].x;
+            editorObjects[i].y = levelJSON.objects[i].y;
         }
     }
     setDifficulty.value = levelJSON.difficulty;
     levelBGColEl.value = levelJSON.bgCol;
-    levelBGFloorEl.value = levelJSON.floorCol;
+    levelFloorColEl.value = levelJSON.floorCol;
     let modeSelectBtns = document.getElementsByClassName("mode-select");
     for (let i = 0; i < modeSelectBtns.length; i++) {
         if (modeSelectBtns[i].id == `${levelJSON.mode}-radio`) {

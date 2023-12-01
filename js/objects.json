@@ -456,6 +456,8 @@
         "h": 30,
         "w": 30,
         "hbx": 0,
+        "hby": 0,
+        "hbh": 30,
         "hbw": 30,
         "hbType": "green",
         "type": "trigger",
