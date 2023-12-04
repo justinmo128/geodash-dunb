@@ -149,12 +149,16 @@ function editorKeys(e) {
         let validKeyPressed = true;
         if (e.key == "w") {
             editorObjects[selectedIndex].y += 30;
+            editorObjects[selectedIndex].rotCenter[1] += 30;
         } else if (e.key == "a") {
             editorObjects[selectedIndex].x -= 30;
+            editorObjects[selectedIndex].rotCenter[0] -= 30;
         } else if (e.key == "s") {
             editorObjects[selectedIndex].y -= 30;
+            editorObjects[selectedIndex].rotCenter[1] -= 30;
         } else if (e.key == "d") {
             editorObjects[selectedIndex].x += 30;
+            editorObjects[selectedIndex].rotCenter[0] += 30;
         } else if (e.key == "ArrowUp") {
             editorObjects[selectedIndex].y++;
         } else if (e.key == "ArrowLeft") {
