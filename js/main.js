@@ -274,11 +274,7 @@ function jump() {
     for (let i = 0; i < player.touchingOrb.length; i++) {
         if (bufferAvailable) {
             if (gameObjs[player.touchingOrb[i]].orbType == "yellow") {
-                if (player.mode == "cube") {
-                    player.yVel = 595.9602 * player.gravityStatus;
-                } else if (player.mode == "ship") {
-                    player.yVel = 432 * player.gravityStatus;
-                }
+                player.yVel = 595.9602 * player.gravityStatus;
                 bufferAvailable = false;
                 gameObjs[player.touchingOrb[i]].activated = true;
                 return;

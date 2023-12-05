@@ -23,11 +23,7 @@ function checkCollision() {
                 }
             } else if (gameObjs[i].type == "pad" && !gameObjs[i].activated) {
                 if (gameObjs[i].padType == "yellow") {
-                    if (player.mode == "cube") {
-                        player.yVel = 862.0614;
-                    } else if (player.mode == "ship") {
-                        player.yVel = 432;
-                    }
+                    player.yVel = 862.0614 * player.gravityStatus;
                     return;
                 }
             } else if (gameObjs[i].type == "orb" && !gameObjs[i].activated) {
