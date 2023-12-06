@@ -8,22 +8,26 @@ function checkCollision() {
             checkTriggerCollision(gameObjs[i]);
         } else if (gameObjs[i].hasHitbox && collides(player.bluehbx, player.bluehby, player.bluehbw, player.bluehbh, gameObjs[i].hbx, gameObjs[i].hby, gameObjs[i].hbw, gameObjs[i].hbh) && gameObjs[i].hbType == "blue") {
             playerDeath();
-        } else if (gameObjs[i].hasHitbox && collides(player.x, player.y, player.w, player.h, gameObjs[i].hbx, gameObjs[i].hby, gameObjs[i].hbw, gameObjs[i].hbh)) {
+        } else if (gameObjs[i].hasHitbox && collides(player.x, player.y, player.w, player.h, gameObjs[i].hbx, gameObjs[i].hby, gameObjs[i].hbw, gameObjs[i].hbh) && !gameObjs[i].activated) {
             // Red Player + Green Obj (Portals, Orbs, Pads)
-            if (gameObjs[i].type == "portal" && !gameObjs[i].activated) {
+            if (gameObjs[i].type == "portal") {
+                player.yVel /= 1.96;
                 if (gameObjs[i].portalType == "ship" || gameObjs[i].portalType == "cube") {
                     switchGamemode(gameObjs[i]);
                 } else if (gameObjs[i].portalType == "upsidedown") {
                     player.gravityStatus = -1;
+                    gameObjs[i].activated = true;
                 } else if (gameObjs[i].portalType == "rightsideup") {
                     player.gravityStatus = 1;
+                    gameObjs[i].activated = true;
                 }
-            } else if (gameObjs[i].type == "pad" && !gameObjs[i].activated) {
+            } else if (gameObjs[i].type == "pad") {
+                gameObjs[i].activated = true;
                 if (gameObjs[i].padType == "yellow") {
                     player.yVel = 862.0614 * player.gravityStatus;
                     return;
                 }
-            } else if (gameObjs[i].type == "orb" && !gameObjs[i].activated) {
+            } else if (gameObjs[i].type == "orb") {
                 player.touchingOrb.push(i)
             }
             // Red Player + Blue Obj (Landing on blocks)
