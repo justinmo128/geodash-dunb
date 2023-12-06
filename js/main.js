@@ -156,6 +156,7 @@ function physics() {
         player.oldx = player.x;
         player.oldy = player.y;
         updateTriggers();
+        console.log(player.yVel)
         movePlayer();
         if (keyHeld) {jump()}
         applyGravity();
@@ -213,32 +214,29 @@ function componentToHex(c) {
 }
 
 function applyGravity() {
-    // Max Velocity
-    if (player.yVel >= 432 && player.mode == "ship" && player.gravityStatus == 1 || player.yVel <= -432 && player.mode == "ship" && player.gravityStatus == -1) {
-        player.yVel = 432 * player.gravityStatus;
-    } else if (player.yVel <= -345.6 && player.mode == "ship" && player.gravityStatus == 1 || player.yVel >= 345.6 && player.mode == "ship" && player.gravityStatus == -1) {
-        player.yVel = -345.6 * player.gravityStatus;
-    }  
-
     // Set Gravity
     if (player.mode == "cube") {
-        if (player.yVel > -810) {
-            player.gravity = -2793.528 * player.gravityStatus;
-        } else {
-            player.gravity = 0;
-        }
+        player.gravity = -2793.528 * player.gravityStatus;
     } else if (player.mode == "ship") {
         if (keyHeld) {
             player.gravity = 0;
-        } else if (player.yVel > 110) {
+        } else if (player.yVel > 110 && player.gravityStatus == 1 || player.yVel < -110 && player.gravityStatus == -1) {
             player.gravity = -1419.584 * player.gravityStatus;
         } else {
             player.gravity = -894.11526 * player.gravityStatus;
         }
     }
-
-    // Apply Velocity and Gravity
+    // Apply Gravity
     player.yVel += player.gravity / (1000/deltaTime);
+    // Max Velocity
+    if (player.mode == "cube" && ((player.yVel < -810 && player.gravityStatus == 1) || (player.yVel > 810 && player.gravityStatus == -1))) {
+        player.yVel = -810 * player.gravityStatus;
+    } else if (player.yVel >= 432 && player.mode == "ship" && player.gravityStatus == 1 || player.yVel <= -432 && player.mode == "ship" && player.gravityStatus == -1) {
+        player.yVel = 432 * player.gravityStatus;
+    } else if (player.yVel <= -345.6 && player.mode == "ship" && player.gravityStatus == 1 || player.yVel >= 345.6 && player.mode == "ship" && player.gravityStatus == -1) {
+        player.yVel = -345.6 * player.gravityStatus;
+    }  
+    // Apply Velocity
     player.y += player.yVel /(1000/deltaTime);
     player.bluehby = player.y + 11;
 }
@@ -282,7 +280,7 @@ function jump() {
         }
     }
     if (player.mode == "cube" && player.grounded) {
-        player.yVel = 603.72 * player.gravityStatus;
+        player.yVel = 595.9602 * player.gravityStatus;
         bufferAvailable = false;
         // To convert from GD velocity to my velocity, multiply by 54
     } else if (player.mode == "ship" && player.y + player.h < roof.y && roof.canCollide) {

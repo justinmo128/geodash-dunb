@@ -11,9 +11,6 @@ function checkCollision() {
         } else if (gameObjs[i].hasHitbox && collides(player.x, player.y, player.w, player.h, gameObjs[i].hbx, gameObjs[i].hby, gameObjs[i].hbw, gameObjs[i].hbh)) {
             // Red Player + Green Obj (Portals, Orbs, Pads)
             if (gameObjs[i].type == "portal" && !gameObjs[i].activated) {
-                if (player.mode !== gameObjs[i].portalType) {
-                    player.yVel = 0;
-                }
                 if (gameObjs[i].portalType == "ship" || gameObjs[i].portalType == "cube") {
                     switchGamemode(gameObjs[i]);
                 } else if (gameObjs[i].portalType == "upsidedown") {
