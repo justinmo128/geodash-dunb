@@ -146,8 +146,8 @@ function initialize() {
     levelInfoDiffIcon.style.backgroundImage = `url(img/diff${getDifficulty(levelJSON.difficulty)}.png)`;
 }
 
-setInterval(physics, 1000/physicsTPS)
-function physics() {
+setInterval(gameLoop, 1000/physicsTPS)
+function gameLoop() {
     let now = performance.now();
     deltaTime = now - lastUpdate;
     lastUpdate = now;
@@ -156,7 +156,6 @@ function physics() {
         player.oldx = player.x;
         player.oldy = player.y;
         updateTriggers();
-        console.log(player.yVel)
         movePlayer();
         if (keyHeld) {jump()}
         applyGravity();
@@ -305,7 +304,8 @@ function checkEnding() {
     }
 }
 
-document.getElementById("pause-btn").addEventListener("click", pauseGame)
+document.getElementById("pause-btn").addEventListener("mousedown", pauseGame)
+document.getElementById("pause-btn").addEventListener("touchstart", pauseGame)
 function pauseGame() {
     gamePaused = true;
     pauseVisible = true;

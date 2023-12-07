@@ -8,9 +8,9 @@ function checkCollision() {
             checkTriggerCollision(gameObjs[i]);
         } else if (gameObjs[i].hasHitbox && collides(player.bluehbx, player.bluehby, player.bluehbw, player.bluehbh, gameObjs[i].hbx, gameObjs[i].hby, gameObjs[i].hbw, gameObjs[i].hbh) && gameObjs[i].hbType == "blue") {
             playerDeath();
-        } else if (gameObjs[i].hasHitbox && collides(player.x, player.y, player.w, player.h, gameObjs[i].hbx, gameObjs[i].hby, gameObjs[i].hbw, gameObjs[i].hbh) && !gameObjs[i].activated) {
+        } else if (gameObjs[i].hasHitbox && collides(player.x, player.y, player.w, player.h, gameObjs[i].hbx, gameObjs[i].hby, gameObjs[i].hbw, gameObjs[i].hbh)) {
             // Red Player + Green Obj (Portals, Orbs, Pads)
-            if (gameObjs[i].type == "portal") {
+            if (gameObjs[i].type == "portal" && !gameObjs[i].activated) {
                 player.yVel /= 1.96;
                 if (gameObjs[i].portalType == "ship" || gameObjs[i].portalType == "cube") {
                     switchGamemode(gameObjs[i]);
@@ -21,18 +21,20 @@ function checkCollision() {
                     player.gravityStatus = 1;
                     gameObjs[i].activated = true;
                 }
-            } else if (gameObjs[i].type == "pad") {
+            } else if (gameObjs[i].type == "pad" && !gameObjs[i].activated) {
                 gameObjs[i].activated = true;
                 if (gameObjs[i].padType == "yellow") {
                     player.yVel = 862.0614 * player.gravityStatus;
                     return;
                 }
-            } else if (gameObjs[i].type == "orb") {
+            } else if (gameObjs[i].type == "orb" && !gameObjs[i].activated) {
                 player.touchingOrb.push(i)
             }
             // Red Player + Blue Obj (Landing on blocks)
             else if (gameObjs[i].hbType == "blue") {
-                checkBlockCollision(i);
+                let blockCollisionResults = checkBlockCollision(gameObjs[i]);
+                player.grounded = blockCollisionResults[0];
+                player.roofed = blockCollisionResults[1];
             // Red Player + Red Obj (Spikes)
             } else if (gameObjs[i].hbType == "red") {
                 playerDeath();
@@ -71,48 +73,38 @@ function checkTriggerCollision(obj) {
     }
 }
 
-function checkBlockCollision(i) {
+function checkBlockCollision(obj) {
     if (player.gravityStatus == 1) {
-        if (player.y <= gameObjs[i].y + gameObjs[i].h && player.y + 10 >= gameObjs[i].y + gameObjs[i].h && player.yVel <= 0) {
-            player.y = gameObjs[i].y + gameObjs[i].hbh;
+        if (player.y <= obj.y + obj.h && player.y + 10 >= obj.y + obj.h && player.yVel < 0) {
+            player.y = obj.y + obj.hbh;
             player.bluehby = player.y + 11;
-            player.grounded = true;
-            player.touchingBlock = true;
-        } else if (player.y + player.h - 10 < gameObjs[i].y && player.y + player.h > gameObjs[i].y && player.mode == "ship" && player.yVel >= 0) {
-            player.roofed = true;
-            player.y = gameObjs[i].y - player.h;
+            return [true, false];
+        } else if (player.mode == "ship" && player.y + player.h - 10 < obj.y && player.y + player.h > obj.y && player.yVel > 0) {
+            player.y = obj.y - player.h;
             player.bluehby = player.y + 11;
-            player.touchingBlock = true;
+            return [false, true];
         }
     } else {
-        if (player.y + player.h >= gameObjs[i].y && player.y + player.h - 10 <= gameObjs[i].y && player.yVel >= 0) {
-            player.y = gameObjs[i].y - player.h;
+        if (player.y + player.h >= obj.y && player.y + player.h - 10 <= obj.y && player.yVel > 0) {
+            player.y = obj.y - player.h;
             player.bluehby = player.y + 11;
-            player.grounded = true;
-            player.touchingBlock = true;
-        } else if (player.y < gameObjs[i].y + gameObjs[i].h && player.y + 10 > gameObjs[i].y + gameObjs[i].h && player.mode == "ship" && player.yVel <= 0) {
-            player.roofed = true;
-            player.y = gameObjs[i].y + gameObjs[i].hbh;
+            return [true, false];
+        } else if (player.mode == "ship" && player.y < obj.y + obj.h && player.y + 10 > obj.y + obj.h && player.yVel < 0) {
+            player.y = obj.y + obj.hbh;
             player.bluehby = player.y + 11;
-            player.touchingBlock = true;
+            return [false, true];
         }
     }
+    return [false, false]
 }
 
 function switchGamemode(obj) {
     player.mode = obj.portalType;
     if (player.mode == "ship") {
-        if (obj.y - 120 < 0 && !obj.activated) {
-            ease(newFloor, [0, newFloor.y * -1], 200, "linear")
-            ease(roof, [0, roof.y * -1 + 390], 200, "linear")
-            ease(camera, [0, 45 - camera.y], 200, "linear")
-            newFloor.hby = 0;
-        } else if (!obj.activated) {
-            newFloor.hby = roundToNearest(obj.y - 120, 30);
-            ease(newFloor, [0, newFloor.hby - newFloor.y], 200, "linear")
-            ease(roof, [0, newFloor.hby + 390 - roof.y], 200, "linear")
-            ease(camera, [0, newFloor.hby + 45 - camera.y], 200, "linear")
-        }
+        newFloor.hby = Math.max(0, floorToNearest((obj.y + obj.h / 2) - 150, 30));
+        ease(newFloor, [0, Math.max(newFloor.y * -1, newFloor.hby - newFloor.y)], 200, "linear")
+        ease(roof, [0, Math.max(roof.y * -1 + 390, newFloor.hby + 390 - roof.y)], 200, "linear")
+        ease(camera, [0, Math.max(45 - camera.y, newFloor.hby + 45 - camera.y)], 200, "linear")
         roof.hby = newFloor.hby + 390;
         newFloor.canCollide = true;
         roof.canCollide = true;
@@ -152,10 +144,10 @@ function checkFloorRoofCollision() {
 }
 
 function collides(Ax, Ay, Aw, Ah, Bx, By, Bw, Bh) {
-    if (Ax <= Bx + Bw &&
-        Ax + Aw >= Bx &&
-        Ay <= By + Bh &&
-        Ay + Ah >= By) {
+    if (Ax < Bx + Bw &&
+        Ax + Aw > Bx &&
+        Ay < By + Bh &&
+        Ay + Ah > By) {
             return true;
     }
     return false;

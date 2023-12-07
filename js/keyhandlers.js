@@ -31,8 +31,8 @@ function mousemoveHandler(e) {
   mouseY = Math.round(e.clientY - cnvRect.top) / K;
   coordX = mouseX + camera.x;
   coordY = camera.y - mouseY + 270;
-  snappedX = Math.floor((coordX)/30) * 30;
-  snappedY = Math.floor((coordY)/30) * 30;
+  snappedX = floorToNearest(coordX, 30);
+  snappedY = floorToNearest(coordY, 30);
 }
 
 function mouseDown(e) {

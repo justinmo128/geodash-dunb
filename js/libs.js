@@ -155,8 +155,8 @@ let objectList = [];
     .then((res) => res.json())
     .then((data) => objectList = data)
 
-function roundToNearest(num, roundTo) {
-    return Math.round((num)/roundTo) * roundTo;
+function floorToNearest(num, roundTo) {
+    return Math.floor((num)/roundTo) * roundTo;
 }
 
 function translateAfterRotation(newobj, oldobj) {
