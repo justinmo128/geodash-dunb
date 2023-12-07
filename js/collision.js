@@ -1,6 +1,7 @@
 function checkCollision() {
-    player.touchingBlock = false;
     player.touchingOrb = [];
+    let blockCollisionResults = [false, false];
+    let floorRoofCollisionResults = checkFloorRoofCollision();
     // Object collision
     for (let i = 0; i < gameObjs.length; i++) {
         if (gameObjs[i].type == "trigger") {
@@ -38,10 +39,8 @@ function checkCollision() {
                     player.touchingOrb.push(i)
                 }
                 // Red Player + Blue Obj (Landing on blocks)
-                else if (gameObjs[i].hbType == "blue") {
-                    let blockCollisionResults = checkBlockCollision(gameObjs[i]);
-                    player.grounded = blockCollisionResults[0];
-                    player.roofed = blockCollisionResults[1];
+                if (gameObjs[i].hbType == "blue") {
+                    blockCollisionResults = checkBlockCollision(gameObjs[i]);
                 // Red Player + Red Obj (Spikes)
                 } else if (gameObjs[i].hbType == "red") {
                     playerDeath();
@@ -49,6 +48,8 @@ function checkCollision() {
             }
         }
     }
+    player.grounded = blockCollisionResults[0] || floorRoofCollisionResults[0];
+    player.roofed = blockCollisionResults[1] || floorRoofCollisionResults[1];
     if (player.grounded || player.roofed) {
         player.yVel = 0;
     }
@@ -83,7 +84,7 @@ function checkTriggerCollision(obj) {
 
 function checkBlockCollision(obj) {
     if (player.gravityStatus == 1) {
-        if (player.y <= obj.y + obj.h && player.y + 10 >= obj.y + obj.h && player.yVel < 0) {
+        if (player.y < obj.y + obj.h && player.y + 10 > obj.y + obj.h && player.yVel < 0) {
             player.y = obj.y + obj.hbh;
             player.bluehby = player.y + 11;
             return [true, false];
@@ -93,7 +94,7 @@ function checkBlockCollision(obj) {
             return [false, true];
         }
     } else {
-        if (player.y + player.h >= obj.y && player.y + player.h - 10 <= obj.y && player.yVel > 0) {
+        if (player.y + player.h > obj.y && player.y + player.h - 10 < obj.y && player.yVel > 0) {
             player.y = obj.y - player.h;
             player.bluehby = player.y + 11;
             return [true, false];
@@ -139,24 +140,19 @@ function checkFloorRoofCollision() {
     if (player.y <= newFloor.hby && newFloor.canCollide) {
         player.y = newFloor.y;
         player.bluehby = player.y + 11;
-        player.grounded = true;
-        return;
+        return [true, false];
     } else if (player.y <= 0) {
         player.y = 0;
         player.bluehby = player.y + 11;
-        player.grounded = true;
-        return;
+        return [true, false];
     } else if (player.y + player.h >= roof.hby - roof.h && roof.canCollide) {
-        player.roofed = true;
         player.y = roof.y - roof.h - player.h;
-        return;
-    } else if (!player.touchingBlock) {
-        player.grounded = false;
-        player.roofed = false;
+        return [false, true];
     }
     if (player.roofed && !keyHeld) {
-        player.roofed = false;
+        return [false, false];
     }
+    return [false, false];
 }
 
 function collides(Ax, Ay, Aw, Ah, Bx, By, Bw, Bh) {
@@ -170,6 +166,7 @@ function collides(Ax, Ay, Aw, Ah, Bx, By, Bw, Bh) {
 }
 
 function playerDeath() {
+    song.pause();
     player.dead = true;
     setTimeout(initialize, 300)
 }

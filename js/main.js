@@ -13,6 +13,7 @@ let deltaTime = 0;
 let showHitboxes = false;
 let levelTime = 0;
 let activeTriggers = [];
+let song;
 
 let levelJSON = [];
 let gameObjs = [];
@@ -73,6 +74,7 @@ function createGameObjects() {
             maxX = gameObjs[i].x;
         }
     }
+    song = new Audio(`songs/${levelJSON.song}`);
 }
 
 function initialize() {
@@ -145,6 +147,8 @@ function initialize() {
     levelInfoName.innerHTML = levelJSON.name;
     levelInfoDiff.innerHTML = `${levelJSON.difficulty} ${getDifficulty(levelJSON.difficulty)}`;
     levelInfoDiffIcon.style.backgroundImage = `url(img/diff${getDifficulty(levelJSON.difficulty)}.png)`;
+    song.currentTime = 0;
+    song.play();
 }
 
 setInterval(gameLoop, 1000/physicsTPS)
@@ -160,7 +164,6 @@ function gameLoop() {
         movePlayer();
         if (keyHeld) {jump()}
         applyGravity();
-        checkFloorRoofCollision();
         checkCollision();
         rotatePlayer();
         checkEnding();
@@ -228,9 +231,14 @@ function applyGravity() {
     } else { // ball
         player.gravity = -1676.4651 * player.gravityStatus;
     }
+
+    // Apply Velocity
     player.y += player.yVel /(1000/deltaTime);
+    player.bluehby = player.y + 11;
+
     // Apply Gravity
     player.yVel += player.gravity / (1000/deltaTime);
+
     // Max Velocity
     if ((player.mode == "cube" || player.mode == "ball") && ((player.yVel < -810 && player.gravityStatus == 1) || (player.yVel > 810 && player.gravityStatus == -1))) {
         player.yVel = -810 * player.gravityStatus;
@@ -239,19 +247,24 @@ function applyGravity() {
     } else if (player.mode == "ship" && (player.yVel <= -345.6 && player.gravityStatus == 1 || player.yVel >= 345.6 && player.gravityStatus == -1)) {
         player.yVel = -345.6 * player.gravityStatus;
     }
-    // Apply Velocity
-    player.bluehby = player.y + 11;
 }
 
 function rotatePlayer() {
-    if (player.grounded && player.mode == "cube") {
-        let angleDiff = roundToNearest(player.angle, 90) - player.angle;
-        player.angle += Math.min(angleDiff, 2);
+    if (player.mode == "cube") {
+        if (player.grounded) {
+            let angleDiff = roundToNearest(player.angle, 90) - player.angle;
+            if (player.gravityStatus == 1) {
+                player.angle += Math.min(angleDiff, 2);
+            } else {
+                player.angle += Math.max(angleDiff, -2);
+            }
+        } else {
+            console.log("Hi")
+            player.angle += 420/(1000/deltaTime) * player.gravityStatus;
+        }
     } else if (player.mode == "ship" && !player.easing && (player.roofed || player.grounded)) {
         player.easing = true;
         ease(player, [0, 0, 0-player.angle], 100, "linear", () => {player.easing = false}, true, true);
-    } else if (player.mode == "cube") {
-        player.angle += 420/(1000/deltaTime) * player.gravityStatus;
     } else if (player.mode == "ship" && !player.easing) {
         let dy = player.y - player.oldy;
         let dx = player.x - player.oldx;
@@ -265,7 +278,7 @@ function rotatePlayer() {
         }
         player.angle += 600/(1000/deltaTime) * player.ballRotStatus;
     }
-    player.angle = player.angle % 360;
+    player.angle %= 360;
 }
 
 function jump() {
@@ -316,6 +329,7 @@ function checkEnding() {
 document.getElementById("pause-btn").addEventListener("mousedown", pauseGame)
 document.getElementById("pause-btn").addEventListener("touchstart", pauseGame)
 function pauseGame() {
+    song.pause();
     gamePaused = true;
     pauseVisible = true;
     document.getElementById("pause-box").style.display = "none";
@@ -325,9 +339,7 @@ function pauseGame() {
 function clickInPause() {
     if (pauseVisible) {
         if (checkClick(190, 290, 113, 217)) {
-            gamePaused = false;
-            document.getElementById("pause-box").style.display = "block";
-            document.getElementById("pause-balance").style.display = "block";
+            unpauseGame();
         } else if (checkClick(26, 96, 129, 202)) {
             pauseVisible = false;
         } else if (checkClick(108, 178, 129, 202)) {
@@ -340,4 +352,11 @@ function clickInPause() {
     } else if (checkClick(6, 46, 284, 344)) {
         pauseVisible = true;
     }
+}
+
+function unpauseGame() {
+    gamePaused = false;
+    document.getElementById("pause-box").style.display = "block";
+    document.getElementById("pause-balance").style.display = "block";
+    song.play();
 }

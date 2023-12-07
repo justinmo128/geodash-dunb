@@ -89,7 +89,11 @@ function escapePressed() {
     } else if (gameState == "editor") {
         initializeMenu();
     } else if (gameState == "gameLoop") {
-        gamePaused = !gamePaused;
+        if (!gamePaused) {
+            pauseGame();
+        } else {
+            unpauseGame();
+        }
     }
 }
 function keyUp() {
