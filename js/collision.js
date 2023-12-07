@@ -3,41 +3,49 @@ function checkCollision() {
     player.touchingOrb = [];
     // Object collision
     for (let i = 0; i < gameObjs.length; i++) {
-        // Blue Player + Blue Obj (Running into blocks)
         if (gameObjs[i].type == "trigger") {
             checkTriggerCollision(gameObjs[i]);
-        } else if (gameObjs[i].hasHitbox && collides(player.bluehbx, player.bluehby, player.bluehbw, player.bluehbh, gameObjs[i].hbx, gameObjs[i].hby, gameObjs[i].hbw, gameObjs[i].hbh) && gameObjs[i].hbType == "blue") {
-            playerDeath();
-        } else if (gameObjs[i].hasHitbox && collides(player.x, player.y, player.w, player.h, gameObjs[i].hbx, gameObjs[i].hby, gameObjs[i].hbw, gameObjs[i].hbh)) {
-            // Red Player + Green Obj (Portals, Orbs, Pads)
-            if (gameObjs[i].type == "portal" && !gameObjs[i].activated) {
-                player.yVel /= 1.96;
-                if (gameObjs[i].portalType == "ship" || gameObjs[i].portalType == "cube") {
-                    switchGamemode(gameObjs[i]);
-                } else if (gameObjs[i].portalType == "upsidedown") {
-                    player.gravityStatus = -1;
-                    gameObjs[i].activated = true;
-                } else if (gameObjs[i].portalType == "rightsideup") {
-                    player.gravityStatus = 1;
-                    gameObjs[i].activated = true;
-                }
-            } else if (gameObjs[i].type == "pad" && !gameObjs[i].activated) {
-                gameObjs[i].activated = true;
-                if (gameObjs[i].padType == "yellow") {
-                    player.yVel = 862.0614 * player.gravityStatus;
-                    return;
-                }
-            } else if (gameObjs[i].type == "orb" && !gameObjs[i].activated) {
-                player.touchingOrb.push(i)
-            }
-            // Red Player + Blue Obj (Landing on blocks)
-            else if (gameObjs[i].hbType == "blue") {
-                let blockCollisionResults = checkBlockCollision(gameObjs[i]);
-                player.grounded = blockCollisionResults[0];
-                player.roofed = blockCollisionResults[1];
-            // Red Player + Red Obj (Spikes)
-            } else if (gameObjs[i].hbType == "red") {
+        } else if (onScreen(gameObjs[i])) {
+            // Blue Player + Blue Obj (Running into blocks)
+            if (gameObjs[i].hasHitbox && collides(player.bluehbx, player.bluehby, player.bluehbw, player.bluehbh, gameObjs[i].hbx, gameObjs[i].hby, gameObjs[i].hbw, gameObjs[i].hbh) && gameObjs[i].hbType == "blue") {
                 playerDeath();
+            } else if (gameObjs[i].hasHitbox && collides(player.x, player.y, player.w, player.h, gameObjs[i].hbx, gameObjs[i].hby, gameObjs[i].hbw, gameObjs[i].hbh)) {
+                // Red Player + Green Obj (Portals, Orbs, Pads)
+                if (gameObjs[i].type == "portal" && !gameObjs[i].activated) {
+                    if (gameObjs[i].portalType != "ball") {
+                        player.yVel /= 1.96;
+                    }
+                    if (gameObjs[i].portalType == "ship" || gameObjs[i].portalType == "cube" || gameObjs[i].portalType == "ball") {
+                        switchGamemode(gameObjs[i]);
+                    } else if (gameObjs[i].portalType == "upsidedown") {
+                        player.gravityStatus = -1;
+                        gameObjs[i].activated = true;
+                    } else if (gameObjs[i].portalType == "rightsideup") {
+                        player.gravityStatus = 1;
+                        gameObjs[i].activated = true;
+                    }
+                } else if (gameObjs[i].type == "pad" && !gameObjs[i].activated) {
+                    gameObjs[i].activated = true;
+                    if (gameObjs[i].padType == "yellow") {
+                        if (player.mode == "ball") {
+                            player.yVel = 514.90728 * player.gravityStatus;
+                        } else {
+                            player.yVel = 862.0614 * player.gravityStatus;
+                        }
+                        return;
+                    }
+                } else if (gameObjs[i].type == "orb" && !gameObjs[i].activated) {
+                    player.touchingOrb.push(i)
+                }
+                // Red Player + Blue Obj (Landing on blocks)
+                else if (gameObjs[i].hbType == "blue") {
+                    let blockCollisionResults = checkBlockCollision(gameObjs[i]);
+                    player.grounded = blockCollisionResults[0];
+                    player.roofed = blockCollisionResults[1];
+                // Red Player + Red Obj (Spikes)
+                } else if (gameObjs[i].hbType == "red") {
+                    playerDeath();
+                }
             }
         }
     }
@@ -101,7 +109,7 @@ function checkBlockCollision(obj) {
 function switchGamemode(obj) {
     player.mode = obj.portalType;
     if (player.mode == "ship") {
-        newFloor.hby = Math.max(0, floorToNearest((obj.y + obj.h / 2) - 150, 30));
+        newFloor.hby = Math.max(0, roundToNearest((obj.y + obj.h / 2) - 165, 30));
         ease(newFloor, [0, Math.max(newFloor.y * -1, newFloor.hby - newFloor.y)], 200, "linear")
         ease(roof, [0, Math.max(roof.y * -1 + 390, newFloor.hby + 390 - roof.y)], 200, "linear")
         ease(camera, [0, Math.max(45 - camera.y, newFloor.hby + 45 - camera.y)], 200, "linear")
@@ -113,6 +121,14 @@ function switchGamemode(obj) {
         ease(camera, [0, 0 - camera.y], 200, "linear", () => {cubeTransition = false;})
         newFloor.canCollide = false;
         roof.canCollide = false;
+    } else { // Ball
+        newFloor.hby = Math.max(0, roundToNearest((obj.y + obj.h / 2) - 135, 30));
+        ease(newFloor, [0, Math.max(newFloor.y * -1, newFloor.hby - newFloor.y)], 200, "linear")
+        ease(roof, [0, Math.max(roof.y * -1 + 330, newFloor.hby + 330 - roof.y)], 200, "linear")
+        ease(camera, [0, Math.max(15 - camera.y, newFloor.hby + 15 - camera.y)], 200, "linear")
+        roof.hby = newFloor.hby + 330;
+        newFloor.canCollide = true;
+        roof.canCollide = true;
     }
     player.angle = 0;
     obj.activated = true;

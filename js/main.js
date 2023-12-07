@@ -108,7 +108,8 @@ function initialize() {
         easeId: 0,
         angle: 0,
         touchingBlock: false,
-        touchingOrb: []
+        touchingOrb: [],
+        ballRotStatus: 1
     };
     camera = {
         x: 0,
@@ -224,45 +225,45 @@ function applyGravity() {
         } else {
             player.gravity = -894.11526 * player.gravityStatus;
         }
+    } else { // ball
+        player.gravity = -1676.4651 * player.gravityStatus;
     }
+    player.y += player.yVel /(1000/deltaTime);
     // Apply Gravity
     player.yVel += player.gravity / (1000/deltaTime);
     // Max Velocity
-    if (player.mode == "cube" && ((player.yVel < -810 && player.gravityStatus == 1) || (player.yVel > 810 && player.gravityStatus == -1))) {
+    if ((player.mode == "cube" || player.mode == "ball") && ((player.yVel < -810 && player.gravityStatus == 1) || (player.yVel > 810 && player.gravityStatus == -1))) {
         player.yVel = -810 * player.gravityStatus;
-    } else if (player.yVel >= 432 && player.mode == "ship" && player.gravityStatus == 1 || player.yVel <= -432 && player.mode == "ship" && player.gravityStatus == -1) {
+    } else if (player.mode == "ship" && (player.yVel >= 432 && player.gravityStatus == 1 || player.yVel <= -432 && player.gravityStatus == -1)) {
         player.yVel = 432 * player.gravityStatus;
-    } else if (player.yVel <= -345.6 && player.mode == "ship" && player.gravityStatus == 1 || player.yVel >= 345.6 && player.mode == "ship" && player.gravityStatus == -1) {
+    } else if (player.mode == "ship" && (player.yVel <= -345.6 && player.gravityStatus == 1 || player.yVel >= 345.6 && player.gravityStatus == -1)) {
         player.yVel = -345.6 * player.gravityStatus;
-    }  
+    }
     // Apply Velocity
-    player.y += player.yVel /(1000/deltaTime);
     player.bluehby = player.y + 11;
 }
 
 function rotatePlayer() {
     if (player.grounded && player.mode == "cube") {
-        let roundedAngle = Math.round(player.angle/90)*90;
-        let angleDiff = roundedAngle - player.angle;
-        if (!player.easing && player.angle % 90 != 0) {
-            player.easing = true;
-            ease(player, [0, 0, angleDiff], angleDiff * 2, "linear", () => {player.easing = false}, true, true);
-        }
-    } 
-    else if (!player.easing && player.mode == "ship" && player.roofed || !player.easing && player.mode == "ship" && player.grounded) {
+        let angleDiff = roundToNearest(player.angle, 90) - player.angle;
+        player.angle += Math.min(angleDiff, 2);
+    } else if (player.mode == "ship" && !player.easing && (player.roofed || player.grounded)) {
         player.easing = true;
         ease(player, [0, 0, 0-player.angle], 100, "linear", () => {player.easing = false}, true, true);
-    } 
-    else {
-        if (player.mode == "cube") {
-            clearEase(player)
-            player.angle += 380/(1000/deltaTime) * player.gravityStatus;
-        } else if (player.mode == "ship" && !player.easing) {
-            let dy = player.y - player.oldy;
-            let dx = player.x - player.oldx;
-            let newAngle = Math.atan(dy/dx) * -180 / Math.PI
-            player.angle = (newAngle + player.angle)/2;
+    } else if (player.mode == "cube") {
+        player.angle += 420/(1000/deltaTime) * player.gravityStatus;
+    } else if (player.mode == "ship" && !player.easing) {
+        let dy = player.y - player.oldy;
+        let dx = player.x - player.oldx;
+        let newAngle = Math.atan(dy/dx) * -180 / Math.PI
+        player.angle = (newAngle + player.angle)/2;
+    } else { // Ball
+        if (player.roofed) {
+            player.ballRotStatus = -1;
+        } else if (player.grounded) {
+            player.ballRotStatus = 1;
         }
+        player.angle += 600/(1000/deltaTime) * player.ballRotStatus;
     }
     player.angle = player.angle % 360;
 }
@@ -271,7 +272,11 @@ function jump() {
     for (let i = 0; i < player.touchingOrb.length; i++) {
         if (bufferAvailable) {
             if (gameObjs[player.touchingOrb[i]].orbType == "yellow") {
-                player.yVel = 595.9602 * player.gravityStatus;
+                if (player.mode == "ball") {
+                    player.yVel = 417.94812 * player.gravityStatus;
+                } else {
+                    player.yVel = 595.9602 * player.gravityStatus;
+                }
                 bufferAvailable = false;
                 gameObjs[player.touchingOrb[i]].activated = true;
                 return;
@@ -288,6 +293,10 @@ function jump() {
         } else {
             player.yVel += 1341.1656 / (1000/deltaTime) * player.gravityStatus;
         }
+        bufferAvailable = false;
+    } else if (player.mode == "ball" && (player.grounded || player.roofed) && bufferAvailable) {
+        player.gravityStatus *= -1;
+        player.yVel = -185.7735 * player.gravityStatus;
         bufferAvailable = false;
     }
 }

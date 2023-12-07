@@ -15,7 +15,9 @@ function drawEditorObjects() {
         if (editorObjects[i].type == "portal") {
             imgName = `portal_${editorObjects[i].portalType}_over`;
         }
-        drawImgCamRotate(imgName, editorObjects[i].x, editorObjects[i].y, editorObjects[i].h, editorObjects[i].w, editorObjects[i].angle, objProps.w, objProps.h, xOffset, yOffset);
+        if (onScreen(editorObjects[i])) {
+            drawImgCamRotate(imgName, editorObjects[i].x, editorObjects[i].y, editorObjects[i].h, editorObjects[i].w, editorObjects[i].angle, objProps.w, objProps.h, xOffset, yOffset);
+        }
     }
     ctx.globalAlpha = 0.5;
     ctx.fillStyle = "lime";

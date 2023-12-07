@@ -154,7 +154,7 @@ function exportLevel() {
         name: document.getElementById("level-name").value,
         difficulty: setDifficulty.value,
         bgCol: levelBGColEl.value,
-        floorCol: levelBGColEl.value,
+        floorCol: levelFloorColEl.value,
         mode: selectedMode,
         objects: exportArray
     }

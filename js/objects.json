@@ -466,5 +466,22 @@
         "hasHitbox": true,
         "visualOffsetx": 0,
         "visualOffsety": 0
+    },
+    {
+        "id": "portal_ball",
+        "h": 90,
+        "w": 30,
+        "hbx": -2,
+        "hby": 2,
+        "hbw": 34,
+        "hbh": 86,
+        "hbType": "green",
+        "portalType": "ball",
+        "type": "portal",
+        "editorOffsetx": 0,
+        "editorOffsety": -30,
+        "hasHitbox": true,
+        "visualOffsetx": 10,
+        "visualOffsety": 0
     }
 ]

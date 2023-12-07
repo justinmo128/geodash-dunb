@@ -155,6 +155,10 @@ let objectList = [];
     .then((res) => res.json())
     .then((data) => objectList = data)
 
+function roundToNearest(num, roundTo) {
+    return Math.round((num)/roundTo) * roundTo;
+}
+
 function floorToNearest(num, roundTo) {
     return Math.floor((num)/roundTo) * roundTo;
 }
@@ -166,4 +170,11 @@ function translateAfterRotation(newobj, oldobj) {
     newobj.y -= yDiff;
     newobj.hbx -= xDiff;
     newobj.hby -= yDiff;
+}
+
+function onScreen(obj) {
+    if (obj.x + obj.w - camera.x >= -30 && obj.x - camera.x <= cnv.width + 30 && camera.y - obj.y - obj.h + 270 >= -60 && camera.y - obj.y - obj.h + 270 <= cnv.height + 60) {
+        return true;
+    }
+    return false;
 }

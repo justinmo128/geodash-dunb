@@ -42,8 +42,10 @@ function drawPlayer() {
             ctx.drawImage(document.getElementById("player_ship_upsidedown"), -20, -15);
         }
         ctx.restore();
-    } else {
+    } else if (player.mode == "cube") {
         drawImgCamRotate(`player_${player.mode}`, player.x, player.y, player.h, player.w, player.angle, 30, 30);
+    } else { // Ball
+        drawImgCamRotate(`player_${player.mode}`, player.x, player.y, player.h, player.w, player.angle, 38, 38);
     }
 }
 
@@ -56,7 +58,7 @@ function drawGameObjects() {
         if (gameObjs[i].type == "portal") {
             imgName = `portal_${gameObjs[i].portalType}_over`
         }
-        if (gameObjs[i].type != "trigger") {
+        if (gameObjs[i].type != "trigger" && onScreen(gameObjs[i])) {
             drawImgCamRotate(imgName, gameObjs[i].x, gameObjs[i].y, gameObjs[i].h, gameObjs[i].w, gameObjs[i].angle, objProps.w, objProps.h, xOffset, yOffset);
         }
     }
