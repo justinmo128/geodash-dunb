@@ -103,7 +103,8 @@ function initialize() {
         gravity: -2851.5625, // units per second squared
         gravityStatus: 1,
         yVel: 0,
-        grounded: true,
+        grounded: false,
+        touchingRoof: false,
         dead: false,
         win: false,
         easing: false,
@@ -240,11 +241,17 @@ function applyGravity() {
     player.yVel += player.gravity / (1000/deltaTime);
 
     // Max Velocity
-    if ((player.mode == "cube" || player.mode == "ball") && ((player.yVel < -810 && player.gravityStatus == 1) || (player.yVel > 810 && player.gravityStatus == -1))) {
+    if ((player.mode == "cube" || player.mode == "ball") && 
+    ((player.yVel < -810 && player.gravityStatus == 1) || 
+    (player.yVel > 810 && player.gravityStatus == -1))) {
         player.yVel = -810 * player.gravityStatus;
-    } else if (player.mode == "ship" && (player.yVel >= 432 && player.gravityStatus == 1 || player.yVel <= -432 && player.gravityStatus == -1)) {
+    } else if (player.mode == "ship" && 
+        (player.yVel >= 432 && player.gravityStatus == 1 ||
+        player.yVel <= -432 && player.gravityStatus == -1)) {
         player.yVel = 432 * player.gravityStatus;
-    } else if (player.mode == "ship" && (player.yVel <= -345.6 && player.gravityStatus == 1 || player.yVel >= 345.6 && player.gravityStatus == -1)) {
+    } else if (player.mode == "ship" && 
+        (player.yVel <= -345.6 && player.gravityStatus == 1 || 
+        player.yVel >= 345.6 && player.gravityStatus == -1)) {
         player.yVel = -345.6 * player.gravityStatus;
     }
 }
@@ -259,10 +266,9 @@ function rotatePlayer() {
                 player.angle += Math.max(angleDiff, -2);
             }
         } else {
-            console.log("Hi")
             player.angle += 420/(1000/deltaTime) * player.gravityStatus;
         }
-    } else if (player.mode == "ship" && !player.easing && (player.roofed || player.grounded)) {
+    } else if (player.mode == "ship" && !player.easing && player.grounded) {
         player.easing = true;
         ease(player, [0, 0, 0-player.angle], 100, "linear", () => {player.easing = false}, true, true);
     } else if (player.mode == "ship" && !player.easing) {
@@ -271,10 +277,8 @@ function rotatePlayer() {
         let newAngle = Math.atan(dy/dx) * -180 / Math.PI
         player.angle = (newAngle + player.angle)/2;
     } else { // Ball
-        if (player.roofed) {
-            player.ballRotStatus = -1;
-        } else if (player.grounded) {
-            player.ballRotStatus = 1;
+        if (player.grounded) {
+            player.ballRotStatus = player.gravityStatus;
         }
         player.angle += 600/(1000/deltaTime) * player.ballRotStatus;
     }

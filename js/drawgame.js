@@ -8,6 +8,7 @@ function drawGame() {
     if (showHitboxes) {
         drawHitboxes();
     }
+    drawPercentage();
     if (gamePaused) {
         drawPause();
     }
@@ -83,6 +84,13 @@ function drawHitboxes() {
         }
     }
     ctx.globalAlpha = 1;
+}
+
+function drawPercentage() {
+    ctx.fillStyle = "white";
+    ctx.font = "15px Pusab";
+    let percentage = Math.round((player.x/maxX)*1000)/10
+    ctx.fillText(`${percentage.toFixed(1)}%`, cnv.width / 2, 17)
 }
 
 function drawPause() {
