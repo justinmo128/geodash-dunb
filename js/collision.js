@@ -144,11 +144,11 @@ function switchGamemode(obj) {
 
 function checkFloorRoofCollision() {
     // Ground, roof collision
-    if (player.y <= newFloor.hby && newFloor.canCollide) {
+    if (player.y < newFloor.hby && newFloor.canCollide) {
         player.y = newFloor.y;
         player.bluehby = player.y + 11;
         return true;
-    } else if (player.y <= 0 && player.gravityStatus == 1) {
+    } else if (player.y < 0 && player.gravityStatus == 1) {
         player.y = 0;
         player.bluehby = player.y + 11;
         return true;

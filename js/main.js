@@ -106,10 +106,7 @@ function initialize() {
         grounded: false,
         dead: false,
         win: false,
-        easing: false,
-        easeId: 0,
         angle: 0,
-        touchingBlock: false,
         touchingOrb: [],
         ballRotStatus: 1
     };
@@ -267,7 +264,7 @@ function rotatePlayer() {
             if (player.gravityStatus == 1) {
                 player.angle += Math.min(angleDiff, 0.72 * deltaTime);
             } else {
-                player.angle += Math.max(angleDiff, 0.72 * deltaTime);
+                player.angle += Math.max(angleDiff, -0.72 * deltaTime);
             }
         } else {
             player.angle += 420/(1000/deltaTime) * player.gravityStatus;
