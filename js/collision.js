@@ -13,7 +13,6 @@ function checkCollision() {
             // Blue Player + Blue Obj (Running into blocks)
             if (gameObjs[i].hbType == "blue" && collides(player.bluehbx, player.bluehby, player.bluehbw, player.bluehbh, gameObjs[i].hbx, gameObjs[i].hby, gameObjs[i].hbw, gameObjs[i].hbh)) {
                 playerDeath();
-                return;
             } 
             else if (collides(player.x, player.y, player.w, player.h, gameObjs[i].hbx, gameObjs[i].hby, gameObjs[i].hbw, gameObjs[i].hbh)) {
             // Red Player + Blue Obj (Landing on blocks)
@@ -42,26 +41,25 @@ function checkCollision() {
                         } else {
                             player.yVel = 862.0614 * player.gravityStatus;
                         }
-                        return;
                     }
+                    return;
                 } else if (gameObjs[i].type == "orb" && !gameObjs[i].activated) {
                     player.touchingOrb.push(i)
                 }
                 // Red Player + Red Obj (Kill Objects)
                 else if (gameObjs[i].hbType == "red") {
                     playerDeath();
-                    return;
                 }
             }
         }
     }
-    player.grounded = blockCollisionResults || floorRoofCollisionResults;
+    if (blockCollisionResults || floorRoofCollisionResults) {
+        player.grounded = true;
+    } else {
+        player.grounded = false;
+    }
     if (player.grounded) {
         player.yVel = 0;
-    }
-    // Bring player down if touching roof and key is let go
-    if (player.touchingRoof && !keyHeld) {
-        player.touchingRoof = false;
     }
 }
 
@@ -93,28 +91,27 @@ function checkTriggerCollision(obj) {
 }
 
 function checkBlockCollision(obj) {
-    if (player.y <= obj.hby + obj.hbh && 
-        player.y + 10 >= obj.hby + obj.hbh && 
-        player.yVel <= 0 &&
-        (player.gravityStatus == 1 || (player.mode == "ship" && gravityStatus == -1))) {
+    if (player.gravityStatus == 1) {
+        if (player.y <= obj.y + obj.h && player.y + 10 >= obj.y + obj.h && player.yVel <= 0) {
             player.y = obj.y + obj.hbh;
             player.bluehby = player.y + 11;
-            if (player.mode == "ship") {
-                player.touchingRoof = true;
-            };
             return true;
-    } else if (player.y + player.h >= obj.y && 
-        player.y + player.h - 10 <= obj.y && 
-        player.yVel >= 0 && 
-        (player.gravityStatus == -1 || (player.mode == "ship" && gravityStatus == 1))) {
+        } else if (player.mode == "ship" && player.y + player.h - 10 <= obj.y && player.y + player.h >= obj.y && player.yVel >= 0) {
             player.y = obj.y - player.h;
             player.bluehby = player.y + 11;
-            if (player.mode == "ship") {
-                player.touchingRoof = true;
-            };
             return true;
+        }
+    } else {
+        if (player.y + player.h >= obj.y && player.y + player.h - 10 <= obj.y && player.yVel >= 0) {
+            player.y = obj.y - player.h;
+            player.bluehby = player.y + 11;
+            return true;
+        } else if (player.mode == "ship" && player.y <= obj.y + obj.h && player.y + 10 >= obj.y + obj.h && player.yVel <= 0) {
+            player.y = obj.y + obj.hbh;
+            player.bluehby = player.y + 11;
+            return true;
+        }
     }
-    return false;
 }
 
 function switchGamemode(obj) {
@@ -155,18 +152,17 @@ function checkFloorRoofCollision() {
         player.y = 0;
         player.bluehby = player.y + 11;
         return true;
-    } else if (player.y + player.h >= roof.hby - roof.h && roof.canCollide) {
+    } else if (player.y + player.h > roof.hby - roof.h && roof.canCollide) {
         player.y = roof.y - roof.h - player.h;
         return true;
     }
-    return false;
 }
 
 function collides(Ax, Ay, Aw, Ah, Bx, By, Bw, Bh) {
-    if (Ax <= Bx + Bw &&
-        Ax + Aw >= Bx &&
-        Ay <= By + Bh &&
-        Ay + Ah >= By) {
+    if (Ax < Bx + Bw &&
+        Ax + Aw > Bx &&
+        Ay < By + Bh &&
+        Ay + Ah > By) {
             return true;
     }
     return false;

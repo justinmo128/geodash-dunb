@@ -73,7 +73,6 @@ function drawHitboxes() {
     // Player
     ctx.fillStyle = "red";
     fillRectCam(player.x, player.y, player.w, player.h)
-    fillRectCamRotate(player.x, player.y, player.w, player.h, player.angle);
     ctx.fillStyle = "blue";
     fillRectCam(player.bluehbx, player.bluehby, player.bluehbw, player.bluehbh)
     // Objects
@@ -90,7 +89,7 @@ function drawPercentage() {
     ctx.fillStyle = "white";
     ctx.font = "15px Pusab";
     let percentage = Math.round((player.x/maxX)*1000)/10
-    ctx.fillText(`${percentage.toFixed(1)}%`, cnv.width / 2, 17)
+    ctx.fillText(`${Math.min(100, percentage).toFixed(1)}%`, cnv.width / 2, 17)
 }
 
 function drawPause() {

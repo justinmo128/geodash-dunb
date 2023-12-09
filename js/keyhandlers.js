@@ -7,6 +7,7 @@ let coordY = 0;
 let snappedX = 0;
 let snappedY = 0;
 let K = 1;
+let keyPressTIme = 0;
 
 document.addEventListener("keydown", (e) => {
     keyDown(e);
@@ -78,6 +79,7 @@ function keyDown(e) {
     } else {
         bufferAvailable = true;
         keyHeld = true;
+        keyPressTIme = levelTime;
     }
 }
 

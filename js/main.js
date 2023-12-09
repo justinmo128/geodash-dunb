@@ -104,7 +104,6 @@ function initialize() {
         gravityStatus: 1,
         yVel: 0,
         grounded: false,
-        touchingRoof: false,
         dead: false,
         win: false,
         easing: false,
@@ -237,6 +236,11 @@ function applyGravity() {
     player.y += player.yVel /(1000/deltaTime);
     player.bluehby = player.y + 11;
 
+    // Kill player if too high
+    if (player.y > 2790) {
+        playerDeath();
+    }
+
     // Apply Gravity
     player.yVel += player.gravity / (1000/deltaTime);
 
@@ -261,21 +265,18 @@ function rotatePlayer() {
         if (player.grounded) {
             let angleDiff = roundToNearest(player.angle, 90) - player.angle;
             if (player.gravityStatus == 1) {
-                player.angle += Math.min(angleDiff, 2);
+                player.angle += Math.min(angleDiff, 0.72 * deltaTime);
             } else {
-                player.angle += Math.max(angleDiff, -2);
+                player.angle += Math.max(angleDiff, 0.72 * deltaTime);
             }
         } else {
             player.angle += 420/(1000/deltaTime) * player.gravityStatus;
         }
-    } else if (player.mode == "ship" && !player.easing && player.grounded) {
-        player.easing = true;
-        ease(player, [0, 0, 0-player.angle], 100, "linear", () => {player.easing = false}, true, true);
-    } else if (player.mode == "ship" && !player.easing) {
+    } else if (player.mode == "ship") {
         let dy = player.y - player.oldy;
         let dx = player.x - player.oldx;
         let newAngle = Math.atan(dy/dx) * -180 / Math.PI
-        player.angle = (newAngle + player.angle)/2;
+        player.angle += (newAngle - player.angle) * 0.008 * deltaTime;
     } else { // Ball
         if (player.grounded) {
             player.ballRotStatus = player.gravityStatus;
