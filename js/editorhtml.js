@@ -21,6 +21,7 @@ levelFloorColEl.value = "#0066FF";
 let editorImport = document.createElement('input');
 editorImport.type = 'file';
 editorImport.accept = '.json';
+let songSelectEl = document.getElementById("select-song");
 
 setDifficulty.addEventListener("change", changeDifficulty)
 function changeDifficulty() {
@@ -156,6 +157,7 @@ function exportLevel() {
         bgCol: levelBGColEl.value,
         floorCol: levelFloorColEl.value,
         mode: selectedMode,
+        song: songSelectEl.value,
         objects: exportArray
     }
     let jsonExport = JSON.stringify(exportObject)
@@ -200,6 +202,7 @@ function createEditorObjects() {
     levelBGColEl.value = levelJSON.bgCol;
     levelFloorColEl.value = levelJSON.floorCol;
     let modeSelectBtns = document.getElementsByClassName("mode-select");
+    songSelectEl.value = levelJSON.song;
     for (let i = 0; i < modeSelectBtns.length; i++) {
         if (modeSelectBtns[i].id == `${levelJSON.mode}-radio`) {
             modeSelectBtns[i].checked = true;

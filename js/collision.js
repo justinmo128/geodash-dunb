@@ -19,32 +19,49 @@ function checkCollision() {
                 if (gameObjs[i].hbType == "blue") {
                     blockCollisionResults = checkBlockCollision(gameObjs[i]);
                 }
-                // Red Player + Green Obj (Portals, Orbs, Pads)
-                else if (gameObjs[i].type == "portal" && !gameObjs[i].activated) {
-                    if (gameObjs[i].portalType != "ball") {
-                        player.yVel /= 1.96;
-                    }
-                    if (gameObjs[i].portalType == "ship" || gameObjs[i].portalType == "cube" || gameObjs[i].portalType == "ball") {
-                        switchGamemode(gameObjs[i]);
-                    } else if (gameObjs[i].portalType == "upsidedown") {
-                        player.gravityStatus = -1;
-                        gameObjs[i].activated = true;
-                    } else if (gameObjs[i].portalType == "rightsideup") {
-                        player.gravityStatus = 1;
-                        gameObjs[i].activated = true;
-                    }
-                } else if (gameObjs[i].type == "pad" && !gameObjs[i].activated) {
-                    gameObjs[i].activated = true;
-                    if (gameObjs[i].padType == "yellow") {
-                        if (player.mode == "ball") {
-                            player.yVel = 514.90728 * player.gravityStatus;
-                        } else {
-                            player.yVel = 862.0614 * player.gravityStatus;
+                // Red Player + Green Obj
+                else if (gameObjs[i].hbType == "green") {
+                    // Portal
+                    if (gameObjs[i].type == "portal" && !gameObjs[i].activated) {
+                        if (gameObjs[i].portalType != "ball" && gameObjs[i].portalType != "mirror" && gameObjs[i].portalType != "unmirror") {
+                            player.yVel /= 1.96;
                         }
+                        if (gameObjs[i].portalType == "ship" || gameObjs[i].portalType == "cube" || gameObjs[i].portalType == "ball") {
+                            switchGamemode(gameObjs[i]);
+                        } else if (gameObjs[i].portalType == "upsidedown") {
+                            player.gravityStatus = -1;
+                        } else if (gameObjs[i].portalType == "rightsideup") {
+                            player.gravityStatus = 1;
+                        } else if (gameObjs[i].portalType == "mirror") {
+                            mirror = true;
+                        } else if (gameObjs[i].portalType == "unmirror") {
+                            mirror = false;
+                        }
+                        gameObjs[i].activated = true;
+                    } 
+                    // Pad
+                    else if (gameObjs[i].type == "pad" && !gameObjs[i].activated) {
+                        gameObjs[i].activated = true;
+                        if (gameObjs[i].padType == "yellow") {
+                            if (player.mode == "ball") {
+                                player.yVel = 514.90728 * player.gravityStatus;
+                            } else {
+                                player.yVel = 862.0614 * player.gravityStatus;
+                            }
+                        }
+                        return;
+                    } 
+                    // Orb
+                    else if (gameObjs[i].type == "orb" && !gameObjs[i].activated) {
+                        player.touchingOrb.push(i)
                     }
-                    return;
-                } else if (gameObjs[i].type == "orb" && !gameObjs[i].activated) {
-                    player.touchingOrb.push(i)
+                    // Secret Coin
+                    else if (gameObjs[i].id == "coin" && !gameObjs[i].activated) {
+                        gameObjs[i].activated = true;
+                        gameObjs[i].yVel = 600;
+                        gameObjs[i].xVel = (Math.random() - 0.5) * 300;
+                        collectedCoins.push(i);
+                    }
                 }
                 // Red Player + Red Obj (Kill Objects)
                 else if (gameObjs[i].hbType == "red") {

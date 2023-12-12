@@ -1,5 +1,10 @@
 function drawGame() {
     moveCamera();
+    if (mirror) {
+        ctx.save();
+        ctx.translate(canvas.width, 0)
+        ctx.scale(-1, 1);
+    }
     drawBG();
     drawBackgroundObjects();
     drawGameObjects();
@@ -7,6 +12,10 @@ function drawGame() {
     drawFloors();
     if (showHitboxes) {
         drawHitboxes();
+    }
+    if (mirror) {
+        ctx.scale(-1, 1)
+        ctx.restore();
     }
     drawPercentage();
     if (gamePaused) {
@@ -27,7 +36,10 @@ function drawFloors() {
 function drawBackgroundObjects() {
     for (let i = 0; i < gameObjs.length; i++) {
         if (gameObjs[i].type == "portal") {
-            drawImgCamRotate(`portal_${gameObjs[i].portalType}_under`, gameObjs[i].x, gameObjs[i].y, gameObjs[i].h, gameObjs[i].w, gameObjs[i].angle, 30, 90, 10);
+            let objProps = objectList.find((element) => gameObjs[i].id == element.id)
+            let imgName = gameObjs[i].id;
+            let xOffset = objProps.visualOffsetx;
+            drawImgCamRotate(`portal_${gameObjs[i].portalType}_under`, gameObjs[i].x, gameObjs[i].y, gameObjs[i].h, gameObjs[i].w, gameObjs[i].angle, 30, 90, xOffset);
         }
     }
 }

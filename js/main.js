@@ -13,7 +13,9 @@ let deltaTime = 0;
 let showHitboxes = false;
 let levelTime = 0;
 let activeTriggers = [];
+let collectedCoins = [];
 let song;
+let mirror = false;
 
 let levelJSON = [];
 let gameObjs = [];
@@ -58,6 +60,11 @@ function createGameObjects() {
             gameObjs[i].fadeTime = levelJSON.objects[i].fadeTime;
             gameObjs[i].target = levelJSON.objects[i].target;
             gameObjs[i].touchActivated = levelJSON.objects[i].touchActivated;
+        } else if (gameObjs[i].id == "coin") {
+            gameObjs[i].xVel = 0;
+            gameObjs[i].yVel = 0;
+            gameObjs[i].oldx = gameObjs[i].x;
+            gameObjs[i].oldy = gameObjs[i].y;
         }
         if (gameObjs[i].hasHitbox) {
             gameObjs[i].hbx = levelJSON.objects[i].x + objProps.hbx;
@@ -80,9 +87,19 @@ function createGameObjects() {
 function initialize() {
     document.getElementById("pause-box").style.display = "block";
     document.getElementById("pause-balance").style.display = "block";
+    song.currentTime = 0;
+    song.play();
     for (let i = 0; i < gameObjs.length; i++) {
         gameObjs[i].activated = false;
     }
+    for (let i = 0; i < collectedCoins.length; i++) {
+        let index = collectedCoins[i];
+        gameObjs[index].x = gameObjs[index].oldx;
+        gameObjs[index].y = gameObjs[index].oldy;
+        gameObjs[index].xVel = 0;
+        gameObjs[index].yVel = 0;
+    }
+    collectedCoins = [];
     gameState = "gameLoop";
     levelTime = 0;
     activeTriggers = [];
@@ -144,8 +161,6 @@ function initialize() {
     levelInfoName.innerHTML = levelJSON.name;
     levelInfoDiff.innerHTML = `${levelJSON.difficulty} ${getDifficulty(levelJSON.difficulty)}`;
     levelInfoDiffIcon.style.backgroundImage = `url(img/diff${getDifficulty(levelJSON.difficulty)}.png)`;
-    song.currentTime = 0;
-    song.play();
 }
 
 setInterval(gameLoop, 1000/physicsTPS)
@@ -157,7 +172,7 @@ function gameLoop() {
         levelTime += deltaTime;
         player.oldx = player.x;
         player.oldy = player.y;
-        updateTriggers();
+        tickObjects();
         movePlayer();
         if (keyHeld) {jump()}
         applyGravity();
@@ -170,7 +185,8 @@ function gameLoop() {
     }
 }
 
-function updateTriggers() {
+function tickObjects() {
+    // Triggers
     for (let i = 0; i < activeTriggers.length; i++) {
         let timePassed = (levelTime - activeTriggers[i].startTime) / 1000;
         let fadeTime = activeTriggers[i].fadeTime;
@@ -195,6 +211,16 @@ function updateTriggers() {
             changeColour(floor, `rgb(${setCol[0]}, ${setCol[1]}, ${setCol[2]})`);
         } else {
             changeColour(background, `rgb(${setCol[0]}, ${setCol[1]}, ${setCol[2]})`);
+        }
+    }
+
+    // Activated Coins
+    for (let i = 0; i < collectedCoins.length; i++) {
+        let index = collectedCoins[i];
+        if (onScreen(gameObjs[index])) {
+            gameObjs[index].y += gameObjs[index].yVel / (1000/deltaTime);
+            gameObjs[index].x += gameObjs[index].xVel / (1000/deltaTime);
+            gameObjs[index].yVel += -2793.528 / (1000/deltaTime);
         }
     }
 }
