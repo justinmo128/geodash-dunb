@@ -162,8 +162,8 @@ function initialize() {
     };
     levelInfo.style.display = "flex";
     levelInfoName.innerHTML = levelJSON.name;
-    levelInfoDiff.innerHTML = `${levelJSON.difficulty} ${getDifficulty(levelJSON.difficulty).toLowerCase()}`;
-    levelInfoDiffIcon.style.backgroundImage = `url(img/diff${getDifficulty(levelJSON.difficulty).toLowerCase()}.png)`;
+    levelInfoDiff.innerHTML = `${levelJSON.difficulty} ${getDifficulty(levelJSON.difficulty)}`;
+    levelInfoDiffIcon.style.backgroundImage = `url(img/diff${getDifficulty(levelJSON.difficulty)}.png)`;
 }
 
 setInterval(gameLoop, 1000/physicsTPS)
