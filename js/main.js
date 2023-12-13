@@ -30,6 +30,8 @@ function startLevel(levelName) {
 function createGameObjects() {
     maxX = 0;
     gameObjs = [];
+    collectedCoins = [];
+    activeTriggers = [];
     for (let i = 0; i < levelJSON.objects.length; i++) {
         let objProps = objectList.find((element) => levelJSON.objects[i].id == element.id)
 
@@ -104,6 +106,7 @@ function initialize() {
     levelTime = 0;
     activeTriggers = [];
     gamePaused = false;
+    mirror = false;
     player = {
         mode: levelJSON.mode,
         x: 0,
@@ -159,8 +162,8 @@ function initialize() {
     };
     levelInfo.style.display = "flex";
     levelInfoName.innerHTML = levelJSON.name;
-    levelInfoDiff.innerHTML = `${levelJSON.difficulty} ${getDifficulty(levelJSON.difficulty)}`;
-    levelInfoDiffIcon.style.backgroundImage = `url(img/diff${getDifficulty(levelJSON.difficulty)}.png)`;
+    levelInfoDiff.innerHTML = `${levelJSON.difficulty} ${getDifficulty(levelJSON.difficulty).toLowerCase()}`;
+    levelInfoDiffIcon.style.backgroundImage = `url(img/diff${getDifficulty(levelJSON.difficulty).toLowerCase()}.png)`;
 }
 
 setInterval(gameLoop, 1000/physicsTPS)
