@@ -1,6 +1,6 @@
 [
     {
-        "id": "block_standard",
+        "id": "fallback",
         "h": 30,
         "w": 30,
         "hbx": 0,
@@ -13,44 +13,31 @@
         "editorOffsety": 0,
         "hasHitbox": true,
         "visualOffsetx": 0,
-        "visualOffsety": 0
+        "visualOffsety": 0,
+        "portalType": "cube",
+        "padType": "yellow",
+        "orbType": "yellow"
+    },
+    {
+        "id": "block_standard"
     },
     {
         "id": "spike_standard",
-        "h": 30,
-        "w": 30,
         "hbx": 12,
         "hby": 9,
         "hbw": 6,
         "hbh": 12,
-        "hbType": "red",
-        "type": "",
-        "editorOffsetx": 0,
-        "editorOffsety": 0,
-        "hasHitbox": true,
-        "visualOffsetx": 0,
-        "visualOffsety": 0
+        "hbType": "red"
     },
     {
         "id": "slab_standard",
         "h": 15,
-        "w": 30,
-        "hbx": 0,
-        "hby": 0,
-        "hbw": 30,
         "hbh": 15,
-        "hbType": "blue",
-        "type": "",
-        "editorOffsetx": 0,
-        "editorOffsety": 15,
-        "hasHitbox": true,
-        "visualOffsetx": 0,
-        "visualOffsety": 0
+        "editorOffsety": 15
     },
     {
         "id": "portal_ship",
         "h": 90,
-        "w": 30,
         "hbx": -2,
         "hby": 2,
         "hbw": 34,
@@ -58,16 +45,12 @@
         "hbType": "green",
         "portalType": "ship",
         "type": "portal",
-        "editorOffsetx": 0,
         "editorOffsety": -30,
-        "hasHitbox": true,
-        "visualOffsetx": 10,
-        "visualOffsety": 0
+        "visualOffsetx": 10
     },
     {
         "id": "portal_cube",
         "h": 90,
-        "w": 30,
         "hbx": -2,
         "hby": 2,
         "hbw": 34,
@@ -75,246 +58,54 @@
         "hbType": "green",
         "portalType": "cube",
         "type": "portal",
-        "editorOffsetx": 0,
         "editorOffsety": -30,
-        "hasHitbox": true,
-        "visualOffsetx": 10,
-        "visualOffsety": 0
+        "visualOffsetx": 10
     },
     {
-        "id": "block_outline_2dots",
-        "h": 30,
-        "w": 30,
-        "hbx": 0,
-        "hby": 0,
-        "hbw": 30,
-        "hbh": 30,
-        "hbType": "blue",
-        "type": "",
-        "editorOffsetx": 0,
-        "editorOffsety": 0,
-        "hasHitbox": true,
-        "visualOffsetx": 0,
-        "visualOffsety": 0
+        "id": "block_outline_2dots"
     },
     {
-        "id": "block_outline_cap",
-        "h": 30,
-        "w": 30,
-        "hbx": 0,
-        "hby": 0,
-        "hbw": 30,
-        "hbh": 30,
-        "hbType": "blue",
-        "type": "",
-        "editorOffsetx": 0,
-        "editorOffsety": 0,
-        "hasHitbox": true,
-        "visualOffsetx": 0,
-        "visualOffsety": 0
+        "id": "block_outline_cap"
     },
     {
-        "id": "block_outline_corner",
-        "h": 30,
-        "w": 30,
-        "hbx": 0,
-        "hby": 0,
-        "hbw": 30,
-        "hbh": 30,
-        "hbType": "blue",
-        "type": "",
-        "editorOffsetx": 0,
-        "editorOffsety": 0,
-        "hasHitbox": true,
-        "visualOffsetx": 0,
-        "visualOffsety": 0
+        "id": "block_outline_corner"
     },
     {
-        "id": "block_outline_dot",
-        "h": 30,
-        "w": 30,
-        "hbx": 0,
-        "hby": 0,
-        "hbw": 30,
-        "hbh": 30,
-        "hbType": "blue",
-        "type": "",
-        "editorOffsetx": 0,
-        "editorOffsety": 0,
-        "hasHitbox": true,
-        "visualOffsetx": 0,
-        "visualOffsety": 0
+        "id": "block_outline_dot"
     },
     {
-        "id": "block_outline_full",
-        "h": 30,
-        "w": 30,
-        "hbx": 0,
-        "hby": 0,
-        "hbw": 30,
-        "hbh": 30,
-        "hbType": "blue",
-        "type": "",
-        "editorOffsetx": 0,
-        "editorOffsety": 0,
-        "hasHitbox": true,
-        "visualOffsetx": 0,
-        "visualOffsety": 0
+        "id": "block_outline_full"
     },
     {
-        "id": "block_outline_line",
-        "h": 30,
-        "w": 30,
-        "hbx": 0,
-        "hby": 0,
-        "hbw": 30,
-        "hbh": 30,
-        "hbType": "blue",
-        "type": "",
-        "editorOffsetx": 0,
-        "editorOffsety": 0,
-        "hasHitbox": true,
-        "visualOffsetx": 0,
-        "visualOffsety": 0
+        "id": "block_outline_line"
     },
     {
-        "id": "block_outline_pillar",
-        "h": 30,
-        "w": 30,
-        "hbx": 0,
-        "hby": 0,
-        "hbw": 30,
-        "hbh": 30,
-        "hbType": "blue",
-        "type": "",
-        "editorOffsetx": 0,
-        "editorOffsety": 0,
-        "hasHitbox": true,
-        "visualOffsetx": 0,
-        "visualOffsety": 0
+        "id": "block_outline_pillar"
     },
     {
-        "id": "block_default1",
-        "h": 30,
-        "w": 30,
-        "hbx": 0,
-        "hby": 0,
-        "hbw": 30,
-        "hbh": 30,
-        "hbType": "blue",
-        "type": "",
-        "editorOffsetx": 0,
-        "editorOffsety": 0,
-        "hasHitbox": true,
-        "visualOffsetx": 0,
-        "visualOffsety": 0
+        "id": "block_default1"
     },
     {
-        "id": "block_default2",
-        "h": 30,
-        "w": 30,
-        "hbx": 0,
-        "hby": 0,
-        "hbw": 30,
-        "hbh": 30,
-        "hbType": "blue",
-        "type": "",
-        "editorOffsetx": 0,
-        "editorOffsety": 0,
-        "hasHitbox": true,
-        "visualOffsetx": 0,
-        "visualOffsety": 0
+        "id": "block_default2"
     },
     {
-        "id": "block_default3",
-        "h": 30,
-        "w": 30,
-        "hbx": 0,
-        "hby": 0,
-        "hbw": 30,
-        "hbh": 30,
-        "hbType": "blue",
-        "type": "",
-        "editorOffsetx": 0,
-        "editorOffsety": 0,
-        "hasHitbox": true,
-        "visualOffsetx": 0,
-        "visualOffsety": 0
+        "id": "block_default3"
     },
     {
-        "id": "block_default4",
-        "h": 30,
-        "w": 30,
-        "hbx": 0,
-        "hby": 0,
-        "hbw": 30,
-        "hbh": 30,
-        "hbType": "blue",
-        "type": "",
-        "editorOffsetx": 0,
-        "editorOffsety": 0,
-        "hasHitbox": true,
-        "visualOffsetx": 0,
-        "visualOffsety": 0
+        "id": "block_default4"
     },
     {
         "id": "block_default5",
-        "h": 30,
-        "w": 30,
-        "type": "",
-        "editorOffsetx": 0,
-        "editorOffsety": 0,
-        "hasHitbox": false,
-        "visualOffsetx": 0,
-        "visualOffsety": 0
+        "hasHitbox": false
     },
     {
-        "id": "block_default6",
-        "h": 30,
-        "w": 30,
-        "hbx": 0,
-        "hby": 0,
-        "hbw": 30,
-        "hbh": 30,
-        "hbType": "blue",
-        "type": "",
-        "editorOffsetx": 0,
-        "editorOffsety": 0,
-        "hasHitbox": true,
-        "visualOffsetx": 0,
-        "visualOffsety": 0
+        "id": "block_default6"
     },
     {
-        "id": "block_default7",
-        "h": 30,
-        "w": 30,
-        "hbx": 0,
-        "hby": 0,
-        "hbw": 30,
-        "hbh": 30,
-        "hbType": "blue",
-        "type": "",
-        "editorOffsetx": 0,
-        "editorOffsety": 0,
-        "hasHitbox": true,
-        "visualOffsetx": 0,
-        "visualOffsety": 0
+        "id": "block_default7"
     },
     {
-        "id": "block_default8",
-        "h": 30,
-        "w": 30,
-        "hbx": 0,
-        "hby": 0,
-        "hbw": 30,
-        "hbh": 30,
-        "hbType": "blue",
-        "type": "",
-        "editorOffsetx": 0,
-        "editorOffsety": 0,
-        "hasHitbox": true,
-        "visualOffsetx": 0,
-        "visualOffsety": 0
+        "id": "block_default8"
     },
     {
         "id": "spike_small",
@@ -325,12 +116,7 @@
         "hbw": 4,
         "hbh": 8,
         "hbType": "red",
-        "type": "",
-        "editorOffsetx": 5,
-        "editorOffsety": 0,
-        "hasHitbox": true,
-        "visualOffsetx": 0,
-        "visualOffsety": 0
+        "editorOffsetx": 5
     },
     {
         "id": "spike_tiny",
@@ -341,61 +127,38 @@
         "hbw": 3,
         "hbh": 4,
         "hbType": "red",
-        "type": "",
-        "editorOffsetx": 4,
-        "editorOffsety": 0,
-        "hasHitbox": true,
-        "visualOffsetx": 0,
-        "visualOffsety": 0
+        "editorOffsetx": 4
     },
     {
         "id": "spike_slab",
         "h": 15,
-        "w": 30,
         "hbx": 12,
         "hby": 3,
         "hbw": 6,
         "hbh": 6,
-        "hbType": "red",
-        "type": "",
-        "editorOffsetx": 0,
-        "editorOffsety": 0,
-        "hasHitbox": true,
-        "visualOffsetx": 0,
-        "visualOffsety": 0
+        "hbType": "red"
     },
     {
         "id": "spike_ground",
         "h": 15,
-        "w": 30,
         "hbx": 10,
         "hby": -3,
         "hbw": 9,
         "hbh": 11,
-        "hbType": "red",
-        "type": "",
-        "editorOffsetx": 0,
-        "editorOffsety": 0,
-        "hasHitbox": true,
-        "visualOffsetx": 0,
-        "visualOffsety": 0
+        "hbType": "red"
     },
     {
         "id": "pad_yellow",
         "h": 4,
-        "w": 28,
+        "w": 30,
         "hbx": 1,
-        "hby": 0,
+        "hby": 1,
         "hbw": 28,
         "hbh": 4,
         "hbType": "green",
         "type": "pad",
         "padType": "yellow",
-        "editorOffsetx": 1,
-        "editorOffsety": 0,
-        "hasHitbox": true,
-        "visualOffsetx": 0,
-        "visualOffsety": 0
+        "visualOffsetx": -1
     },
     {
         "id": "orb_yellow",

@@ -2,27 +2,27 @@ function drawEditor() {
     drawBG();
     drawGrid();
     drawFloorRoof(floor);
-    drawEditorObjects();
+    draweditObjs();
 }
 
-function drawEditorObjects() {
+function draweditObjs() {
     ctx.globalAlpha = 1;
-    for (let i = 0; i < editorObjects.length; i++) {
-        let imgName = editorObjects[i].id;
-        let objProps = objectList.find((element) => editorObjects[i].id == element.id)
-        let xOffset = objProps.visualOffsetx;
-        let yOffset = objProps.visualOffsety;
-        if (editorObjects[i].type == "portal") {
-            imgName = `portal_${editorObjects[i].portalType}_over`;
+    for (let i = 0; i < editObjs.length; i++) {
+        let imgName = editObjs[i].id;
+        let objProps = objectList.find((element) => editObjs[i].id == element.id)
+        let xOffset = objProps.visualOffsetx ?? fallback.visualOffsetx;
+        let yOffset = objProps.visualOffsety ?? fallback.visualOffsety;
+        if (editObjs[i].type == "portal") {
+            imgName = `portal_${editObjs[i].portalType}_over`;
         }
-        if (onScreen(editorObjects[i])) {
-            drawImgCamRotate(imgName, editorObjects[i].x, editorObjects[i].y, editorObjects[i].h, editorObjects[i].w, editorObjects[i].angle, objProps.w, objProps.h, xOffset, yOffset);
+        if (onScreen(editObjs[i])) {
+            drawImgCamRotate(imgName, editObjs[i].x, editObjs[i].y, editObjs[i].h, editObjs[i].w, editObjs[i].angle, (objProps.w ?? fallback.w), (objProps.h ?? fallback.h), xOffset, yOffset);
         }
     }
     ctx.globalAlpha = 0.5;
     ctx.fillStyle = "lime";
-    if (selectedIndex > -1) {
-        fillRectCam(editorObjects[selectedIndex].x, editorObjects[selectedIndex].y, editorObjects[selectedIndex].w, editorObjects[selectedIndex].h);
+    if (curIndex > -1) {
+        fillRectCam(editObjs[curIndex].x, editObjs[curIndex].y, editObjs[curIndex].w, editObjs[curIndex].h);
     }
 }
 

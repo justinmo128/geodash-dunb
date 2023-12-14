@@ -1,7 +1,7 @@
 let buildCategory = "build"; // The current category selected
 let currentObj = "block_standard"; // The Object selected in the build menu
-let selectedIndex = -1; // The object selected in canvas
-let editorObjects = [];
+let curIndex = -1; // The object selected in canvas
+let editObjs = [];
 let initMouseX = 0;
 let initMouseY = 0;
 let initCamX = 0;
@@ -48,14 +48,14 @@ function swipe() {
     if (mouseInBounds() && mouseHeld && swipeEnabled) {
         if (buildCategory == "build") {
             let objProps = objectList.find((element) => currentObj == element.id);
-            let same = swipeObjs.some(e => e[0] === snappedX + objProps.editorOffsetx && e[1] === snappedY + objProps.editorOffsety);
+            let same = swipeObjs.some(e => e[0] === snappedX + (objProps.editorOffsetx ?? fallback.editorOffsetx) && e[1] === snappedY + (objProps.editorOffsety ?? fallback.editorOffsety));
             if (!same) {
                 buildObject(currentObj, snappedX, snappedY, savedAngle, true);
                 swipeObjs.push([snappedX + objProps.editorOffsetx, snappedY + objProps.editorOffsety]);
             }
         } else if (buildCategory == "delete") {
-            for (let i = 0; i < editorObjects.length; i++) {
-                if (coordX >= editorObjects[i].x && coordX <= editorObjects[i].x + editorObjects[i].w && coordY >= editorObjects[i].y && coordY <= editorObjects[i].y + editorObjects[i].h) {
+            for (let i = 0; i < editObjs.length; i++) {
+                if (coordX >= editObjs[i].x && coordX <= editObjs[i].x + editObjs[i].w && coordY >= editObjs[i].y && coordY <= editObjs[i].y + editObjs[i].h) {
                     deleteObject(i)
                 }
             }
@@ -69,38 +69,38 @@ function buildObject(id, x, y, angle, offset) {
     let offsetX = 0;
     let offsetY = 0;
     if (offset) {
-        offsetX = objProps.editorOffsetx;
-        offsetY = objProps.editorOffsety;
+        offsetX = objProps.editorOffsetx ?? fallback.editorOffsetx;
+        offsetY = objProps.editorOffsety ?? fallback.editorOffsety;
     }
 
-    editorObjects.push({
+    editObjs.push({
         id: id,
         x: x + offsetX,
         y: y + offsetY,
         angle: angle,
-        h: objProps.h,
-        w: objProps.w,
-        hbType: objProps.hbType,
-        type: objProps.type
+        h: objProps.h ?? fallback.h,
+        w: objProps.w ?? fallback.w,
+        hbType: objProps.hbType ?? fallback.hbType,
+        type: objProps.type ?? fallback.type
     })
 
-    selectedIndex = editorObjects.length - 1;
-    if (editorObjects[selectedIndex].w < 30 || editorObjects[selectedIndex].h < 30) {
-        editorObjects[selectedIndex].rotCenter = [editorObjects[selectedIndex].x + 15, editorObjects[selectedIndex].y + 15];
+    curIndex = editObjs.length - 1;
+    if (editObjs[curIndex].w < 30 || editObjs[curIndex].h < 30) {
+        editObjs[curIndex].rotCenter = [editObjs[curIndex].x + 15 - offsetX, editObjs[curIndex].y + 15 - offsetY];
     } else {
-        editorObjects[selectedIndex].rotCenter = [editorObjects[selectedIndex].x + editorObjects[selectedIndex].w / 2, editorObjects[selectedIndex].y + editorObjects[selectedIndex].h / 2];
+        editObjs[curIndex].rotCenter = [editObjs[curIndex].x + editObjs[curIndex].w / 2, editObjs[curIndex].y + editObjs[curIndex].h / 2];
     }
-    if (editorObjects[selectedIndex].type == "portal") {
-        editorObjects[selectedIndex].portalType = objProps.portalType;
+    if (editObjs[curIndex].type == "portal") {
+        editObjs[curIndex].portalType = objProps.portalType ?? fallback.portalType;
     }
-    if (editorObjects[selectedIndex].angle !== 0) {
-        rotateObject(editorObjects[selectedIndex]);
+    if (editObjs[curIndex].angle !== 0) {
+        rotateObject(editObjs[curIndex]);
     }
-    if (editorObjects[selectedIndex].type == "trigger") {
-        editorObjects[selectedIndex].colour = "#000000";
-        editorObjects[selectedIndex].fadeTime = 0;
-        editorObjects[selectedIndex].target = "background";
-        editorObjects[selectedIndex].touchActivated = false;
+    if (editObjs[curIndex].type == "trigger") {
+        editObjs[curIndex].colour = "#000000";
+        editObjs[curIndex].fadeTime = 0;
+        editObjs[curIndex].target = "background";
+        editObjs[curIndex].touchActivated = false;
     }
     updateHTML();
 }
@@ -111,25 +111,25 @@ function clickInEditor() {
     } else if (buildCategory == "edit" && mouseInBounds() && !movedCam) {
         let indices = [];
         let selectedInIndices = false;
-        for (let i = 0; i < editorObjects.length; i++) {
-            if (coordX >= editorObjects[i].x && coordX <= editorObjects[i].x + editorObjects[i].w && coordY >= editorObjects[i].y && coordY <= editorObjects[i].y + editorObjects[i].h) {
+        for (let i = 0; i < editObjs.length; i++) {
+            if (coordX >= editObjs[i].x && coordX <= editObjs[i].x + editObjs[i].w && coordY >= editObjs[i].y && coordY <= editObjs[i].y + editObjs[i].h) {
                 indices.push(i);
             }
         }
         for (let i = 0; i < indices.length; i++) {
-            if (selectedIndex == indices[i]) {
+            if (curIndex == indices[i]) {
                 selectedInIndices = true;
-                selectedIndex = indices[i + 1];
+                curIndex = indices[i + 1];
                 break;
             }
         }
-        if (!selectedInIndices || selectedIndex === undefined) {
-            selectedIndex = indices[0];
+        if (!selectedInIndices || curIndex === undefined) {
+            curIndex = indices[0];
         }
         updateHTML();
     } else if (mouseInBounds() && !movedCam && !swipeEnabled) {
-        for (let i = 0; i < editorObjects.length; i++) {
-            if (coordX >= editorObjects[i].x && coordX <= editorObjects[i].x + editorObjects[i].w && coordY >= editorObjects[i].y && coordY <= editorObjects[i].y + editorObjects[i].h) {
+        for (let i = 0; i < editObjs.length; i++) {
+            if (coordX >= editObjs[i].x && coordX <= editObjs[i].x + editObjs[i].w && coordY >= editObjs[i].y && coordY <= editObjs[i].y + editObjs[i].h) {
                 deleteObject(i)
                 break;
             }
@@ -145,34 +145,34 @@ function editorKeys(e) {
             cursorInInput = true;
         }
     }
-    if (selectedIndex > -1 && gameState == "editor" && !cursorInInput) {
+    if (curIndex > -1 && gameState == "editor" && !cursorInInput) {
         let validKeyPressed = true;
         if (e.key == "w") {
-            editorObjects[selectedIndex].y += 30;
-            editorObjects[selectedIndex].rotCenter[1] += 30;
+            editObjs[curIndex].y += 30;
+            editObjs[curIndex].rotCenter[1] += 30;
         } else if (e.key == "a") {
-            editorObjects[selectedIndex].x -= 30;
-            editorObjects[selectedIndex].rotCenter[0] -= 30;
+            editObjs[curIndex].x -= 30;
+            editObjs[curIndex].rotCenter[0] -= 30;
         } else if (e.key == "s") {
-            editorObjects[selectedIndex].y -= 30;
-            editorObjects[selectedIndex].rotCenter[1] -= 30;
+            editObjs[curIndex].y -= 30;
+            editObjs[curIndex].rotCenter[1] -= 30;
         } else if (e.key == "d") {
-            editorObjects[selectedIndex].x += 30;
-            editorObjects[selectedIndex].rotCenter[0] += 30;
+            editObjs[curIndex].x += 30;
+            editObjs[curIndex].rotCenter[0] += 30;
         } else if (e.key == "ArrowUp") {
-            editorObjects[selectedIndex].y++;
+            editObjs[curIndex].y++;
         } else if (e.key == "ArrowLeft") {
-            editorObjects[selectedIndex].x--;
+            editObjs[curIndex].x--;
         } else if (e.key == "ArrowDown") {
-            editorObjects[selectedIndex].y--;
+            editObjs[curIndex].y--;
         } else if (e.key == "ArrowRight") {
-            editorObjects[selectedIndex].x++;
+            editObjs[curIndex].x++;
         } else if (e.key == "r") {
-            let oldAngle = editorObjects[selectedIndex].angle;
-            editorObjects[selectedIndex].angle += 90;
-            editorObjects[selectedIndex].angle %= 360;
-            savedAngle = editorObjects[selectedIndex].angle;
-            rotateObject(editorObjects[selectedIndex], oldAngle);
+            let oldAngle = editObjs[curIndex].angle;
+            editObjs[curIndex].angle += 90;
+            editObjs[curIndex].angle %= 360;
+            savedAngle = editObjs[curIndex].angle;
+            rotateObject(editObjs[curIndex], oldAngle);
         } else {
             validKeyPressed = false;
         }

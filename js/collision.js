@@ -188,5 +188,5 @@ function collides(Ax, Ay, Aw, Ah, Bx, By, Bw, Bh) {
 function playerDeath() {
     song.pause();
     player.dead = true;
-    setTimeout(initialize, 300)
+    player.deathTime = levelTime;
 }

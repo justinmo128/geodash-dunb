@@ -151,9 +151,11 @@ function rotateObject(obj, oldAngle = 0, rotateHitbox = false) {
 }
 
 let objectList = [];
-    fetch(`js/objects.json`)
+let fallback;
+fetch(`js/objects.json`)
     .then((res) => res.json())
     .then((data) => objectList = data)
+    .then(() => fallback = objectList[0])
 
 function roundToNearest(num, roundTo) {
     return Math.round((num)/roundTo) * roundTo;

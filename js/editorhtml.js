@@ -49,16 +49,16 @@ function buildObjSelect(i) {
 }
 
 document.getElementById("delete-obj-btn").addEventListener("click", () => {
-    deleteObject(selectedIndex)
+    deleteObject(curIndex)
 })
 function deleteObject(index) {
-    selectedIndex = -1;
-    editorObjects.splice(index, 1)
+    curIndex = -1;
+    editObjs.splice(index, 1)
 }
 
 document.getElementById("deselect-btn").addEventListener("click", deselect)
 function deselect() {
-    selectedIndex = -1;
+    curIndex = -1;
 }
 
 document.getElementById("swipe-btn").addEventListener("click", toggleSwipe);
@@ -83,21 +83,21 @@ function toggleSettings() {
 function updateHTML() {
     camXEl.value = camera.x;
     camYEl.value = camera.y;
-    if (selectedIndex > -1) {
-        objXEl.value = editorObjects[selectedIndex].x;
-        objYEl.value = editorObjects[selectedIndex].y;
-        objAngleEl.value = editorObjects[selectedIndex].angle;
+    if (curIndex > -1) {
+        objXEl.value = editObjs[curIndex].x;
+        objYEl.value = editObjs[curIndex].y;
+        objAngleEl.value = editObjs[curIndex].angle;
     } else {
         objXEl.value = 0;
         objYEl.value = 0;
         objAngleEl.value = 0;
         triggerColTimeEl.value = 0;
     }
-    if (selectedIndex > -1 && editorObjects[selectedIndex].type == "trigger") {
+    if (curIndex > -1 && editObjs[curIndex].type == "trigger") {
         document.getElementById("trigger-col-edit").style.display = "flex";
-        triggerColColourEl.value = editorObjects[selectedIndex].colour;
-        triggerColTimeEl.value = editorObjects[selectedIndex].fadeTime;
-        triggerColTargetEl.value = editorObjects[selectedIndex].target;
+        triggerColColourEl.value = editObjs[curIndex].colour;
+        triggerColTimeEl.value = editObjs[curIndex].fadeTime;
+        triggerColTargetEl.value = editObjs[curIndex].target;
     } else {
         document.getElementById("trigger-col-edit").style.display = "none";
     }
@@ -110,44 +110,44 @@ camYEl.addEventListener("change", () => {
     camera.x = +camXEl.value;
 })
 objXEl.addEventListener("change", () => {
-    editorObjects[selectedIndex].x = +objXEl.value;
+    editObjs[curIndex].x = +objXEl.value;
 })
 objYEl.addEventListener("change", () => {
-    editorObjects[selectedIndex].y = +objYEl.value;
+    editObjs[curIndex].y = +objYEl.value;
 })
 objAngleEl.addEventListener("change", () => {
-    editorObjects[selectedIndex].angle = +objAngleEl.value;
-    editorObjects[selectedIndex].angle %= 360;
+    editObjs[curIndex].angle = +objAngleEl.value;
+    editObjs[curIndex].angle %= 360;
 })
 triggerColColourEl.addEventListener("change", () => {
-    editorObjects[selectedIndex].colour = triggerColColourEl.value;
+    editObjs[curIndex].colour = triggerColColourEl.value;
 })
 triggerColTimeEl.addEventListener("change", () => {
-    editorObjects[selectedIndex].fadeTime = triggerColTimeEl.value;
+    editObjs[curIndex].fadeTime = triggerColTimeEl.value;
 })
 triggerColTargetEl.addEventListener("change", () => {
-    editorObjects[selectedIndex].target = triggerColTargetEl.value;
+    editObjs[curIndex].target = triggerColTargetEl.value;
 })
 triggerColTouchEl.addEventListener("change", () => {
-    editorObjects[selectedIndex].touchActivated = triggerColTouchEl.checked;
+    editObjs[curIndex].touchActivated = triggerColTouchEl.checked;
 })
 
 document.getElementById("export-btn").addEventListener("click", exportLevel)
 function exportLevel() {
     let exportArray = [];
-    for (let i = 0; i < editorObjects.length; i++) {
+    for (let i = 0; i < editObjs.length; i++) {
         exportArray.push({
-            x: editorObjects[i].x,
-            y: editorObjects[i].y,
-            id: editorObjects[i].id,
-            angle: editorObjects[i].angle
+            x: editObjs[i].x,
+            y: editObjs[i].y,
+            id: editObjs[i].id,
+            angle: editObjs[i].angle
         })
 
         if (exportArray[i].id.split('_')[0] == "trigger") {
-            exportArray[i].colour = editorObjects[i].colour;
-            exportArray[i].fadeTime = editorObjects[i].fadeTime;
-            exportArray[i].target = editorObjects[i].target;
-            exportArray[i].touchActivated = editorObjects[i].touchActivated;
+            exportArray[i].colour = editObjs[i].colour;
+            exportArray[i].fadeTime = editObjs[i].fadeTime;
+            exportArray[i].target = editObjs[i].target;
+            exportArray[i].touchActivated = editObjs[i].touchActivated;
         }
     }
     selectedMode = document.querySelector('input[name="mode-select"]:checked').value;
@@ -174,28 +174,28 @@ editorImport.addEventListener("change", loadLevel)
 function loadLevel() {
     new Response(editorImport.files[0]).json()
         .then(json => {levelJSON = json})
-        .then(createEditorObjects)
+        .then(createeditObjs)
 }
 
-function createEditorObjects() {
-    editorObjects = [];
+function createeditObjs() {
+    editObjs = [];
     for (let i = 0; i < levelJSON.objects.length; i++) {
         buildObject(levelJSON.objects[i].id, levelJSON.objects[i].x, levelJSON.objects[i].y, levelJSON.objects[i].angle, false)
-        if (editorObjects[i].type == "trigger") {
-            editorObjects[i].colour = levelJSON.objects[i].colour;
-            editorObjects[i].fadeTime = levelJSON.objects[i].fadeTime;
-            editorObjects[i].target = levelJSON.objects[i].target;
+        if (editObjs[i].type == "trigger") {
+            editObjs[i].colour = levelJSON.objects[i].colour;
+            editObjs[i].fadeTime = levelJSON.objects[i].fadeTime;
+            editObjs[i].target = levelJSON.objects[i].target;
             if (levelJSON.objects[i].touchActivated) {
-                editorObjects[i].touchActivated = levelJSON.objects[i].touchActivated;
+                editObjs[i].touchActivated = levelJSON.objects[i].touchActivated;
             } else {
-                editorObjects[i].touchActivated = false;
+                editObjs[i].touchActivated = false;
             }
             
             updateHTML();
         }
-        if (editorObjects[i].angle !== 0) {
-            editorObjects[i].x = levelJSON.objects[i].x;
-            editorObjects[i].y = levelJSON.objects[i].y;
+        if (editObjs[i].angle !== 0) {
+            editObjs[i].x = levelJSON.objects[i].x;
+            editObjs[i].y = levelJSON.objects[i].y;
         }
     }
     setDifficulty.value = levelJSON.difficulty;

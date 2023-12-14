@@ -37,8 +37,7 @@ function drawBackgroundObjects() {
     for (let i = 0; i < gameObjs.length; i++) {
         if (gameObjs[i].type == "portal") {
             let objProps = objectList.find((element) => gameObjs[i].id == element.id)
-            let imgName = gameObjs[i].id;
-            let xOffset = objProps.visualOffsetx;
+            let xOffset = (objProps.visualOffsetx ?? fallback.visualOffsetx);
             drawImgCamRotate(`portal_${gameObjs[i].portalType}_under`, gameObjs[i].x, gameObjs[i].y, gameObjs[i].h, gameObjs[i].w, gameObjs[i].angle, 30, 90, xOffset);
         }
     }
@@ -66,13 +65,13 @@ function drawGameObjects() {
     for (let i = 0; i < gameObjs.length; i++) {
         let objProps = objectList.find((element) => gameObjs[i].id == element.id)
         let imgName = gameObjs[i].id;
-        let xOffset = objProps.visualOffsetx;
-        let yOffset = objProps.visualOffsety;
+        let xOffset = objProps.visualOffsetx ?? fallback.visualOffsetx;
+        let yOffset = objProps.visualOffsety ?? fallback.visualOffsety;
         if (gameObjs[i].type == "portal") {
             imgName = `portal_${gameObjs[i].portalType}_over`
         }
         if (gameObjs[i].type != "trigger" && onScreen(gameObjs[i])) {
-            drawImgCamRotate(imgName, gameObjs[i].x, gameObjs[i].y, gameObjs[i].h, gameObjs[i].w, gameObjs[i].angle, objProps.w, objProps.h, xOffset, yOffset);
+            drawImgCamRotate(imgName, gameObjs[i].x, gameObjs[i].y, gameObjs[i].h, gameObjs[i].w, gameObjs[i].angle, (objProps.w ?? fallback.w), (objProps.h ?? fallback.h), xOffset, yOffset);
         }
     }
     if (player.win) {

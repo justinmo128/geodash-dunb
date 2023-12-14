@@ -40,10 +40,10 @@ function createGameObjects() {
             x: levelJSON.objects[i].x,
             y: levelJSON.objects[i].y,
             angle: levelJSON.objects[i].angle,
-            h: objProps.h,
-            w: objProps.w,
-            hasHitbox: objProps.hasHitbox,
-            type: objProps.type,
+            h: objProps.h ?? fallback.h,
+            w: objProps.w ?? fallback.w,
+            hasHitbox: objProps.hasHitbox ?? fallback.hasHitbox,
+            type: objProps.type ?? fallback.type,
             activated: false,
         })
         if (gameObjs[i].w < 30 || gameObjs[i].h < 30) {
@@ -52,11 +52,11 @@ function createGameObjects() {
             gameObjs[i].rotCenter = [gameObjs[i].x + gameObjs[i].w / 2, gameObjs[i].y + gameObjs[i].h / 2];
         }
         if (gameObjs[i].type == "portal") {
-            gameObjs[i].portalType = objProps.portalType;
+            gameObjs[i].portalType = objProps.portalType ?? fallback.portalType;
         } else if (gameObjs[i].type == "pad") {
-            gameObjs[i].padType = objProps.padType;
+            gameObjs[i].padType = objProps.padType ?? fallback.padType;
         } else if (gameObjs[i].type == "orb") {
-            gameObjs[i].orbType = objProps.orbType;
+            gameObjs[i].orbType = objProps.orbType ?? fallback.orbType;
         } else if (gameObjs[i].type == "trigger") {
             gameObjs[i].colour = levelJSON.objects[i].colour;
             gameObjs[i].fadeTime = levelJSON.objects[i].fadeTime;
@@ -69,11 +69,11 @@ function createGameObjects() {
             gameObjs[i].oldy = gameObjs[i].y;
         }
         if (gameObjs[i].hasHitbox) {
-            gameObjs[i].hbx = levelJSON.objects[i].x + objProps.hbx;
-            gameObjs[i].hby = levelJSON.objects[i].y + objProps.hby;
-            gameObjs[i].hbw = objProps.hbw;
-            gameObjs[i].hbh = objProps.hbh;
-            gameObjs[i].hbType = objProps.hbType;
+            gameObjs[i].hbx = levelJSON.objects[i].x + (objProps.hbx ?? fallback.hbx);
+            gameObjs[i].hby = levelJSON.objects[i].y + (objProps.hby ?? fallback.hby);
+            gameObjs[i].hbw = (objProps.hbw ?? fallback.hbw);
+            gameObjs[i].hbh = (objProps.hbh ?? fallback.hbh);
+            gameObjs[i].hbType = (objProps.hbType ?? fallback.hbType);
         }
         if (gameObjs[i].angle !== 0) {
             rotateObject(gameObjs[i], 0, true);
@@ -128,7 +128,9 @@ function initialize() {
         win: false,
         angle: 0,
         touchingOrb: [],
-        ballRotStatus: 1
+        ballRotStatus: 1,
+        deathTime: -1,
+        winTime: -1
     };
     camera = {
         x: 0,
@@ -171,17 +173,21 @@ function gameLoop() {
     let now = performance.now();
     deltaTime = now - lastUpdate;
     lastUpdate = now;
-    if (gameState == "gameLoop" && !player.dead && !gamePaused) {
+    if (gameState == "gameLoop" && !gamePaused) {
         levelTime += deltaTime;
-        player.oldx = player.x;
-        player.oldy = player.y;
-        tickObjects();
-        movePlayer();
-        if (keyHeld) {jump()}
-        applyGravity();
-        checkCollision();
-        rotatePlayer();
-        checkEnding();
+        if (!player.dead) {
+            player.oldx = player.x;
+            player.oldy = player.y;
+            tickObjects();
+            movePlayer();
+            if (keyHeld) {jump()}
+            applyGravity();
+            checkCollision();
+            rotatePlayer();
+            checkEnding();
+        } else if (levelTime > player.deathTime + 300 && player.deathTime > -1) {
+            initialize();
+        }
     } else if (gameState == "editor") {
         swipe();
         moveEditorCam();
@@ -353,7 +359,9 @@ function movePlayer() {
 function checkEnding() {
     if (player.x > maxX + 480 && !player.win) {
         player.win = true;
-        setTimeout(initializeMenu, 2000)
+        player.winTime = levelTime;
+    } else if (levelTime > player.winTime + 2000 && player.winTime > -1) {
+        initializeMenu();
     }
 }
 
