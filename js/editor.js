@@ -92,15 +92,17 @@ function buildObject(id, x, y, angle, offset) {
     }
     if (editObjs[curIndex].type == "portal") {
         editObjs[curIndex].portalType = objProps.portalType ?? fallback.portalType;
-    }
-    if (editObjs[curIndex].angle !== 0) {
-        rotateObject(editObjs[curIndex]);
-    }
-    if (editObjs[curIndex].type == "trigger") {
+    } else if (editObjs[curIndex].type == "trigger") {
         editObjs[curIndex].colour = "#000000";
         editObjs[curIndex].fadeTime = 0;
         editObjs[curIndex].target = "background";
         editObjs[curIndex].touchActivated = false;
+    } else if (editObjs[curIndex].id == "startpos") {
+        editObjs[curIndex].mode = "cube";
+        editObjs[curIndex].flipGravity = false;
+    }
+    if (editObjs[curIndex].angle !== 0) {
+        rotateObject(editObjs[curIndex]);
     }
     updateHTML();
 }

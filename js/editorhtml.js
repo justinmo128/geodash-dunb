@@ -22,6 +22,7 @@ let editorImport = document.createElement('input');
 editorImport.type = 'file';
 editorImport.accept = '.json';
 let songSelectEl = document.getElementById("select-song");
+let startposFlipGravEl = document.getElementById("startpos-flipgravity");
 
 setDifficulty.addEventListener("change", changeDifficulty)
 function changeDifficulty() {
@@ -98,8 +99,21 @@ function updateHTML() {
         triggerColColourEl.value = editObjs[curIndex].colour;
         triggerColTimeEl.value = editObjs[curIndex].fadeTime;
         triggerColTargetEl.value = editObjs[curIndex].target;
+        triggerColTouchEl.checked = editObjs[curIndex].touchActivated;
+    } else if (curIndex > -1 && editObjs[curIndex].id == "startpos") {
+        document.getElementById("startpos-edit").style.display = "flex";
+        let modeSelectBtns = document.getElementsByClassName("mode-select-startpos");
+        for (let i = 0; i < modeSelectBtns.length; i++) {
+            if (modeSelectBtns[i].id == `${editObjs[curIndex].mode}-radio-startpos`) {
+                modeSelectBtns[i].checked = true;
+            } else {
+                modeSelectBtns[i].checked = false;
+            }
+        }
+        startposFlipGravEl.checked = editObjs[curIndex].flipGravity;
     } else {
         document.getElementById("trigger-col-edit").style.display = "none";
+        document.getElementById("startpos-edit").style.display = "none";
     }
 }
 
@@ -131,6 +145,9 @@ triggerColTargetEl.addEventListener("change", () => {
 triggerColTouchEl.addEventListener("change", () => {
     editObjs[curIndex].touchActivated = triggerColTouchEl.checked;
 })
+startposFlipGravEl.addEventListener("change", () => {
+    editObjs[curIndex].flipGravity = startposFlipGravEl.checked;
+})
 
 document.getElementById("export-btn").addEventListener("click", exportLevel)
 function exportLevel() {
@@ -148,6 +165,9 @@ function exportLevel() {
             exportArray[i].fadeTime = editObjs[i].fadeTime;
             exportArray[i].target = editObjs[i].target;
             exportArray[i].touchActivated = editObjs[i].touchActivated;
+        } else if (exportArray[i].id == "startpos") {
+            exportArray[i].mode = document.querySelector('input[name="mode-select-startpos"]:checked').value;
+            exportArray[i].flipGravity = editObjs[i].flipGravity;
         }
     }
     selectedMode = document.querySelector('input[name="mode-select"]:checked').value;
@@ -185,6 +205,7 @@ function createeditObjs() {
             editObjs[i].colour = levelJSON.objects[i].colour;
             editObjs[i].fadeTime = levelJSON.objects[i].fadeTime;
             editObjs[i].target = levelJSON.objects[i].target;
+            editObjs[i].touchActivated = levelJSON.objects[i].touchActivated;
             if (levelJSON.objects[i].touchActivated) {
                 editObjs[i].touchActivated = levelJSON.objects[i].touchActivated;
             } else {
@@ -192,6 +213,9 @@ function createeditObjs() {
             }
             
             updateHTML();
+        } else if (editObjs[i].id == "startpos") {
+            editObjs[i].mode = levelJSON.objects[i].mode;
+            editObjs[i].flipGravity = levelJSON.objects[i].flipGravity;
         }
         if (editObjs[i].angle !== 0) {
             editObjs[i].x = levelJSON.objects[i].x;
@@ -212,4 +236,5 @@ function createeditObjs() {
     }
 
     document.getElementById("level-name").value = levelJSON.name;
+    updateHTML();
 }

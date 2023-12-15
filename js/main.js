@@ -5,7 +5,6 @@ let levelInfo = document.getElementById("level-info");
 let levelInfoName = document.getElementById("level-info-name");
 let levelInfoDiff = document.getElementById("level-info-diff");
 let levelInfoDiffIcon = document.getElementById("level-info-difficon");
-let cubeTransition = false;
 let gamePaused = false;
 let pauseVisible = true;
 let lastUpdate = performance.now();
@@ -14,6 +13,7 @@ let showHitboxes = false;
 let levelTime = 0;
 let activeTriggers = [];
 let collectedCoins = [];
+let levelStartPos = [];
 let song;
 let mirror = false;
 
@@ -67,6 +67,13 @@ function createGameObjects() {
             gameObjs[i].yVel = 0;
             gameObjs[i].oldx = gameObjs[i].x;
             gameObjs[i].oldy = gameObjs[i].y;
+        } else if (gameObjs[i].id == "startpos") {
+            levelStartPos.push({
+                x: levelJSON.objects[i].x,
+                y: levelJSON.objects[i].y,
+                mode: levelJSON.objects[i].mode,
+                flipGravity: levelJSON.objects[i].flipGravity
+            })
         }
         if (gameObjs[i].hasHitbox) {
             gameObjs[i].hbx = levelJSON.objects[i].x + (objProps.hbx ?? fallback.hbx);
@@ -89,26 +96,8 @@ function createGameObjects() {
 function initialize() {
     document.getElementById("pause-box").style.display = "block";
     document.getElementById("pause-balance").style.display = "block";
-    song.currentTime = 0;
-    song.play();
-    for (let i = 0; i < gameObjs.length; i++) {
-        gameObjs[i].activated = false;
-    }
-    for (let i = 0; i < collectedCoins.length; i++) {
-        let index = collectedCoins[i];
-        gameObjs[index].x = gameObjs[index].oldx;
-        gameObjs[index].y = gameObjs[index].oldy;
-        gameObjs[index].xVel = 0;
-        gameObjs[index].yVel = 0;
-    }
-    collectedCoins = [];
-    gameState = "gameLoop";
-    levelTime = 0;
-    activeTriggers = [];
-    gamePaused = false;
-    mirror = false;
     player = {
-        mode: levelJSON.mode,
+        mode: "cube",
         x: 0,
         y: 0,
         oldx: 0,
@@ -132,6 +121,21 @@ function initialize() {
         deathTime: -1,
         winTime: -1
     };
+    for (let i = 0; i < gameObjs.length; i++) {
+        gameObjs[i].activated = false;
+    }
+    for (let i = 0; i < collectedCoins.length; i++) {
+        let index = collectedCoins[i];
+        gameObjs[index].x = gameObjs[index].oldx;
+        gameObjs[index].y = gameObjs[index].oldy;
+        gameObjs[index].xVel = 0;
+        gameObjs[index].yVel = 0;
+    }
+    collectedCoins = [];
+    gameState = "gameLoop"; 
+    activeTriggers = [];
+    gamePaused = false;
+    mirror = false;
     camera = {
         x: 0,
         y: 0,
@@ -166,6 +170,22 @@ function initialize() {
     levelInfoName.innerHTML = levelJSON.name;
     levelInfoDiff.innerHTML = `${levelJSON.difficulty} ${getDifficulty(levelJSON.difficulty)}`;
     levelInfoDiffIcon.style.backgroundImage = `url(img/difficulty${getDifficulty(levelJSON.difficulty)}.png)`;
+    if (levelStartPos.length > 0) {
+        let lastStartPos = levelStartPos[levelStartPos.length - 1];
+        console.log(lastStartPos)
+        levelTime = lastStartPos.x * (1000/311.576);
+        player.x = lastStartPos.x;
+        player.y = lastStartPos.y;
+        switchGamemode(lastStartPos.mode, lastStartPos.y, 90)
+        if (lastStartPos.flipGravity) {
+            player.gravityStatus = -1;
+        }
+    } else {
+        levelTime = 0;
+        switchGamemode(levelJSON.mode, 0, 0)
+    }
+    song.currentTime = levelTime / 1000;
+    song.play();
 }
 
 setInterval(gameLoop, 1000/physicsTPS)

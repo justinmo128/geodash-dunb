@@ -27,7 +27,7 @@ function checkCollision() {
                             player.yVel /= 1.96;
                         }
                         if (gameObjs[i].portalType == "ship" || gameObjs[i].portalType == "cube" || gameObjs[i].portalType == "ball") {
-                            switchGamemode(gameObjs[i]);
+                            switchGamemode(gameObjs[i].portalType, gameObjs[i].y, gameObjs[i].h);
                         } else if (gameObjs[i].portalType == "upsidedown") {
                             player.gravityStatus = -1;
                         } else if (gameObjs[i].portalType == "rightsideup") {
@@ -131,23 +131,21 @@ function checkBlockCollision(obj) {
     }
 }
 
-function switchGamemode(obj) {
-    player.mode = obj.portalType;
-    if (player.mode == "ship") {
-        newFloor.hby = Math.max(0, roundToNearest((obj.y + obj.h / 2) - 165, 30));
+function switchGamemode(mode, objY, objH) {
+    player.mode = mode;
+    if (mode == "ship") {
+        newFloor.hby = Math.max(0, roundToNearest((objY + objH / 2) - 165, 30));
         ease(newFloor, [0, Math.max(newFloor.y * -1, newFloor.hby - newFloor.y)], 200, "linear")
         ease(roof, [0, Math.max(roof.y * -1 + 390, newFloor.hby + 390 - roof.y)], 200, "linear")
         ease(camera, [0, Math.max(45 - camera.y, newFloor.hby + 45 - camera.y)], 200, "linear")
         roof.hby = newFloor.hby + 390;
         newFloor.canCollide = true;
         roof.canCollide = true;
-    } else if (player.mode == "cube") {
-        cubeTransition = true;
-        ease(camera, [0, 0 - camera.y], 200, "linear", () => {cubeTransition = false;})
+    } else if (mode == "cube") {
         newFloor.canCollide = false;
         roof.canCollide = false;
     } else { // Ball
-        newFloor.hby = Math.max(0, roundToNearest((obj.y + obj.h / 2) - 135, 30));
+        newFloor.hby = Math.max(0, roundToNearest((objY + objH / 2) - 135, 30));
         ease(newFloor, [0, Math.max(newFloor.y * -1, newFloor.hby - newFloor.y)], 200, "linear")
         ease(roof, [0, Math.max(roof.y * -1 + 330, newFloor.hby + 330 - roof.y)], 200, "linear")
         ease(camera, [0, Math.max(15 - camera.y, newFloor.hby + 15 - camera.y)], 200, "linear")
@@ -156,7 +154,6 @@ function switchGamemode(obj) {
         roof.canCollide = true;
     }
     player.angle = 0;
-    obj.activated = true;
 }
 
 function checkFloorRoofCollision() {

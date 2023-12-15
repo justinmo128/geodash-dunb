@@ -295,5 +295,10 @@
         "hasHitbox": true,
         "visualOffsetx": 15,
         "visualOffsety": 0
+    },
+    {
+        "id": "startpos",
+        "hbType": "green",
+        "hasHitbox": false
     }
 ]

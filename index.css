@@ -295,7 +295,7 @@ button:hover {
     display: flex;
 }
 
-#trigger-col-edit {
+#trigger-col-edit, #startpos-edit {
     display: none;
 }
 
