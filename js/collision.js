@@ -16,8 +16,8 @@ function checkCollision() {
             } 
             else if (collides(player.x, player.y, player.w, player.h, gameObjs[i].hbx, gameObjs[i].hby, gameObjs[i].hbw, gameObjs[i].hbh)) {
             // Red Player + Blue Obj (Landing on blocks)
-                if (gameObjs[i].hbType == "blue") {
-                    blockCollisionResults = checkBlockCollision(gameObjs[i]);
+                if (gameObjs[i].hbType == "blue" && checkBlockCollision(gameObjs[i])) {
+                    blockCollisionResults = true;
                 }
                 // Red Player + Green Obj
                 else if (gameObjs[i].hbType == "green") {
@@ -131,38 +131,13 @@ function checkBlockCollision(obj) {
     }
 }
 
-function switchGamemode(mode, objY, objH) {
-    player.mode = mode;
-    if (mode == "ship") {
-        newFloor.hby = Math.max(0, roundToNearest((objY + objH / 2) - 165, 30));
-        ease(newFloor, [0, Math.max(newFloor.y * -1, newFloor.hby - newFloor.y)], 200, "linear")
-        ease(roof, [0, Math.max(roof.y * -1 + 390, newFloor.hby + 390 - roof.y)], 200, "linear")
-        ease(camera, [0, Math.max(45 - camera.y, newFloor.hby + 45 - camera.y)], 200, "linear")
-        roof.hby = newFloor.hby + 390;
-        newFloor.canCollide = true;
-        roof.canCollide = true;
-    } else if (mode == "cube") {
-        newFloor.canCollide = false;
-        roof.canCollide = false;
-    } else { // Ball
-        newFloor.hby = Math.max(0, roundToNearest((objY + objH / 2) - 135, 30));
-        ease(newFloor, [0, Math.max(newFloor.y * -1, newFloor.hby - newFloor.y)], 200, "linear")
-        ease(roof, [0, Math.max(roof.y * -1 + 330, newFloor.hby + 330 - roof.y)], 200, "linear")
-        ease(camera, [0, Math.max(15 - camera.y, newFloor.hby + 15 - camera.y)], 200, "linear")
-        roof.hby = newFloor.hby + 330;
-        newFloor.canCollide = true;
-        roof.canCollide = true;
-    }
-    player.angle = 0;
-}
-
 function checkFloorRoofCollision() {
     // Ground, roof collision
-    if (player.y < newFloor.hby && newFloor.canCollide) {
+    if (player.y <= newFloor.hby && newFloor.canCollide) {
         player.y = newFloor.y;
         player.bluehby = player.y + 11;
         return true;
-    } else if (player.y < 0 && player.gravityStatus == 1) {
+    } else if (player.y <= 0 && player.gravityStatus == 1) {
         player.y = 0;
         player.bluehby = player.y + 11;
         return true;
@@ -173,17 +148,11 @@ function checkFloorRoofCollision() {
 }
 
 function collides(Ax, Ay, Aw, Ah, Bx, By, Bw, Bh) {
-    if (Ax < Bx + Bw &&
-        Ax + Aw > Bx &&
-        Ay < By + Bh &&
-        Ay + Ah > By) {
+    if (Ax <= Bx + Bw &&
+        Ax + Aw >= Bx &&
+        Ay <= By + Bh &&
+        Ay + Ah >= By) {
             return true;
     }
     return false;
-}
-
-function playerDeath() {
-    song.pause();
-    player.dead = true;
-    player.deathTime = levelTime;
 }

@@ -14,6 +14,13 @@
         <script defer src="js/drawgame.js"></script>
         <script defer src="js/draweditor.js"></script>
         <script defer src="js/collision.js"></script>
+        <script defer src="js/playerdeath.js"></script>
+        <script defer src="js/camera.js"></script>
+        <script defer src="js/rotation.js"></script>
+        <script defer src="js/objectlist.js"></script>
+        <script defer src="js/pause.js"></script>
+        <script defer src="js/switchgamemode.js"></script>
+        <script defer src="js/startlevel.js"></script>
         <meta name="viewport" content="width=device-width, initial-scale=1.0 user-scalable=0">
     </head>
 
@@ -84,7 +91,7 @@
                 <p>
                     objX: <input type="number" id="obj-x"><br>
                     objY: <input type="number" id="obj-y"><br>
-                    objAngle: <input type="number" min="0" max="360" id="obj-angle"></span>
+                    objAngle: <span id="obj-angle">0</span>
                 </p>
                 <button id="export-btn"></button>
             </div>

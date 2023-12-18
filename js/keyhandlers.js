@@ -21,7 +21,6 @@ document.addEventListener("touchstart", touchstart)
 document.addEventListener("touchend", mouseUp)
 document.addEventListener("click", clicked)
 document.addEventListener("mousemove", mousemoveHandler);
-document.addEventListener("touchmove", touchmoveHandler);
 
 function mousemoveHandler(e) {
     // Get rectangle info about canvas location
@@ -31,20 +30,6 @@ function mousemoveHandler(e) {
     // Calc mouse coordinates using mouse event and canvas location info
     mouseX = Math.round(e.clientX - cnvRect.left) / K;
     mouseY = Math.round(e.clientY - cnvRect.top) / K;
-    coordX = mouseX + camera.x;
-    coordY = camera.y - mouseY + 270;
-    snappedX = floorToNearest(coordX, 30);
-    snappedY = floorToNearest(coordY, 30);
-}
-
-function touchmoveHandler(e) {
-    // Get rectangle info about canvas location
-    let cnvRect = cnv.getBoundingClientRect();
-    K = cnvRect.width / cnv.width;
-
-    // Calc mouse coordinates using mouse event and canvas location info
-    mouseX = Math.round(e.touches[0].clientX - cnvRect.left) / K;
-    mouseY = Math.round(e.touches[0].clientY - cnvRect.top) / K;
     coordX = mouseX + camera.x;
     coordY = camera.y - mouseY + 270;
     snappedX = floorToNearest(coordX, 30);
@@ -72,17 +57,11 @@ function mouseUp() {
     swipeObjs = [];
 }
 
-function touchstart(e) {
+function touchstart() {
     if (gameState == "gameLoop" && !gamePaused) {
         keyDown("hi");
     } else if (gameState == "gameLoop" && gamePaused) {
         clickInPause();
-    } else if (gameState == "editor") {
-        mouseHeld = true;
-        initMouseX = Math.round(e.touches[0].clientX - cnvRect.left) / K;
-        initMouseY = Math.round(e.touches[0].clientY - cnvRect.top) / K;
-        initCamX = camera.x;
-        initCamY = camera.y;
     }
 }
 

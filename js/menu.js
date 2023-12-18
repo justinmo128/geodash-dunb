@@ -2,10 +2,6 @@ initializeMenu();
 let menuState = "top";
 let menuSelect = 0;
 let levels = [];
-let importInput = document.createElement('input');
-importInput.type = 'file';
-importInput.accept = '.json';
-importInput.addEventListener("change", importLevel)
 
 fetch(`levels/levels.json`)
     .then((res) => res.json())
@@ -33,7 +29,7 @@ function clickInMenu() {
             menuSelect -= 1;
         } else if (checkClick(440, 475, 130, 200)) {
             menuSelect += 1;
-        } else if (checkClick(65, 410, 60, 172)) {
+        } else if (checkClick(65, 410, 109, 221)) {
             startLevel(levels[menuSelect]);
         }
         if (menuSelect > levels.length - 1) {
@@ -52,13 +48,6 @@ function clickInMenu() {
             initialize();
         }
     }
-}
-
-function importLevel() {
-    new Response(importInput.files[0]).json()
-        .then(json => {levelJSON = json})
-        .then(createGameObjects)
-        .then(initialize);
 }
 
 function initializeEditor() {

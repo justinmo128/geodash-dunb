@@ -8,10 +8,10 @@ function drawMenu() {
         ctx.drawImage(document.getElementById("greenarrow"), 10, 10);
         ctx.drawImage(document.getElementById("arrowleft"), 10, 130);
         ctx.drawImage(document.getElementById("arrowright"), 440, 130);
-        ctx.drawImage(document.getElementById("levelbox"), 65, 60);
+        ctx.drawImage(document.getElementById("levelbox"), 65, 109);
         ctx.fillStyle = "white";
         ctx.font = "30px Pusab";
-        ctx.fillText(levels[menuSelect], 240, 130);
+        ctx.fillText(levels[menuSelect], 240, 177);
     } else if (menuState == "editorMenu") {
         ctx.drawImage(document.getElementById("greenarrow"), 10, 10);
         ctx.drawImage(document.getElementById("createbtn"), 75, 100);

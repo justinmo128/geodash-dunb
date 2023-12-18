@@ -1,3 +1,5 @@
+let showHitboxes = false;
+
 function drawGame() {
     moveCamera();
     if (mirror) {

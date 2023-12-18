@@ -349,4 +349,10 @@ button:hover {
     #pause-box {
         width: 100%;
     }
+    #level-settings-box, #editor-main {
+        width: 100%;
+        padding-right: 0;
+        padding-left: 0;
+        margin: 0
+    }
 }

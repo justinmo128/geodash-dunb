@@ -48,10 +48,9 @@ function swipe() {
     if (mouseInBounds() && mouseHeld && swipeEnabled) {
         if (buildCategory == "build") {
             let objProps = objectList.find((element) => currentObj == element.id);
-            let same = swipeObjs.some(e => e[0] === snappedX + (objProps.editorOffsetx ?? fallback.editorOffsetx) && e[1] === snappedY + (objProps.editorOffsety ?? fallback.editorOffsety));
-            if (!same) {
+            if (!swipeObjAlreadyExists(snappedX + (objProps.editorOffsetx ?? fallback.editorOffsetx), snappedY + (objProps.editorOffsety ?? fallback.editorOffsety))) {
                 buildObject(currentObj, snappedX, snappedY, savedAngle, true);
-                swipeObjs.push([snappedX + objProps.editorOffsetx, snappedY + objProps.editorOffsety]);
+                swipeObjs.push([snappedX + (objProps.editorOffsetx ?? fallback.editorOffsetx), snappedY + (objProps.editorOffsety ?? fallback.editorOffsety)]);
             }
         } else if (buildCategory == "delete") {
             for (let i = 0; i < editObjs.length; i++) {
@@ -62,6 +61,16 @@ function swipe() {
             updateHTML();
         }
     }
+}
+
+function swipeObjAlreadyExists(x, y) {
+    for (let i = 0; i < swipeObjs.length; i++) {
+        if (x === swipeObjs[i][0] && y === swipeObjs[i][1]) {
+            console.log("Hi")
+            return true;
+        }
+    }
+    return false;
 }
 
 function buildObject(id, x, y, angle, offset) {

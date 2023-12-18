@@ -87,11 +87,11 @@ function updateHTML() {
     if (curIndex > -1) {
         objXEl.value = editObjs[curIndex].x;
         objYEl.value = editObjs[curIndex].y;
-        objAngleEl.value = editObjs[curIndex].angle;
+        objAngleEl.innerHTML = editObjs[curIndex].angle;
     } else {
         objXEl.value = 0;
         objYEl.value = 0;
-        objAngleEl.value = 0;
+        objAngleEl.innerHTML = 0;
         triggerColTimeEl.value = 0;
     }
     if (curIndex > -1 && editObjs[curIndex].type == "trigger") {
@@ -128,10 +128,6 @@ objXEl.addEventListener("change", () => {
 })
 objYEl.addEventListener("change", () => {
     editObjs[curIndex].y = +objYEl.value;
-})
-objAngleEl.addEventListener("change", () => {
-    editObjs[curIndex].angle = +objAngleEl.value;
-    editObjs[curIndex].angle %= 360;
 })
 triggerColColourEl.addEventListener("change", () => {
     editObjs[curIndex].colour = triggerColColourEl.value;
