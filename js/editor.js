@@ -66,7 +66,6 @@ function swipe() {
 function swipeObjAlreadyExists(x, y) {
     for (let i = 0; i < swipeObjs.length; i++) {
         if (x === swipeObjs[i][0] && y === swipeObjs[i][1]) {
-            console.log("Hi")
             return true;
         }
     }

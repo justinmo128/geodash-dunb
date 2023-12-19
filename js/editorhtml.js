@@ -27,7 +27,7 @@ let startposFlipGravEl = document.getElementById("startpos-flipgravity");
 setDifficulty.addEventListener("change", changeDifficulty)
 function changeDifficulty() {
     levelDiff.innerHTML = getDifficulty(setDifficulty.value);
-    levelDiffIcon.style.backgroundImage = `url(img/diff${getDifficulty(setDifficulty.value)}.png)`;
+    levelDiffIcon.style.backgroundImage = `url(img/difficulty${getDifficulty(setDifficulty.value)}.png)`;
 }
 
 function switchCategory(newCat) {
