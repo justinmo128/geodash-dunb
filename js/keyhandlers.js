@@ -100,7 +100,7 @@ function escapePressed() {
     }
 }
 function keyUp(e) {
-    if (practice && !(e.key === "z" || e.key === "x")) {
+    if (!(practice && (e.key === "z" || e.key === "x"))) {
         keyHeld = false;
         bufferAvailable = false;
     }
