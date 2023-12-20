@@ -9,17 +9,13 @@ let snappedY = 0;
 let K = 1;
 let keyPressTIme = 0;
 
-document.addEventListener("keydown", (e) => {
-    keyDown(e);
-})
-document.addEventListener("keyup", keyUp)
-document.addEventListener("mousedown", (e) => {
-    mouseDown(e);
-})
-document.addEventListener("mouseup", mouseUp)
-document.addEventListener("touchstart", touchstart)
-document.addEventListener("touchend", mouseUp)
-document.addEventListener("click", clicked)
+document.addEventListener("keydown", (e) => {keyDown(e)});
+document.addEventListener("keyup", (e) => {keyUp(e)});
+document.addEventListener("mousedown", mouseDown);
+document.addEventListener("mouseup", mouseUp);
+document.addEventListener("touchstart", touchstart);
+document.addEventListener("touchend", mouseUp);
+document.addEventListener("click", clicked);
 document.addEventListener("mousemove", mousemoveHandler);
 
 function mousemoveHandler(e) {
@@ -36,9 +32,11 @@ function mousemoveHandler(e) {
     snappedY = floorToNearest(coordY, 30);
 }
 
-function mouseDown(e) {
+function mouseDown() {
     if (gameState == "gameLoop" && !gamePaused) {
-        keyDown(e);
+        bufferAvailable = true;
+        keyHeld = true;
+        keyPressTIme = levelTime;
     } else if (gameState == "gameLoop" && gamePaused) {
         clickInPause();
     } else if (gameState == "menu") {
@@ -52,14 +50,17 @@ function mouseDown(e) {
     }
 }
 function mouseUp() {
-    keyUp();
+    keyHeld = false;
+    bufferAvailable = false;
     mouseHeld = false;
     swipeObjs = [];
 }
 
 function touchstart() {
     if (gameState == "gameLoop" && !gamePaused) {
-        keyDown("hi");
+        bufferAvailable = true;
+        keyHeld = true;
+        keyPressTIme = levelTime;
     } else if (gameState == "gameLoop" && gamePaused) {
         clickInPause();
     }
@@ -70,6 +71,12 @@ function keyDown(e) {
         escapePressed();
     } else if (gameState == "editor") {
         editorKeys(e);
+    } else if (practice && (e.key === "z" || e.key === "x")) {
+        if (e.key === "z") {
+            addCheckpoint();
+        } else if (e.key === "x") {
+            removeCheckpoint();
+        }
     } else {
         bufferAvailable = true;
         keyHeld = true;
@@ -92,9 +99,11 @@ function escapePressed() {
         }
     }
 }
-function keyUp() {
-    keyHeld = false;
-    bufferAvailable = false;
+function keyUp(e) {
+    if (practice && !(e.key === "z" || e.key === "x")) {
+        keyHeld = false;
+        bufferAvailable = false;
+    }
 }
 
 function clicked() {

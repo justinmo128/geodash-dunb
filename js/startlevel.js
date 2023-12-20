@@ -26,7 +26,6 @@ function createGameObjects() {
     activeTriggers = [];
     for (let i = 0; i < levelJSON.objects.length; i++) {
         let objProps = objectList.find((element) => levelJSON.objects[i].id == element.id)
-
         gameObjs.push({
             id: levelJSON.objects[i].id,
             x: levelJSON.objects[i].x,
@@ -37,29 +36,31 @@ function createGameObjects() {
             hasHitbox: objProps.hasHitbox ?? fallback.hasHitbox,
             type: objProps.type ?? fallback.type,
             activated: false,
+            rotCenter: [this.x + this.w / 2, this.y + this.h / 2]
         })
-        if (gameObjs[i].w < 30 || gameObjs[i].h < 30) {
-            gameObjs[i].rotCenter = [gameObjs[i].x + 15, gameObjs[i].y + 15];
+        let obj = gameObjs[i];
+        if (obj.w < 30 || obj.h < 30) {
+            obj.rotCenter = [obj.x + 15, obj.y + 15];
         } else {
-            gameObjs[i].rotCenter = [gameObjs[i].x + gameObjs[i].w / 2, gameObjs[i].y + gameObjs[i].h / 2];
+            obj.rotCenter = [obj.x + obj.w / 2, obj.y + obj.h / 2]
         }
-        if (gameObjs[i].type == "portal") {
-            gameObjs[i].portalType = objProps.portalType ?? fallback.portalType;
-        } else if (gameObjs[i].type == "pad") {
-            gameObjs[i].padType = objProps.padType ?? fallback.padType;
-        } else if (gameObjs[i].type == "orb") {
-            gameObjs[i].orbType = objProps.orbType ?? fallback.orbType;
-        } else if (gameObjs[i].type == "trigger") {
-            gameObjs[i].colour = levelJSON.objects[i].colour;
-            gameObjs[i].fadeTime = levelJSON.objects[i].fadeTime;
-            gameObjs[i].target = levelJSON.objects[i].target;
-            gameObjs[i].touchActivated = levelJSON.objects[i].touchActivated;
-        } else if (gameObjs[i].id == "coin") {
-            gameObjs[i].xVel = 0;
-            gameObjs[i].yVel = 0;
-            gameObjs[i].oldx = gameObjs[i].x;
-            gameObjs[i].oldy = gameObjs[i].y;
-        } else if (gameObjs[i].id == "startpos") {
+        if (obj.type == "portal") {
+            obj.portalType = objProps.portalType ?? fallback.portalType;
+        } else if (obj.type == "pad") {
+            obj.padType = objProps.padType ?? fallback.padType;
+        } else if (obj.type == "orb") {
+            obj.orbType = objProps.orbType ?? fallback.orbType;
+        } else if (obj.type == "trigger") {
+            obj.colour = levelJSON.objects[i].colour;
+            obj.fadeTime = levelJSON.objects[i].fadeTime;
+            obj.target = levelJSON.objects[i].target;
+            obj.touchActivated = levelJSON.objects[i].touchActivated;
+        } else if (obj.id == "coin") {
+            obj.xVel = 0;
+            obj.yVel = 0;
+            obj.oldx = obj.x;
+            obj.oldy = obj.y;
+        } else if (obj.id == "startpos") {
             levelStartPos.push({
                 x: levelJSON.objects[i].x,
                 y: levelJSON.objects[i].y,
@@ -67,19 +68,19 @@ function createGameObjects() {
                 flipGravity: levelJSON.objects[i].flipGravity
             })
         }
-        if (gameObjs[i].hasHitbox) {
-            gameObjs[i].hbx = levelJSON.objects[i].x + (objProps.hbx ?? fallback.hbx);
-            gameObjs[i].hby = levelJSON.objects[i].y + (objProps.hby ?? fallback.hby);
-            gameObjs[i].hbw = (objProps.hbw ?? fallback.hbw);
-            gameObjs[i].hbh = (objProps.hbh ?? fallback.hbh);
-            gameObjs[i].hbType = (objProps.hbType ?? fallback.hbType);
+        if (obj.hasHitbox) {
+            obj.hbx = levelJSON.objects[i].x + (objProps.hbx ?? fallback.hbx);
+            obj.hby = levelJSON.objects[i].y + (objProps.hby ?? fallback.hby);
+            obj.hbw = (objProps.hbw ?? fallback.hbw);
+            obj.hbh = (objProps.hbh ?? fallback.hbh);
+            obj.hbType = (objProps.hbType ?? fallback.hbType);
         }
-        if (gameObjs[i].angle !== 0) {
-            rotateObject(gameObjs[i], 0, true);
-            translateAfterRotation(gameObjs[i], levelJSON.objects[i]);
+        if (obj.angle !== 0) {
+            rotateObject(obj, 0, true);
+            translateAfterRotation(obj, levelJSON.objects[i]);
         }
-        if (gameObjs[i].x > maxX) {
-            maxX = gameObjs[i].x;
+        if (obj.x > maxX) {
+            maxX = obj.x;
         }
     }
     song = new Audio(`songs/${levelJSON.song}`);

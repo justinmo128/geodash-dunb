@@ -10,6 +10,9 @@ function drawGame() {
     drawBG();
     drawBackgroundObjects();
     drawGameObjects();
+    if (practice) {
+        drawCheckpoints();
+    }
     drawPlayer();
     drawFloors();
     if (showHitboxes) {
@@ -63,6 +66,12 @@ function drawPlayer() {
     }
 }
 
+function drawCheckpoints() {
+    for (let i = 0; i < checkpoints.length; i++) {
+        drawImgCamRotate("checkpoint", checkpoints[i].x, checkpoints[i].y, 30, 30, 0, 30, 30)
+    }
+}
+
 function drawGameObjects() {
     for (let i = 0; i < gameObjs.length; i++) {
         let objProps = objectList.find((element) => gameObjs[i].id == element.id)
@@ -113,7 +122,11 @@ function drawPause() {
         ctx.globalAlpha = 1;
         ctx.drawImage(document.getElementById("pause_play"), 190, 113);
         ctx.drawImage(document.getElementById("pause_invisible"), 26, 129);
-        ctx.drawImage(document.getElementById("pause_practice"), 108, 129);
+        if (practice) {
+            ctx.drawImage(document.getElementById("pause_unpractice"), 108, 129);
+        } else {
+            ctx.drawImage(document.getElementById("pause_practice"), 108, 129);
+        }
         ctx.drawImage(document.getElementById("pause_menu"), 302, 129);
         ctx.drawImage(document.getElementById("pause_restart"), 384, 129);
     } else {

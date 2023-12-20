@@ -15,7 +15,7 @@ function clickInPause() {
         } else if (checkClick(26, 96, 129, 202)) {
             pauseVisible = false;
         } else if (checkClick(108, 178, 129, 202)) {
-            // This button does nothing because I decided to not implement the functionality.
+            togglePractice(!practice);
         } else if (checkClick(302, 372, 129, 202)) {
             initializeMenu();
         } else if (checkClick(384, 454, 129, 202)) {

@@ -51,6 +51,14 @@ canvas {
     margin-bottom: 10px;
 }
 
+#practice-box {
+    width: 480px;
+    margin: auto;
+    display: none;
+    margin-bottom: 10px;
+    justify-content: center;
+}
+
 #level-settings-box {
     justify-content: space-around;
 }
@@ -349,10 +357,28 @@ button:hover {
     #pause-box {
         width: 100%;
     }
-    #level-settings-box, #editor-main {
+    #level-settings-box, #editor-main, #practice-box {
         width: 100%;
         padding-right: 0;
         padding-left: 0;
         margin: 0
     }
+}
+
+#checkpoint-add {
+    background-image: url("img/checkpoint-add.png");
+    background-color: transparent;
+    border-width: 0;
+    width: 146px;
+    height: 96px;
+    margin-right: 2px;
+}
+
+#checkpoint-remove {
+    background-image: url("img/checkpoint-remove.png");
+    background-color: transparent;
+    border-width: 0;
+    width: 93px;
+    height: 96px;
+    margin-left: 2px;
 }

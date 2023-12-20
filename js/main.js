@@ -1,4 +1,4 @@
-let gameState, background, floor, newFloor, roof, player;
+let gameState, background, floor, newFloor, roof;
 let maxX = 0;
 const physicsTPS = 240;
 let levelInfo = document.getElementById("level-info");
@@ -16,6 +16,7 @@ let levelStartPos = [];
 let song;
 let mirror = false;
 let gameObjs = [];
+let player;
 
 function initialize() {
     document.getElementById("pause-box").style.display = "block";
@@ -42,7 +43,7 @@ function initialize() {
         ballRotStatus: 1,
         deathTime: -1,
         winTime: -1
-    };
+    }
     for (let i = 0; i < gameObjs.length; i++) {
         gameObjs[i].activated = false;
     }
@@ -92,9 +93,20 @@ function initialize() {
     levelInfoName.innerHTML = levelJSON.name;
     levelInfoDiff.innerHTML = `${levelJSON.difficulty} ${getDifficulty(levelJSON.difficulty)}`;
     levelInfoDiffIcon.style.backgroundImage = `url(img/difficulty${getDifficulty(levelJSON.difficulty)}.png)`;
-    if (levelStartPos.length > 0) {
+    if (practice && checkpoints.length > 0) {
+        let lastCheckpoint = checkpoints[checkpoints.length - 1];
+        levelTime = lastCheckpoint.levelTime;
+        player.x = lastCheckpoint.x;
+        player.y = lastCheckpoint.y;
+        player.angle = lastCheckpoint.angle;
+        player.yVel = lastCheckpoint.yVel;
+        player.gravityStatus = lastCheckpoint.gravityStatus;
+        player.ballRotStatus = lastCheckpoint.ballRotStatus;
+        keyHeld = false;
+        bufferAvailable = false;
+        switchGamemode(lastCheckpoint.mode, lastCheckpoint.y, 90)
+    } else if (levelStartPos.length > 0) {
         let lastStartPos = levelStartPos[levelStartPos.length - 1];
-        console.log(lastStartPos)
         levelTime = lastStartPos.x * (1000/311.576);
         player.x = lastStartPos.x;
         player.y = lastStartPos.y;
@@ -127,7 +139,7 @@ function gameLoop() {
             checkCollision();
             rotatePlayer();
             checkEnding();
-        } else if (levelTime > player.deathTime + 300 && player.deathTime > -1) {
+        } else if (levelTime - player.deathTime >= 500 && player.deathTime > -1) {
             initialize();
         }
     } else if (gameState == "editor") {
