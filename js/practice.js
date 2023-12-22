@@ -22,9 +22,10 @@ function addCheckpoint() {
             gravityStatus: player.gravityStatus,
             angle: player.angle,
             ballRotStatus: player.ballRotStatus,
-            newFloory: newFloor.y,
-            roofy: roof.y,
-            cameray: camera.y
+            newFloory: newFloor.hby,
+            roofy: roof.hby,
+            cameray: camera.y,
+            mirror: mirror
         })
     }
 }

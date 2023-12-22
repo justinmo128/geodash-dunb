@@ -108,6 +108,13 @@ function initialize() {
         camera.y = lastCheckpoint.cameray;
         newFloor.y = lastCheckpoint.newFloory;
         roof.y = lastCheckpoint.roofy;
+        newFloor.hby = lastCheckpoint.newFloory;
+        roof.hby = lastCheckpoint.roofy;
+        if (player.mode == "ship" || player.mode == "ball") {
+            newFloor.canCollide = true;
+            roof.canCollide = true;
+        }
+        mirror = lastCheckpoint.mirror;
     } else if (levelStartPos.length > 0) {
         let lastStartPos = levelStartPos[levelStartPos.length - 1];
         levelTime = lastStartPos.x * (1000/311.576);

@@ -96,5 +96,8 @@ function initializeMenu() {
     for (let i = 0; i < editorDivs.length; i++) {
         editorDivs[i].style.display = "none";
     }
-    togglePractice(false);
+    if (song) {
+        togglePractice(false);
+        song.pause();
+    }
 }
