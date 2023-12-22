@@ -1,4 +1,3 @@
-initializeMenu();
 let menuState = "top";
 let menuSelect = 0;
 let levels = [];
@@ -80,6 +79,7 @@ function initializeEditor() {
 }
 
 document.getElementById("editor-leave").addEventListener("click", initializeMenu)
+initializeMenu();
 function initializeMenu() {
     gameState = "menu";
     levelInfo.style.display = "none";
@@ -96,4 +96,5 @@ function initializeMenu() {
     for (let i = 0; i < editorDivs.length; i++) {
         editorDivs[i].style.display = "none";
     }
+    togglePractice(false);
 }

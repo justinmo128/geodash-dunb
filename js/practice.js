@@ -21,7 +21,10 @@ function addCheckpoint() {
             yVel: player.yVel,
             gravityStatus: player.gravityStatus,
             angle: player.angle,
-            ballRotStatus: player.ballRotStatus
+            ballRotStatus: player.ballRotStatus,
+            newFloory: newFloor.y,
+            roofy: roof.y,
+            cameray: camera.y
         })
     }
 }

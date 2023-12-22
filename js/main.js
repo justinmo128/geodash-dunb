@@ -104,7 +104,10 @@ function initialize() {
         player.ballRotStatus = lastCheckpoint.ballRotStatus;
         keyHeld = false;
         bufferAvailable = false;
-        switchGamemode(lastCheckpoint.mode, lastCheckpoint.y, 90)
+        player.mode = lastCheckpoint.mode;
+        camera.y = lastCheckpoint.cameray;
+        newFloor.y = lastCheckpoint.newFloory;
+        roof.y = lastCheckpoint.roofy;
     } else if (levelStartPos.length > 0) {
         let lastStartPos = levelStartPos[levelStartPos.length - 1];
         levelTime = lastStartPos.x * (1000/311.576);
@@ -283,7 +286,7 @@ function jump() {
                 }
                 bufferAvailable = false;
                 gameObjs[player.touchingOrb[i]].activated = true;
-                return;
+                break;
             }
         }
     }
@@ -291,7 +294,7 @@ function jump() {
         player.yVel = 595.9602 * player.gravityStatus;
         bufferAvailable = false;
         // To convert from GD velocity to my velocity, multiply by 54
-    } else if (player.mode == "ship" && player.y + player.h < roof.y && roof.canCollide) {
+    } else if (player.mode == "ship") {
         if (player.yVel > 120 && player.gravityStatus == 1 || player.yVel < 120 && player.gravityStatus == -1) {
             player.yVel += 1180.5102 / (1000/deltaTime) * player.gravityStatus;
         } else {
