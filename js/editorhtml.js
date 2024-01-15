@@ -22,6 +22,7 @@ let editorImport = document.createElement('input');
 editorImport.type = 'file';
 editorImport.accept = '.json';
 let songSelectEl = document.getElementById("select-song");
+let customSongURL = document.getElementById("song-url");
 let startposFlipGravEl = document.getElementById("startpos-flipgravity");
 
 setDifficulty.addEventListener("change", changeDifficulty)
@@ -145,6 +146,14 @@ startposFlipGravEl.addEventListener("change", () => {
     editObjs[curIndex].flipGravity = startposFlipGravEl.checked;
 })
 
+songSelectEl.addEventListener("change", () => {
+    if (songSelectEl.value === "URL") {
+        document.getElementById("url-info").style.display = "block";
+    } else {
+        document.getElementById("url-info").style.display = "none";
+    }
+})
+
 document.getElementById("export-btn").addEventListener("click", exportLevel)
 function exportLevel() {
     let exportArray = [];
@@ -174,6 +183,7 @@ function exportLevel() {
         floorCol: levelFloorColEl.value,
         mode: selectedMode,
         song: songSelectEl.value,
+        songURL: customSongURL.value,
         objects: exportArray
     }
     let jsonExport = JSON.stringify(exportObject)
@@ -223,6 +233,12 @@ function createeditObjs() {
     levelFloorColEl.value = levelJSON.floorCol;
     let modeSelectBtns = document.getElementsByClassName("mode-select");
     songSelectEl.value = levelJSON.song;
+    if (songSelectEl.value === "URL") {
+        document.getElementById("url-info").style.display = "block";
+    } else {
+        document.getElementById("url-info").style.display = "none";
+    }
+    customSongURL.value = levelJSON.songURL;
     for (let i = 0; i < modeSelectBtns.length; i++) {
         if (modeSelectBtns[i].id == `${levelJSON.mode}-radio`) {
             modeSelectBtns[i].checked = true;

@@ -382,3 +382,10 @@ button:hover {
     height: 96px;
     margin-left: 2px;
 }
+
+#url-info {
+    display: none;
+    font-family: 'Roboto';
+    text-shadow: none;
+    font-size: 10px;
+}
