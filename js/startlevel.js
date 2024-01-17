@@ -24,6 +24,11 @@ function createGameObjects() {
     gameObjs = [];
     collectedCoins = [];
     activeTriggers = [];
+    if (levelJSON.song === "URL") {
+        song = new Audio(levelJSON.songURL);
+    } else {
+        song = new Audio(`songs/${levelJSON.song}`);
+    }
     for (let i = 0; i < levelJSON.objects.length; i++) {
         let objProps = objectList.find((element) => levelJSON.objects[i].id == element.id)
         gameObjs.push({
@@ -83,7 +88,6 @@ function createGameObjects() {
             maxX = obj.x;
         }
     }
-    song = new Audio(`songs/${levelJSON.song}`);
     levelInfo.style.display = "flex";
     levelInfoName.innerHTML = levelJSON.name;
     levelInfoDiff.innerHTML = `${levelJSON.difficulty} ${getDifficulty(levelJSON.difficulty)}`;
