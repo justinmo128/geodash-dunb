@@ -84,4 +84,8 @@ function createGameObjects() {
         }
     }
     song = new Audio(`songs/${levelJSON.song}`);
+    levelInfo.style.display = "flex";
+    levelInfoName.innerHTML = levelJSON.name;
+    levelInfoDiff.innerHTML = `${levelJSON.difficulty} ${getDifficulty(levelJSON.difficulty)}`;
+    levelInfoDiffIcon.style.backgroundImage = `url(img/difficulty${getDifficulty(levelJSON.difficulty)}.png)`;
 }

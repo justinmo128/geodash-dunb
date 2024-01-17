@@ -89,10 +89,6 @@ function initialize() {
         easeId: 0,
         fadeStart: 0
     };
-    levelInfo.style.display = "flex";
-    levelInfoName.innerHTML = levelJSON.name;
-    levelInfoDiff.innerHTML = `${levelJSON.difficulty} ${getDifficulty(levelJSON.difficulty)}`;
-    levelInfoDiffIcon.style.backgroundImage = `url(img/difficulty${getDifficulty(levelJSON.difficulty)}.png)`;
     if (practice && checkpoints.length > 0) {
         let lastCheckpoint = checkpoints[checkpoints.length - 1];
         levelTime = lastCheckpoint.levelTime;
