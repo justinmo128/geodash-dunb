@@ -83,9 +83,6 @@ initializeMenu();
 function initializeMenu() {
     gameState = "menu";
     levelInfo.style.display = "none";
-    document.getElementById("pause-box").style.display = "none";
-    document.getElementById("pause-balance").style.display = "none";
-    document.getElementById("level-settings-box").style.display = "none";
     camera.x = 0;
     camera.y = 500;
     background = {
@@ -100,4 +97,7 @@ function initializeMenu() {
         togglePractice(false);
         song.pause();
     }
+    document.getElementById("pause-box").style.display = "none";
+    document.getElementById("pause-balance").style.display = "none";
+    document.getElementById("level-settings-box").style.display = "none";
 }
